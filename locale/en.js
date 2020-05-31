@@ -174,7 +174,7 @@ const en = {
     'notes'                     : 'Notes',
     'addNewCard'                : 'Add new card',
     'noCard'                    : 'You have no added card',
-    'name'                      : 'Name',
+    'fullName'                  : 'Full name',
     'confirmPay'                : 'Confirm payment',
     'confirmPayDone'            : 'Payment has been confirmed and you will be contacted',
     'goHome'                    : 'Go to home',
@@ -187,6 +187,18 @@ const en = {
     'wallet'                    : 'Wallet',
     'credit'                    : 'Credit',
     'voucher'                   : 'Shipping voucher',
+    'createAcc'                 : 'Create account',
+    'enterCode'                 : 'Enter the code sent on the phone',
+    'save'                      : 'Save',
+    'enterPass'                 : 'Enter new password',
+    'recharge'                  : 'Recharge',
+    'inquiry'                   : 'Inquiry about the card',
+    'transferCard'              : 'Transfer card',
+    'transferCredit'            : 'Transfer credit',
+    'bankAccounts'              : 'Bank accounts',
+    'myCards'                   : 'My cards',
+    'registerCard'              : 'Register the card number',
+    'chooseCard'                : 'Choose card',
 };
 
 export default en;

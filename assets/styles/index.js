@@ -26,8 +26,8 @@ const styles = ({
     text_orange : {
         color               : COLORS.orange
     },
-    text_yellow : {
-        color               : COLORS.yellow
+    text_green : {
+        color               : COLORS.green
     },
     text_black : {
         color               : COLORS.black
@@ -51,10 +51,10 @@ const styles = ({
     // Style Font
 
     textRegular : {
-        fontFamily          : 'sukar',
+        fontFamily          : 'cairo',
     },
     textBold : {
-        fontFamily          : 'sukarBold'
+        fontFamily          : 'cairoBold'
     },
     textDecoration : {
         textDecorationLine  : "underline"
@@ -164,8 +164,14 @@ const styles = ({
     marginBottom_5 : {
         marginBottom      : 5
     },
+    marginBottom_7 : {
+        marginBottom      : 7
+    },
     marginBottom_10 : {
         marginBottom      : 10
+    },
+    marginBottom_12 : {
+        marginBottom      : 12
     },
     marginBottom_15 : {
         marginBottom      : 15
@@ -175,6 +181,9 @@ const styles = ({
     },
     marginBottom_25 : {
         marginBottom      : 25
+    },
+    marginBottom_30 : {
+        marginBottom      : 30
     },
     marginBottom_35 : {
         marginBottom      : 35
@@ -199,6 +208,9 @@ const styles = ({
     },
     marginTop_55 : {
         marginTop      : 55
+    },
+    marginTop_60 : {
+        marginTop      : 60
     },
     marginTop_20 : {
         marginTop      : 20
@@ -254,6 +266,9 @@ const styles = ({
     paddingTop_50 : {
         paddingTop      : 50
     },
+    paddingTop_30 : {
+        paddingTop      : 30
+    },
 
     // Padding Space Horizontal
 
@@ -278,6 +293,9 @@ const styles = ({
     paddingHorizontal_30 : {
         paddingHorizontal    : 30
     },
+    paddingHorizontal_35 : {
+        paddingHorizontal    : 35
+    },
     paddingHorizontal_70 : {
         paddingHorizontal    : 70
     },
@@ -289,6 +307,9 @@ const styles = ({
     },
     Radius_5 : {
         borderRadius        : 5
+    },
+    Radius_7 : {
+        borderRadius        : 7
     },
     Radius_10 : {
         borderRadius        : 10
@@ -330,11 +351,11 @@ const styles = ({
 
     // Background Color
 
-    bg_yellow : {
-        backgroundColor     : COLORS.yellow
+    bg_green : {
+        backgroundColor     : COLORS.green
     },
-    bg_lightYellow : {
-        backgroundColor     : COLORS.lightYellow
+    bg_mstarda : {
+        backgroundColor     : COLORS.mstarda
     },
 
     bg_pink : {
@@ -625,6 +646,10 @@ const styles = ({
         width               : 200,
         height              : 200,
     },
+    icon220 : {
+        width               : 220,
+        height              : 220,
+    },
     icon50 : {
         width               : 50,
         height              : 50,
@@ -673,6 +698,10 @@ const styles = ({
         width               : 35,
         height              : 35,
         resizeMode          : 'contain'
+    },
+    icon40 : {
+        width               : 40,
+        height              : 40
     },
 
     //  Style Header
@@ -837,6 +866,7 @@ const styles = ({
     },
     directionColumn:{
         flexDirection:'column',
+        alignItems:'center' ,
     },
     directionRowReverse:{
         flexDirection:'row-reverse',
@@ -940,14 +970,13 @@ const styles = ({
         left: -125,
         bottom: '60%',
     },
-    yellowBtn:{
+    greenBtn:{
         width:'100%',
         height:45,
-        backgroundColor:COLORS.yellow,
+        backgroundColor:COLORS.green,
         justifyContent:'center',
         alignItems:'center',
-        marginTop:20,
-        borderRadius:10,
+        borderRadius:5,
     },
     payMethod:{
         paddingHorizontal:20,
@@ -971,22 +1000,23 @@ const styles = ({
         top: -20,
         marginTop: 0,
         width:'100%',
-        paddingHorizontal: 10,
+        paddingLeft:0,
+        marginLeft:0,
         zIndex : -1,
     },
     label : {
-        top:3,
-        left: 20,
+        top:0,
+        left: 15,
         backgroundColor: '#ffffff',
         alignSelf: 'flex-start',
-        fontFamily: 'sukar',
-        fontSize: 15,
+        fontFamily: 'cairo',
+        fontSize: 14,
         borderBottomWidth: 2,
         borderBottomColor: '#fff',
         zIndex:10
     },
     labelText : {
-        left: 20,
+        left: 15,
         backgroundColor: '#ffffff',
         alignSelf: 'flex-start',
         fontSize: 15,
@@ -996,12 +1026,12 @@ const styles = ({
     input : {
         borderColor         : COLORS.black,
         borderWidth         : 1,
-        borderRadius        : 10,
+        borderRadius        : 5,
         color               : COLORS.black,
-        paddingRight        : 20,
-        paddingLeft         : 20,
+        paddingRight        : 15,
+        paddingLeft         : 15,
         textAlign           : I18nManager.isRTL ? 'right' : 'left',
-        fontFamily          : 'sukar',
+        fontFamily          : 'cairo',
         fontSize            : 15,
     },
     inputSearch : {
@@ -1009,7 +1039,7 @@ const styles = ({
         paddingRight        : 20,
         paddingLeft         : 20,
         textAlign           : I18nManager.isRTL ? 'right' : 'left',
-        fontFamily          : 'sukar',
+        fontFamily          : 'cairo',
         fontSize            : 14,
         borderRadius        :5,
         height              :35,
@@ -1021,7 +1051,7 @@ const styles = ({
         paddingRight        : 20,
         paddingLeft         : 60,
         textAlign           : I18nManager.isRTL ? 'right' : 'left',
-        fontFamily          : 'sukar',
+        fontFamily          : 'cairo',
         fontSize            : 15,
         width               : '100%',
         height              : 50
@@ -1053,7 +1083,7 @@ const styles = ({
         paddingRight        : 20,
         paddingLeft         : 20,
         textAlign           : I18nManager.isRTL ? 'right' : 'left',
-        fontFamily          : 'sukar',
+        fontFamily          : 'cairo',
         fontSize            : 15,
         width               : '95%',
         height              : 50
@@ -1064,7 +1094,7 @@ const styles = ({
         left                : 20,
         backgroundColor     : '#ffffff',
         // alignSelf           : 'flex-start',
-        fontFamily          : 'sukar',
+        fontFamily          : 'cairo',
         fontSize            : 15,
     },
     textArea : {
@@ -1076,14 +1106,14 @@ const styles = ({
         paddingRight        : 20,
         paddingLeft         : 20,
         textAlign           : 'right',
-        fontFamily          : 'sukar',
+        fontFamily          : 'cairo',
         fontSize            : 15,
         top                 : 0,
         marginTop           : 25
     },
     Active : {
         borderWidth           : 1,
-        borderColor           : COLORS.black,
+        borderColor           : COLORS.green,
         zIndex:-1
     },
     noActive : {

@@ -1,21 +1,33 @@
-import React from "react";
+import React , {useEffect} from "react";
+import {  AsyncStorage } from 'react-native';
 import { NavigationContainer  } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthStackNavigator } from './AuthStackNavigator'
 import { MainStackNavigator } from './MainStackNavigator'
-
-
-
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
+import { chooseLang } from '../actions';
 
 
 const RootStack = createStackNavigator();
 
 function renderScreens() {
-	const auth = useSelector(state => state.auth);
+	const dispatch = useDispatch();
+	useEffect( () => {
+		AsyncStorage.getItem('init').then(init => {
+			if (init != 'true'){
+				AsyncStorage.setItem('init', 'true');
+				dispatch(chooseLang('ar'))
+			}
+		});
+	}, []);
 
 
-	if (auth.user !== null) {
+	// const auth = useSelector(state => state.auth);
+	const auth = true;
+
+
+	// if (auth.user !== null) {
+	if (auth) {
 		return (
 			<RootStack.Screen name={'MainStack'} component={MainStackNavigator}/>
 		)

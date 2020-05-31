@@ -3,13 +3,11 @@ export default {
     black_gray          : '#6a6a6a',
     red                 : '#d3292a',
     light_red           : '#f4c9c9',
-    green               : '#007F00',
 
-    yellow      :'#FFD600',
-    lightYellow        :'#FFE666',
-    lightGray       :'#9D9C9C',
-    gray        :'#7A7A7A',
-    black        :'#2C2C2C',
-    aqua        :'#41cec8',
+    green      :'#007A48',
+    lightGray       :'#A1A1A1',
+    gray        :'#A5A5A5',
+    black        :'#535455',
+    mstarda        :'#FEBC10',
 }
 

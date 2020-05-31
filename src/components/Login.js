@@ -13,9 +13,11 @@ function Login({navigation}) {
 
 
     const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
     const [deviceId, setDeviceId] = useState('');
     const [userId, setUserId] = useState(null);
     const [phoneStatus, setPhoneStatus] = useState(0);
+    const [passwordStatus, setPasswordStatus] = useState(0);
     const [spinner, setSpinner] = useState(false);
 
     const getDeviceId = async () => {
@@ -53,10 +55,12 @@ function Login({navigation}) {
 
     function activeInput(type) {
         if (type === 'phone' || phone !== '') setPhoneStatus(1);
+        if (type === 'password' || password !== '') setPasswordStatus(1);
     }
 
     function unActiveInput(type) {
         if (type === 'phone' && phone === '') setPhoneStatus(0);
+        if (type === 'password' && password === '') setPasswordStatus(0);
     }
 
     function validate() {
@@ -66,6 +70,9 @@ function Login({navigation}) {
         if (phone.length <= 0) {
             isError = true;
             msg = i18n.t('namereq');
+        } else if (password.length < 6) {
+            isError = true;
+            msg = i18n.t('passreq');
         }
         if (msg !== '') {
             Toast.show({
@@ -83,22 +90,22 @@ function Login({navigation}) {
     };
 
     function renderSubmit() {
-        if (phone == '') {
+        if (password == '' || phone == '') {
             return (
                 <View
-                    style={[styles.yellowBtn , styles.Width_95 , {
+                    style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , {
                         backgroundColor:'#ccc'
                     }]}
                 >
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
+                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('login') }</Text>
                 </View>
             );
         }
 
         return (
             <TouchableOpacity
-                onPress={() => onLoginPressed()} style={[styles.yellowBtn , styles.Width_95]}>
-                <Text style={[styles.textRegular , styles.text_black , styles.textSize_16]}>{ i18n.t('next') }</Text>
+                onPress={() => onLoginPressed()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40]}>
+                <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('login') }</Text>
             </TouchableOpacity>
         );
     }
@@ -109,7 +116,6 @@ function Login({navigation}) {
         if (!err){
             setSpinner(true);
             // dispatch(userLogin(phone, password, deviceId , lang , navigation));
-            navigation.push('activationCode')
         }
     }
 
@@ -126,43 +132,53 @@ function Login({navigation}) {
     return (
         <Container>
             {renderLoader()}
-                <Content contentContainerStyle={[styles.bgFullWidth , styles.paddingTop_50]}>
+                <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                    <View style={[styles.paddingHorizontal_20 , styles.bgFullWidth, styles.Width_100, styles.flexCenter]}>
+                    <Image source={require('../../assets/images/login_vector.png')} style={[styles.icon220 , {top:40 , left:30 , zIndex:1}]} resizeMode={'contain'} />
 
-                       <View style={[styles.directionRowCenter , styles.Width_100]}>
-                           <TouchableOpacity style={{position:'absolute' , left:0}}>
-                               <Text style={[styles.textRegular , styles.text_yellow , styles.textSize_16]}>{ i18n.t('cancel') }</Text>
-                           </TouchableOpacity>
-                           <Text style={[styles.textRegular , styles.text_black  , styles.textSize_16, {textAlign: 'center'}]}>{ i18n.t('verifyNumber') }</Text>
-                       </View>
+                    <View style={[styles.bgFullWidth,styles.paddingHorizontal_20 ,styles.bg_White,
+                        styles.Width_100, styles.directionColumn, styles.paddingTop_30,
+                       {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
+                       <Image source={require('../../assets/images/logo_login.png')} style={[styles.icon100 , styles.marginBottom_35]} resizeMode={'contain'} />
+                       <KeyboardAvoidingView style={[styles.Width_100]}>
+                           <Form style={[styles.Width_100 , styles.flexCenter]}>
+                               <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                                   <Item floatingLabel style={[styles.item]}>
+                                       <Label style={[styles.label, styles.textRegular ,{ color:phoneStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('phone') }</Label>
+                                       <Input style={[styles.input, styles.height_50, (phoneStatus === 1 ? styles.Active : styles.noActive)]}
+                                              onChangeText={(phone) => setPhone(phone)}
+                                              onBlur={() => unActiveInput('phone')}
+                                              onFocus={() => activeInput('phone')}
+                                              keyboardType={'number-pad'}
+                                       />
+                                   </Item>
+                               </View>
+                               <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7 ]}>
+                                   <Item floatingLabel style={[styles.item]}>
+                                       <Label style={[styles.label, styles.textRegular ,{ color:passwordStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('password') }</Label>
+                                       <Input style={[styles.input, styles.height_50, (passwordStatus === 1 ? styles.Active : styles.noActive)]}
+                                              onChangeText={(password) => setPassword(password)}
+                                              onBlur={() => unActiveInput('password')}
+                                              onFocus={() => activeInput('password')}
+                                              secureTextEntry
+                                       />
+                                   </Item>
+                               </View>
 
-                        <Image source={require('../../assets/images/confirm_user.png')} style={[styles.icon80 , styles.marginVertical_35]} resizeMode={'contain'} />
+                               <TouchableOpacity onPress={() => navigation.push('forgetPass')} style={[{alignSelf:'flex-end'}]}>
+                                   <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('forgetPassword') }</Text>
+                               </TouchableOpacity>
 
-                        <Text style={[styles.textRegular , styles.text_light_gray  , styles.textSize_16, styles.marginBottom_25
-                            , {textAlign: 'center'}]}>{ i18n.t('afterAct') }</Text>
+                               {renderSubmit()}
 
-                        <KeyboardAvoidingView behavior={'padding'} style={[styles.keyboardAvoid]}>
-                            <Form style={[styles.Width_100 , styles.flexCenter, styles.marginVertical_10]}>
-                                <View style={[styles.position_R, styles.height_70, styles.flexCenter, styles.marginBottom_5 ]}>
-                                    <Item floatingLabel style={[styles.item, styles.position_R, { right: 5 }]}>
-                                        <Label style={[styles.label, styles.textRegular ,{ color:phoneStatus === 1 ?  COLORS.black :  COLORS.gray}]}>{ i18n.t('phone') }</Label>
-                                        <Input style={[styles.input, styles.height_50, (phoneStatus === 1 ? styles.Active : styles.noActive)]}
-                                               onChangeText={(phone) => setPhone(phone)}
-                                               onBlur={() => unActiveInput('phone')}
-                                               onFocus={() => activeInput('phone')}
-                                               keyboardType={'number-pad'}
-                                        />
-                                    </Item>
-                                </View>
+                               <TouchableOpacity onPress={() => navigation.push('register')} style={[styles.directionRow , styles.marginTop_60 , styles.marginBottom_15]}>
+                                   <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('haveNoAcc') }</Text>
+                                   <Text style={[styles.textRegular , styles.text_green , styles.textSize_14 , {marginLeft:5}]}>{ i18n.t('createAcc') }</Text>
+                               </TouchableOpacity>
 
-
-                                {renderSubmit()}
-
-
-                            </Form>
-                        </KeyboardAvoidingView>
-                    </View>
+                           </Form>
+                       </KeyboardAvoidingView>
+                   </View>
                 </Content>
         </Container>
     );

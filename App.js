@@ -21,10 +21,10 @@ function App({navigation}) {
 
 		async function loadFont(){
 			await Font.loadAsync({
-				sukar             : require('./assets/fonts/Sukar-Regular.ttf'),
-				sukarBold         : require('./assets/fonts/Sukar-Bold.ttf'),
-				Roboto: require('native-base/Fonts/Roboto.ttf'),
-				Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+				cairo             : require('./assets/fonts/Cairo-Regular.ttf'),
+				cairoBold         : require('./assets/fonts/Cairo-Bold.ttf'),
+				Roboto            : require('native-base/Fonts/Roboto.ttf'),
+				Roboto_medium     : require('native-base/Fonts/Roboto_medium.ttf'),
 				...Ionicons.font,
 			});
 			setIsReady(true)

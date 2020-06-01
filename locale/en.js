@@ -199,6 +199,20 @@ const en = {
     'myCards'                   : 'My cards',
     'registerCard'              : 'Register the card number',
     'chooseCard'                : 'Choose card',
+    'accStatement'              : 'Account statement',
+    'cardOp'                    : 'The operations performed on the card will be shown',
+    'charge'                    : 'Charge',
+    'transfer'                  : 'Transfer',
+    'opDate'                    : 'Operation date',
+    'amount'                    : 'Amount',
+    'time'                      : 'Date',
+    'status'                    : 'Status',
+    'disAmount'                 : 'Discount amount',
+    'chargeAmount'              : 'Charge amount',
+    'transfreAmount'            : 'Transfer amount',
+    'profile'                   : 'Profile',
+    'giftCard'                  : 'Gift card',
+    'logout'                    : 'logout',
 };
 
 export default en;

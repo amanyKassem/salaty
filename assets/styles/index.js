@@ -212,11 +212,17 @@ const styles = ({
     marginTop_60 : {
         marginTop      : 60
     },
+    marginTop_65 : {
+        marginTop      : 65
+    },
     marginTop_20 : {
         marginTop      : 20
     },
     marginTop_125 : {
         marginTop      : 125
+    },
+    marginTop_150 : {
+        marginTop      : 150
     },
 
     // Margin Space Horizontal
@@ -298,6 +304,12 @@ const styles = ({
     },
     paddingHorizontal_70 : {
         paddingHorizontal    : 70
+    },
+    paddingBottom55 : {
+        paddingBottom    : 55
+    },
+    paddingTop20 : {
+        paddingTop    : 20
     },
 
     // Style Border Radius
@@ -534,7 +546,10 @@ const styles = ({
         width               : '80%'
     },
     Width_85 : {
-        width               : '82%'
+        width               : '85%'
+    },
+    Width_87 : {
+        width               : '87%'
     },
     Width_90 : {
         width               : '90%'
@@ -657,6 +672,10 @@ const styles = ({
     icon20 : {
         width               : 20,
         height              : 20,
+    },
+    icon23 : {
+        width               : 23,
+        height              : 23,
     },
     icon15 : {
         width               : 15,
@@ -888,6 +907,9 @@ const styles = ({
     directionRow:{
         flexDirection:'row',
         alignItems:'center'
+    },
+    directionBasicRow:{
+        flexDirection:'row',
     },
     directionRowEnd:{
         flexDirection:'row',
@@ -1122,7 +1144,11 @@ const styles = ({
     },
     borderGray : {
         borderWidth           : 1,
-        borderColor           : COLORS.light_gray,
+        borderColor           : '#ddd',
+    },
+    borderBottomGray : {
+        borderBottomWidth           : 1,
+        borderColor           : '#ddd',
     },
     scrollView: {
         flexDirection       : 'row',

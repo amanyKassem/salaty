@@ -198,7 +198,21 @@ const ar = {
     'bankAccounts'              : 'الحسابات البنكية',
     'myCards'                   : 'بطاقاتي',
     'registerCard'              : 'قم بتسجيل رقم البطاقة',
-    'chooseCard'                : 'أختر البطاقة',
+    'chooseCard'                : 'اختر البطاقة',
+    'accStatement'              : 'كشف حساب',
+    'cardOp'                    : 'سيتم اظهار العمليات التي تمت علي البطاقة',
+    'charge'                    : 'شحن',
+    'transfer'                  : 'تحويل',
+    'opDate'                    : 'تاريخ العملية',
+    'amount'                    : 'المبلغ',
+    'time'                      : 'الوقت',
+    'status'                    : 'الحالة',
+    'disAmount'                 : 'مبلغ الخصم',
+    'chargeAmount'              : 'مبلغ الشحن',
+    'transfreAmount'            : 'مبلغ التحويل',
+    'profile'                   : 'الملف الشخصي',
+    'giftCard'                  : 'اهداء بطاقة',
+    'logout'                    : 'تسجيل الخروج',
 };
 
 export default ar;

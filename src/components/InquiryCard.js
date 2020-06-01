@@ -37,7 +37,9 @@ function InquiryCard({navigation , route}) {
     }
 
     function onConfirm() {
+        navigation.push('accStatement')
     }
+
     return (
         <Container>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
@@ -60,7 +62,7 @@ function InquiryCard({navigation , route}) {
                     styles.Width_100, styles.paddingTop_30,
                     {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
 
-                    <View style={[styles.directionRow]}>
+                    <View style={[styles.directionRow,styles.marginBottom_35]}>
                         <Image source={require('../../assets/images/card_info_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('inquiry') }</Text>
@@ -69,7 +71,7 @@ function InquiryCard({navigation , route}) {
                     </View>
 
                     <View style={[styles.height_50 ,styles.input ,(card !== ''? styles.Active : styles.noActive), styles.flexCenter,
-                        styles.marginBottom_30 , styles.Width_100 , styles.marginTop_35]}>
+                        styles.marginBottom_30 , styles.Width_100]}>
                         <RNPickerSelect
                             style={{
                                 inputAndroid: {

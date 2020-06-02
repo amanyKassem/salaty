@@ -13,10 +13,9 @@ const isIOS = Platform.OS === 'ios';
 function InquiryCard({navigation , route}) {
 
     const [card, setCard] = useState('');
-    const [cardStatus, setCardStatus] = useState(0);
 
     function renderSubmit() {
-        if (card == null) {
+        if (card == null || card == '') {
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , {

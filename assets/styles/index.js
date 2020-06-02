@@ -23,8 +23,8 @@ const styles = ({
     },
     // Style Color ConText
 
-    text_orange : {
-        color               : COLORS.orange
+    text_mstarda : {
+        color               : COLORS.mstarda
     },
     text_green : {
         color               : COLORS.green
@@ -1054,7 +1054,7 @@ const styles = ({
         paddingLeft         : 15,
         textAlign           : I18nManager.isRTL ? 'right' : 'left',
         fontFamily          : 'cairo',
-        fontSize            : 15,
+        fontSize            : 14,
     },
     inputSearch : {
         color               : COLORS.gray,

@@ -44,45 +44,45 @@ function Home({navigation , route}) {
                     <View style={[styles.marginTop_15 , styles.marginBottom_20 , {height:height - 370}]}>
 
                         <ScrollView contentContainerStyle={[styles.rowGroup]} showsVerticalScrollIndicator={false}>
-                            <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
+                            <TouchableOpacity onPress={() => navigation.push('recharge')} style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/hand_card_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12]}>{ i18n.t('recharge') }</Text>
+                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('recharge') }</Text>
                                 </Card>
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => navigation.push('inquiryCard')} style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/card_info_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12]}>{ i18n.t('inquiry') }</Text>
+                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('inquiry') }</Text>
                                 </Card>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/change_card_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12]}>{ i18n.t('transferCard') }</Text>
+                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('transferCard') }</Text>
                                 </Card>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
+                            <TouchableOpacity onPress={() => navigation.push('transferCredit')} style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/transform_money_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12]}>{ i18n.t('transferCredit') }</Text>
+                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('transferCredit') }</Text>
                                 </Card>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/bank_accounts_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12]}>{ i18n.t('bankAccounts') }</Text>
+                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('bankAccounts') }</Text>
                                 </Card>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/wallet_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12]}>{ i18n.t('myCards') }</Text>
+                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('myCards') }</Text>
                                 </Card>
                             </TouchableOpacity>
                         </ScrollView>

@@ -18,7 +18,7 @@ const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function ConfirmCredit({navigation , route}) {
+function ActivateCard({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -48,7 +48,7 @@ function ConfirmCredit({navigation , route}) {
                         backgroundColor:'#ccc'
                     }]}
                 >
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('send') }</Text>
+                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('confirm') }</Text>
                 </View>
             );
         }
@@ -56,7 +56,7 @@ function ConfirmCredit({navigation , route}) {
             return(
                 <TouchableOpacity
                     onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('send') }</Text>
+                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('confirm') }</Text>
                 </TouchableOpacity>
             )
         }
@@ -64,7 +64,7 @@ function ConfirmCredit({navigation , route}) {
         return (
             <TouchableOpacity
                 onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('send') }</Text>
+                <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('confirm') }</Text>
             </TouchableOpacity>
 
         );
@@ -99,9 +99,9 @@ function ConfirmCredit({navigation , route}) {
                     {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
 
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
-                        <Image source={require('../../assets/images/transform_money_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/change_card_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('transferCredit') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('transferCard') }</Text>
                             <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('enterCode') }</Text>
                         </View>
                     </View>
@@ -111,7 +111,7 @@ function ConfirmCredit({navigation , route}) {
 
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
                                 <Item floatingLabel style={[styles.item]}>
-                                    <Label style={[styles.label, styles.textRegular ,{ color:codeStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('code') }</Label>
+                                    <Label style={[styles.label, styles.textRegular ,{ color:codeStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('activationCode') }</Label>
                                     <Input style={[styles.input, styles.height_50, (codeStatus === 1 ? styles.Active : styles.noActive)]}
                                            onChangeText={(code) => setCode(code)}
                                            onBlur={() => unActiveInput('code')}
@@ -134,6 +134,6 @@ function ConfirmCredit({navigation , route}) {
     );
 }
 
-export default ConfirmCredit;
+export default ActivateCard;
 
 

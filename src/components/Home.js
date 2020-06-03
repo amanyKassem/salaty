@@ -1,9 +1,8 @@
-import React, { useState , useEffect} from "react";
+import React from "react";
 import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView} from "react-native";
 import {Container, Content, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import  Modal  from "react-native-modal";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -11,14 +10,13 @@ const isIOS = Platform.OS === 'ios';
 
 function Home({navigation , route}) {
 
-
     return (
         <Container>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Image source={require('../../assets/images/menu.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/menu.png')} style={[styles.icon25 , styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
@@ -58,7 +56,7 @@ function Home({navigation , route}) {
                                 </Card>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
+                            <TouchableOpacity onPress={() => navigation.push('transferCard')} style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/change_card_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
                                     <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('transferCard') }</Text>
@@ -72,14 +70,14 @@ function Home({navigation , route}) {
                                 </Card>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
+                            <TouchableOpacity onPress={() => navigation.push('bankAccounts')} style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/bank_accounts_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
                                     <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('bankAccounts') }</Text>
                                 </Card>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
+                            <TouchableOpacity onPress={() => navigation.push('myCards')} style={[styles.Radius_7 , styles.icon150 , styles.marginBottom_12]}>
                                 <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth]}>
                                     <Image source={require('../../assets/images/wallet_small.png')} style={[styles.icon50 , styles.marginBottom_7]} resizeMode={'contain'} />
                                     <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>{ i18n.t('myCards') }</Text>

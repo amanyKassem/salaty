@@ -29,10 +29,9 @@ function renderScreens() {
 	// if (auth.user !== null) {
 	if (auth) {
 		return (
-			<RootStack.Screen name={'MainStack'} component={MainStackNavigator}/>
+			<RootStack.Screen name={'MainStack'} component={MainStackNavigator} />
 		)
 	}
-
 	return (<RootStack.Screen name={'AuthStack'} component={AuthStackNavigator}/>)
 }
 

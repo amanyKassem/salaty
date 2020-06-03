@@ -7,38 +7,36 @@ import {
     Dimensions,
     KeyboardAvoidingView,
 } from "react-native";
-import {Container, Content, Form, Item, Label, Input} from 'native-base'
+import {Container, Content, Form, Item, Label, Input , Textarea} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function TransferCredit({navigation , route}) {
+function TransferCard({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const [cardImage, setCardImage] = useState(i18n.t('cardImage'));
-    const [imgBase64,, setImgBase64] = useState('');
-
     const [cardNumber, setCardNumber] = useState('');
     const [cardNumberStatus, setCardNumberStatus] = useState(0);
-
-    const [amountTransfer, setAmountTransfer] = useState('');
-    const [amountTransferStatus, setAmountTransferStatus] = useState(0);
+    const [newPhone, setNewPhone] = useState('');
+    const [newPhoneStatus, setNewPhoneStatus] = useState(0);
+    const [transferNote, setTransferNote] = useState('');
+    const [transferNoteStatus, setTransferNoteStatus] = useState(0);
 
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
-        if (type === 'amountTransfer' || amountTransfer !== '') setAmountTransferStatus(1);
+        if (type === 'newPhone' || newPhone !== '') setNewPhoneStatus(1);
+        if (type === 'transferNote' || transferNote !== '') setTransferNoteStatus(1);
     }
 
     function unActiveInput(type) {
         if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
-        if (type === 'amountTransfer' && amountTransfer === '') setAmountTransferStatus(0);
+        if (type === 'newPhone' && newPhone === '') setNewPhoneStatus(0);
+        if (type === 'transferNote' && transferNote === '') setTransferNoteStatus(0);
     }
 
 
@@ -47,36 +45,8 @@ function TransferCredit({navigation , route}) {
     }, [isSubmitted]);
 
 
-    async function askPermissionsAsync (){
-        await Permissions.askAsync(Permissions.CAMERA);
-        await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    };
-
-    async function _pickImage () {
-
-        askPermissionsAsync();
-
-        let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-            aspect: [4, 3],
-            base64:true,
-            quality:.1
-
-        });
-
-        let localUri = result.uri;
-        let filename = localUri.split('/').pop();
-
-        // check if there is image then set it and make button not disabled
-        if (!result.cancelled) {
-            setCardImage(filename)
-            setImgBase64(result.base64)
-        }
-    };
-
-
     function renderConfirm(){
-        if ( cardNumber == '' || amountTransfer == ''){
+        if ( cardNumber == '' || newPhone == '' || transferNote == ''){
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -107,7 +77,7 @@ function TransferCredit({navigation , route}) {
 
     function onConfirm(){
         // setIsSubmitted(true)
-        navigation.navigate('confirmCredit')
+        navigation.navigate('activateCard')
     }
 
 
@@ -134,17 +104,17 @@ function TransferCredit({navigation , route}) {
                     {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
 
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
-                        <Image source={require('../../assets/images/transform_money_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/change_card_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('transferCredit') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('cardInfo') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('transferCard') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('transferData') }</Text>
                         </View>
                     </View>
 
                     <KeyboardAvoidingView style={[styles.Width_100]}>
                         <Form style={[styles.Width_100 , styles.flexCenter]}>
 
-                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_25]}>
                                 <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>
                                     <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive)]}
@@ -156,22 +126,25 @@ function TransferCredit({navigation , route}) {
                                 </Item>
                             </View>
 
-                            <TouchableOpacity onPress={_pickImage} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImage') ? styles.Active : styles.noActive), styles.directionRowSpace,
-                                styles.marginBottom_25 , styles.Width_100]}>
-                                <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{cardImage.substr(0,38)}</Text>
-                                <Image source={require('../../assets/images/camera_green.png')} style={[styles.icon20]} resizeMode={'contain'} />
-                            </TouchableOpacity>
-
-                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                            <View style={[styles.height_40, styles.flexCenter]}>
                                 <Item floatingLabel style={[styles.item]}>
-                                    <Label style={[styles.label, styles.textRegular ,{ color:amountTransferStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('amountTransfer') }</Label>
-                                    <Input style={[styles.input, styles.height_50, (amountTransferStatus === 1 ? styles.Active : styles.noActive)]}
-                                           onChangeText={(amountTransfer) => setAmountTransfer(amountTransfer)}
-                                           onBlur={() => unActiveInput('amountTransfer')}
-                                           onFocus={() => activeInput('amountTransfer')}
+                                    <Label style={[styles.label, styles.textRegular ,{ color:newPhoneStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('newPhone') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (newPhoneStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(newPhone) => setNewPhone(newPhone)}
+                                           onBlur={() => unActiveInput('newPhone')}
+                                           onFocus={() => activeInput('newPhone')}
+                                           keyboardType={'number-pad'}
                                     />
                                 </Item>
                             </View>
+
+                            <Label style={[styles.label, styles.textRegular ,{ color:transferNoteStatus === 1 ?  COLORS.green :  COLORS.gray, top:transferNoteStatus === 1 ? 10 : 40}]}>{ i18n.t('transferNote') }</Label>
+                            <Textarea style={[styles.input, styles.height_120 , styles.Width_100 , styles.paddingVertical_10,
+                                (transferNoteStatus === 1 ? styles.Active : styles.noActive) , styles.marginBottom_25]}
+                                      onChangeText={(transferNote) => setTransferNote(transferNote)}
+                                      onBlur={() => unActiveInput('transferNote')}
+                                      onFocus={() => activeInput('transferNote')}
+                            />
 
 
                             {renderConfirm()}
@@ -186,6 +159,6 @@ function TransferCredit({navigation , route}) {
     );
 }
 
-export default TransferCredit;
+export default TransferCard;
 
 

@@ -1,9 +1,8 @@
-import React, { useState , useEffect} from "react";
+import React, { useState } from "react";
 import {View, Text, Image, TouchableOpacity, Dimensions , ScrollView } from "react-native";
 import {Container, Content, Accordion, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n"
-import COLORS from "../consts/colors";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -55,7 +54,7 @@ function AccStatement({navigation , route}) {
                     <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.date }</Text>
                 </View>
                 {expanded
-                    ? <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon15]} resizeMode={'contain'} />
+                    ? <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon15 , styles.transform]} resizeMode={'contain'} />
                     : <Image source={require('../../assets/images/drop_green_arrow.png')} style={[styles.icon15]} resizeMode={'contain'} />}
             </Card>
         );
@@ -119,7 +118,7 @@ function AccStatement({navigation , route}) {
     //                 <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.date }</Text>
     //             </View>
     //             {expanded
-    //                 ? <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon15]} resizeMode={'contain'} />
+    //                 ? <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon15 , styles.transform]} resizeMode={'contain'} />
     //                 : <Image source={require('../../assets/images/drop_green_arrow.png')} style={[styles.icon15]} resizeMode={'contain'} />}
     //         </Card>
     //     );
@@ -253,7 +252,7 @@ function AccStatement({navigation , route}) {
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />

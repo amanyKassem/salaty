@@ -17,7 +17,7 @@ function Notification({navigation , route}) {
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Image source={require('../../assets/images/menu.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/menu.png')} style={[styles.icon25 , styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
@@ -48,9 +48,9 @@ function Notification({navigation , route}) {
                                 <Card style={[styles.directionBasicRow ,styles.Radius_7 , styles.bgFullWidth , {padding:17}]}>
                                     <Image source={require('../../assets/images/ring_small.png')} style={[styles.icon33 , styles.marginBottom_7]} resizeMode={'contain'} />
                                     <View style={[styles.marginHorizontal_10 ,{flex:1}]}>
-                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>رسالة من الاداره</Text>
-                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>تم تحويل المبلغ الي بطاقة Amany</Text>
-                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5]}>منذ يومين</Text>
+                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14, styles.alignStart]}>رسالة من الاداره</Text>
+                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13, styles.alignStart]}>تم تحويل المبلغ الي بطاقة Amany</Text>
+                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5, styles.alignStart]}>منذ يومين</Text>
                                     </View>
                                     <TouchableOpacity style={[styles.icon23 , {right:-5 , top:-5}]}>
                                         <Image source={require('../../assets/images/rubbish_can_gray.png')} style={[styles.Width_100 , styles.heightFull , styles.marginBottom_7]} resizeMode={'contain'} />
@@ -62,9 +62,9 @@ function Notification({navigation , route}) {
                                 <Card style={[styles.directionBasicRow ,styles.Radius_7 , styles.bgFullWidth , {padding:17}]}>
                                     <Image source={require('../../assets/images/ring_small.png')} style={[styles.icon33 , styles.marginBottom_7]} resizeMode={'contain'} />
                                     <View style={[styles.marginHorizontal_10 ,{flex:1}]}>
-                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>رسالة من الاداره</Text>
-                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>تم تحويل المبلغ الي بطاقة Amany</Text>
-                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5]}>منذ يومين</Text>
+                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14, styles.alignStart]}>رسالة من الاداره</Text>
+                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13, styles.alignStart]}>تم تحويل المبلغ الي بطاقة Amany</Text>
+                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5, styles.alignStart]}>منذ يومين</Text>
                                     </View>
                                     <TouchableOpacity style={[styles.icon23 , {right:-5 , top:-5}]}>
                                         <Image source={require('../../assets/images/rubbish_can_gray.png')} style={[styles.Width_100 , styles.heightFull , styles.marginBottom_7]} resizeMode={'contain'} />
@@ -76,9 +76,9 @@ function Notification({navigation , route}) {
                                 <Card style={[styles.directionBasicRow ,styles.Radius_7 , styles.bgFullWidth , {padding:17}]}>
                                     <Image source={require('../../assets/images/ring_small.png')} style={[styles.icon33 , styles.marginBottom_7]} resizeMode={'contain'} />
                                     <View style={[styles.marginHorizontal_10 ,{flex:1}]}>
-                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>رسالة من الاداره</Text>
-                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13]}>تم تحويل المبلغ الي بطاقة Amany</Text>
-                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5]}>منذ يومين</Text>
+                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14, styles.alignStart]}>رسالة من الاداره</Text>
+                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13, styles.alignStart]}>تم تحويل المبلغ الي بطاقة Amany</Text>
+                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5, styles.alignStart]}>منذ يومين</Text>
                                     </View>
                                     <TouchableOpacity style={[styles.icon23 , {right:-5 , top:-5}]}>
                                         <Image source={require('../../assets/images/rubbish_can_gray.png')} style={[styles.Width_100 , styles.heightFull , styles.marginBottom_7]} resizeMode={'contain'} />

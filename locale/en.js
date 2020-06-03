@@ -228,6 +228,22 @@ const en = {
     'draftImage'                : 'Draft image',
     'cardImage'                 : 'Card image (Optional)',
     'cardInfo'                  : 'The card information to be transferred to',
+    'transferData'              : 'Transfer data',
+    'newPhone'                  : "New user\'s mobile",
+    'transferNote'              : "Transfer notes",
+    'requestCard'               : "Request a card",
+    'cardRequested'             : "A card has been successfully requested, and the department will be contacted",
+    'registeredBank'            : "Registered bank accounts",
+    'bank'                      : "Bank name",
+    'implementDiscount'         : "You can from this application implement the discount and purchases by entering the card number or identification through the camera",
+    'enterBill'                 : "Enter the bill",
+    'enterBillData'             : "Please enter bill data",
+    'totalBillAmount'           : "Total bill amount",
+    'billImage'                 : "Bill image",
+    'confirmCard'               : "Confirm card",
+    'numOrImg'                  : "You can enter the number or photograph the card",
+    'withdrawal'                : "The withdrawal was successful",
+    'noCredit'                  : "No operation can be applied to this card until it has credit and please inform the customer",
 };
 
 export default en;

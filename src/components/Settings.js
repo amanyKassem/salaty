@@ -12,6 +12,7 @@ const isIOS = Platform.OS === 'ios';
 
 function Settings({navigation , route}) {
 
+    const authType = 'casher' ;
     const [switchValue, setSwitchValue] = useState(false);
 
     function toggleSwitch(value) {
@@ -24,14 +25,19 @@ function Settings({navigation , route}) {
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
-                    <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
+                    <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100,{right: authType === 'user' ? 0 : 12}]} resizeMode={'contain'} />
 
-                    <TouchableOpacity onPress={() => navigation.push('notification')}>
-                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
-                    </TouchableOpacity>
+                    {
+                        authType === 'user' ?
+                            <TouchableOpacity onPress={() => navigation.push('notification')}>
+                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                            </TouchableOpacity>
+                            :
+                            <View/>
+                    }
 
                 </View>
 
@@ -50,12 +56,12 @@ function Settings({navigation , route}) {
 
                     <TouchableOpacity onPress={() => navigation.push('editPassword')} style={[styles.directionRowSpace , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_15]}>{ i18n.t('password') }</Text>
-                        <Image source={require('../../assets/images/arrow_gray_side.png')} style={[styles.icon20, {left:10}]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/arrow_gray_side.png')} style={[styles.icon20, styles.transform, {left:10}]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => navigation.push('language')} style={[styles.directionRowSpace , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_15]}>{ i18n.t('language') }</Text>
-                        <Image source={require('../../assets/images/arrow_gray_side.png')} style={[styles.icon20, {left:10}]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/arrow_gray_side.png')} style={[styles.icon20, styles.transform, {left:10}]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
 

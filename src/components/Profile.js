@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions , I18nManager} from "react-native";
 import {Container, Content, Card, Form} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -12,7 +12,7 @@ const isIOS = Platform.OS === 'ios';
 
 function Profile({navigation , route}) {
 
-    const authType = 'casher' ;
+    const authType = route.params.authType ;
 
     return (
         <Container>
@@ -44,32 +44,32 @@ function Profile({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35 , styles.paddingHorizontal_25]}>
                         <Image source={require('../../assets/images/user_small_icon.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('profile') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('yourInfo') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('profile') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('yourInfo') }</Text>
                         </View>
                     </View>
 
                     <View style={[styles.directionRow , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
-                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90]}>{ i18n.t('name') }</Text>
+                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{ i18n.t('name') }</Text>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , { marginRight:20}]}> : </Text>
                         <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>أماني</Text>
                     </View>
 
                     <View style={[styles.directionRow , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
-                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90]}>{ i18n.t('phone') }</Text>
+                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{ i18n.t('phone') }</Text>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , {marginRight:20}]}> : </Text>
                         <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>012345678</Text>
                     </View>
 
                     <View style={[styles.directionRow , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
-                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90]}>{ i18n.t('city') }</Text>
+                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{ i18n.t('city') }</Text>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , {marginRight:20}]}> : </Text>
                         <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>الرياض</Text>
                     </View>
 
 
 
-                    <TouchableOpacity onPress={ () => navigation.push('editData')} style={[styles.greenBtn , styles.Width_87 , styles.SelfCenter , styles.marginTop_25]}>
+                    <TouchableOpacity onPress={ () => navigation.push('editData',{ authType })} style={[styles.greenBtn , styles.Width_87 , styles.SelfCenter , styles.marginTop_25]}>
                         <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('editData') }</Text>
                     </TouchableOpacity>
 

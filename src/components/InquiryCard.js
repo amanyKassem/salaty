@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions , Platform } from "react-native";
 import {Container, Content, Card, Form} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -64,8 +64,8 @@ function InquiryCard({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
                         <Image source={require('../../assets/images/card_info_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                           <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('inquiry') }</Text>
-                           <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('registerCard') }</Text>
+                           <Text style={[styles.textBold , styles.text_black , styles.textSize_14,styles.alignStart]}>{ i18n.t('inquiry') }</Text>
+                           <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13,styles.alignStart]}>{ i18n.t('registerCard') }</Text>
                        </View>
                     </View>
 
@@ -79,7 +79,8 @@ function InquiryCard({navigation , route}) {
                                 },
                                 inputIOS: {
                                     fontFamily: 'cairo',
-                                    color:COLORS.black
+                                    color:COLORS.black,
+                                    alignSelf:'flex-start',
                                 },
                             }}
                             placeholder={{
@@ -92,7 +93,7 @@ function InquiryCard({navigation , route}) {
                                 { label: 'المنصورة', value: 'mansoura' },
                             ]}
                             Icon={() => {
-                                return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:18}]} resizeMode={'contain'} />
+                                return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                             }}
                         />
                     </View>

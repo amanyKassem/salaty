@@ -148,8 +148,8 @@ function Recharge({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
                         <Image source={require('../../assets/images/hand_card_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('recharge') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('fillInfo') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('recharge') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('fillInfo') }</Text>
                         </View>
                     </View>
 

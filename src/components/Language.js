@@ -13,7 +13,7 @@ const isIOS = Platform.OS === 'ios';
 
 function Language({navigation , route}) {
 
-    const authType = 'casher' ;
+    const authType = route.params.authType ;
     const language = useSelector(state => state.lang);
     const [lang, setLang] = useState(language.lang);
     console.log("language" , language.lang)
@@ -24,7 +24,7 @@ function Language({navigation , route}) {
     function selectLang(newLang) {
         if(newLang !== lang){
             setLang(newLang)
-            navigation.navigate('settings');
+            navigation.navigate('settings',{authType});
             dispatch(chooseLang(newLang))
         }
     }
@@ -59,8 +59,8 @@ function Language({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35 , styles.paddingHorizontal_25]}>
                         <Image source={require('../../assets/images/setting_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('language') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('setLang') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('language') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('setLang') }</Text>
                         </View>
                     </View>
 

@@ -12,7 +12,7 @@ function Home({navigation , route}) {
 
     return (
         <Container>
-            <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
+            <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -37,7 +37,7 @@ function Home({navigation , route}) {
                     styles.Width_100, styles.paddingTop_30,
                     {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
 
-                    <Text style={[styles.textBold , styles.text_black , styles.textSize_16]}>{ i18n.t('services') }</Text>
+                    <Text style={[styles.textBold , styles.text_black , styles.textSize_16,styles.alignStart]}>{ i18n.t('services') }</Text>
 
                     <View style={[styles.marginTop_15 , styles.marginBottom_20 , {height:height - 370}]}>
 

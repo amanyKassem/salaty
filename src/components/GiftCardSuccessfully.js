@@ -11,7 +11,7 @@ const isIOS = Platform.OS === 'ios';
 
 function GiftCardSuccessfully({navigation , route}) {
 
-    const authType = 'casher' ;
+    const authType = route.params.authType ;
 
     return (
         <Container>

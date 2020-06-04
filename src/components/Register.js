@@ -1,11 +1,13 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, KeyboardAvoidingView, I18nManager, AsyncStorage, ActivityIndicator } from "react-native";
+import { View, Text, Image, TouchableOpacity, ImageBackground, KeyboardAvoidingView, Platform, AsyncStorage, ActivityIndicator } from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import RNPickerSelect from 'react-native-picker-select';
 
+
+const isIOS = Platform.OS === 'ios';
 
 function Register({navigation}) {
 
@@ -127,7 +129,8 @@ function Register({navigation}) {
                                         },
                                         inputIOS: {
                                             fontFamily: 'cairo',
-                                            color:COLORS.black
+                                            color:COLORS.black,
+                                            alignSelf:'flex-start',
                                         },
                                     }}
                                     placeholder={{
@@ -140,7 +143,7 @@ function Register({navigation}) {
                                         { label: 'المنصورة', value: 'mansoura' },
                                     ]}
                                     Icon={() => {
-                                        return <Image source={city !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:18}]} resizeMode={'contain'} />
+                                        return <Image source={city !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top: isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}
                                 />
                             </View>

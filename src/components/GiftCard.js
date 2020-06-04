@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, ActivityIndicator, KeyboardAvoidingView} from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions, Platform, KeyboardAvoidingView} from "react-native";
 import {Container, Content, Card, Form, Item, Label, Input, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -12,7 +12,7 @@ const isIOS = Platform.OS === 'ios';
 
 function GiftCard({navigation , route}) {
 
-    const authType = 'casher' ;
+    const authType = route.params.authType ;
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const [phone, setPhone] = useState('');
@@ -65,7 +65,7 @@ function GiftCard({navigation , route}) {
     function onConfirm(){
 
         setIsSubmitted(true)
-        navigation.navigate('giftCardSuccessfully')
+        navigation.navigate('giftCardSuccessfully',{ authType })
     }
 
 
@@ -100,8 +100,8 @@ function GiftCard({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
                         <Image source={require('../../assets/images/gift_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('giftCard') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('presentCard') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('giftCard') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('presentCard') }</Text>
                         </View>
                     </View>
 
@@ -130,7 +130,8 @@ function GiftCard({navigation , route}) {
                                         },
                                         inputIOS: {
                                             fontFamily: 'cairo',
-                                            color:COLORS.black
+                                            color:COLORS.black,
+                                            alignSelf:'flex-start',
                                         },
                                     }}
                                     placeholder={{
@@ -143,7 +144,7 @@ function GiftCard({navigation , route}) {
                                         { label: 'المنصورة', value: 'mansoura' },
                                     ]}
                                     Icon={() => {
-                                        return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:18}]} resizeMode={'contain'} />
+                                        return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}
                                 />
                             </View>

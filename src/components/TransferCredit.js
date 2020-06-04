@@ -136,8 +136,8 @@ function TransferCredit({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
                         <Image source={require('../../assets/images/transform_money_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('transferCredit') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('cardInfo') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14,styles.alignStart]}>{ i18n.t('transferCredit') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13,styles.alignStart]}>{ i18n.t('cardInfo') }</Text>
                         </View>
                     </View>
 

@@ -12,7 +12,7 @@ const isIOS = Platform.OS === 'ios';
 
 function EditPassword({navigation , route}) {
 
-    const authType = 'casher' ;
+    const authType = route.params.authType ;
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const [newpass, setNewpass] = useState('');
@@ -86,7 +86,7 @@ function EditPassword({navigation , route}) {
         } else {
             setIsSubmitted(true)
             // dispatch(changePass(lang , password , confirmPass , token , navigation));
-            navigation.navigate('settings')
+            navigation.navigate('settings',{authType})
         }
     }
 
@@ -152,8 +152,8 @@ function EditPassword({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
                         <Image source={require('../../assets/images/setting_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('password') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('changeYourPass') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('password') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('changeYourPass') }</Text>
                         </View>
                     </View>
 

@@ -12,7 +12,7 @@ const isIOS = Platform.OS === 'ios';
 
 function Settings({navigation , route}) {
 
-    const authType = 'casher' ;
+    const authType = route.params.authType ;
     const [switchValue, setSwitchValue] = useState(false);
 
     function toggleSwitch(value) {
@@ -49,17 +49,17 @@ function Settings({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35 , styles.paddingHorizontal_25]}>
                         <Image source={require('../../assets/images/setting_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('settings') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('controlSettings') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('settings') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('controlSettings') }</Text>
                         </View>
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.push('editPassword')} style={[styles.directionRowSpace , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
+                    <TouchableOpacity onPress={() => navigation.push('editPassword', {authType})} style={[styles.directionRowSpace , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_15]}>{ i18n.t('password') }</Text>
                         <Image source={require('../../assets/images/arrow_gray_side.png')} style={[styles.icon20, styles.transform, {left:10}]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.push('language')} style={[styles.directionRowSpace , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
+                    <TouchableOpacity onPress={() => navigation.push('language', {authType})} style={[styles.directionRowSpace , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_15]}>{ i18n.t('language') }</Text>
                         <Image source={require('../../assets/images/arrow_gray_side.png')} style={[styles.icon20, styles.transform, {left:10}]} resizeMode={'contain'} />
                     </TouchableOpacity>

@@ -13,16 +13,16 @@ function Notification({navigation , route}) {
 
     return (
         <Container>
-            <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
+            <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
-                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Image source={require('../../assets/images/menu.png')} style={[styles.icon25 , styles.transform]} resizeMode={'contain'} />
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
 
-                    <TouchableOpacity onPress={() => navigation.push('notification')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('notification')}>
                         <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
                     </TouchableOpacity>
 
@@ -38,7 +38,7 @@ function Notification({navigation , route}) {
                     styles.Width_100, styles.paddingTop_30,
                     {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
 
-                    <Text style={[styles.textBold , styles.text_black , styles.textSize_16]}>{ i18n.t('notifications') }</Text>
+                    <Text style={[styles.textBold , styles.text_black , styles.textSize_16,styles.alignStart]}>{ i18n.t('notifications') }</Text>
 
                     <View style={[styles.marginTop_15 , styles.marginBottom_20 , {height:height - 370}]}>
 

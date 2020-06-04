@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, ActivityIndicator, KeyboardAvoidingView} from "react-native";
+import {View, Text, Image, TouchableOpacity , Platform, Dimensions, ActivityIndicator, KeyboardAvoidingView} from "react-native";
 import {Container, Content, Card, Form, Item, Label, Input} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -12,7 +12,7 @@ const isIOS = Platform.OS === 'ios';
 
 function EditData({navigation , route}) {
 
-    const authType = 'casher' ;
+    const authType = route.params.authType ;
     const [fullName, setFullName] = useState('اماني');
     const [phone, setPhone] = useState('012345678');
     const [city, setCity] = useState('mansoura');
@@ -103,8 +103,8 @@ function EditData({navigation , route}) {
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
                         <Image source={require('../../assets/images/user_small_icon.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('profile') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{ i18n.t('editPersonalData') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('profile') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('editPersonalData') }</Text>
                         </View>
                     </View>
 
@@ -143,7 +143,8 @@ function EditData({navigation , route}) {
                                         },
                                         inputIOS: {
                                             fontFamily: 'cairo',
-                                            color:COLORS.black
+                                            color:COLORS.black,
+                                            alignSelf:'flex-start',
                                         },
                                     }}
                                     placeholder={{
@@ -156,7 +157,7 @@ function EditData({navigation , route}) {
                                         { label: 'المنصورة', value: 'mansoura' },
                                     ]}
                                     Icon={() => {
-                                        return <Image source={city !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:18}]} resizeMode={'contain'} />
+                                        return <Image source={city !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}
                                     value={city}
                                 />

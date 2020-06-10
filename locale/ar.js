@@ -246,6 +246,9 @@ const ar = {
     'withdrawal'                : "تم عملية السحب بنجاح",
     'noCredit'                  : "لا يوجد رصيد كافي",
     'noCreditText'              : "لا يمكن تطبيق أي عملية على هذه البطاقة حتى يتم شحنها برجاء إبلاغ العميل",
+    'selectUser'                : "اختر نوع الحساب",
+    'client'                    : "عميل",
+    'cashier'                   : "كاشير",
 };
 
 export default ar;

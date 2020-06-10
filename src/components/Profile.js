@@ -1,10 +1,9 @@
-import React, { useState , useEffect} from "react";
+import React, { useEffect} from "react";
 import {View, Text, Image, TouchableOpacity, Dimensions , I18nManager} from "react-native";
-import {Container, Content, Card, Form} from 'native-base'
+import {Container, Content} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import RNPickerSelect from 'react-native-picker-select';
-import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -13,6 +12,11 @@ const isIOS = Platform.OS === 'ios';
 function Profile({navigation , route}) {
 
     const authType = route.params.authType ;
+    const lang  = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
+
+    const user      = useSelector(state => state.auth.user ? state.auth.user.data : { avatar: '../../assets/images/user_small_icon.png', name: null, email: null, phone: null });
+    const dispatch  = useDispatch();
 
     return (
         <Container>
@@ -42,7 +46,7 @@ function Profile({navigation , route}) {
                     {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
 
                     <View style={[styles.directionRow,styles.marginBottom_35 , styles.paddingHorizontal_25]}>
-                        <Image source={require('../../assets/images/user_small_icon.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
+                        <Image source={{uri:user.avatar}} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
                             <Text style={[styles.textBold , styles.text_black , styles.textSize_14, styles.alignStart]}>{ i18n.t('profile') }</Text>
                             <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13, styles.alignStart]}>{ i18n.t('yourInfo') }</Text>
@@ -52,19 +56,19 @@ function Profile({navigation , route}) {
                     <View style={[styles.directionRow , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{ i18n.t('name') }</Text>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , { marginRight:20}]}> : </Text>
-                        <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>أماني</Text>
+                        <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>{user.name}</Text>
                     </View>
 
                     <View style={[styles.directionRow , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{ i18n.t('phone') }</Text>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , {marginRight:20}]}> : </Text>
-                        <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>012345678</Text>
+                        <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>{user.phone}</Text>
                     </View>
 
                     <View style={[styles.directionRow , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{ i18n.t('city') }</Text>
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , {marginRight:20}]}> : </Text>
-                        <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>الرياض</Text>
+                        <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>{user.city}</Text>
                     </View>
 
 

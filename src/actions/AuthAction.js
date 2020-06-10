@@ -10,7 +10,7 @@ export const userLogin = (phone, password, deviceId, lang, navigation) => {
 
         axios.post(
             CONST.url + 'login',
-            {phone, password, lang, device_id: deviceId, type: 'provider'})
+            {phone, password, lang, device_id: deviceId})
             .then(
                 response => handelLogin(dispatch, response.data , navigation)
             )
@@ -27,11 +27,10 @@ export const register = (data, navigation) => {
 				url: CONST.url + 'register',
 				method: 'POST',
 				data: {
-					name			    : data.username,
+					name			    : data.fullName,
 					phone			    : data.phone,
-					email			    : data.email,
-					type			    : 'provider',
-					category_id		    : data.serviceID,
+					// email			    : data.email,
+					city_id			    : data.city,
 					password		    : data.password,
 					lang 			    : data.lang,
 					device_id
@@ -53,7 +52,7 @@ export const register = (data, navigation) => {
 					duration    	: 3000,
 					textStyle   	: {
 						color       	: "white",
-						fontFamily  	: 'sukar',
+						fontFamily  	: 'cairo',
 						textAlign   	: 'center'
 					}
 				});
@@ -65,10 +64,10 @@ export const register = (data, navigation) => {
 };
 
 
-export const activeAccount = (userId, lang) => {
+export const activeAccount = (userId, lang, navigation) => {
 	return (dispatch) => {
 		axios({
-			url: CONST.url + 'active_account',
+			url: CONST.url + 'activeAccount',
 			method: 'POST',
 			data: {
 				user_id	: userId,
@@ -77,13 +76,18 @@ export const activeAccount = (userId, lang) => {
 		}).then(response => {
 			dispatch({type: 'active_account', data: response.data});
 
+			// if (response.data.success){
+			// 	alert('hhaha')
+			// 	navigation.navigate('login' ,{userType:'user'});
+			// }
+
 			Toast.show({
 				text        	: response.data.message,
 				type			: response.data.success ? "success" : "danger",
 				duration    	: 3000,
 				textStyle   	: {
 					color       	: "white",
-					fontFamily  	: 'sukar',
+					fontFamily  	: 'cairo',
 					textAlign   	: 'center'
 				}
 			});
@@ -96,12 +100,12 @@ export const activeAccount = (userId, lang) => {
 export const checkPhone = (phone, lang, navigation) => {
 	return (dispatch) => {
 		axios({
-			url: CONST.url + 'check_phone',
+			url: CONST.url + 'ForgetPassword',
 			method: 'POST',
 			data: { phone, lang }
 		}).then(response => {
 			if (response.data.success)
-				navigation.navigate('resetPass', { activeCode: response.data.data.code, id: response.data.data.id });
+				navigation.navigate('changePass', { activeCode: response.data.data.code, id: response.data.data.id });
 
 			Toast.show({
 				text        	: response.data.message,
@@ -109,7 +113,7 @@ export const checkPhone = (phone, lang, navigation) => {
 				duration    	: 3000,
 				textStyle   	: {
 					color       	: "white",
-					fontFamily  	: 'sukar',
+					fontFamily  	: 'cairo',
 					textAlign   	: 'center'
 				}
 			});
@@ -121,7 +125,7 @@ export const checkPhone = (phone, lang, navigation) => {
 export const resetPassword = (id, password, lang, navigation) => {
 	return (dispatch) => {
 		axios({
-			url: CONST.url + 'reset_password',
+			url: CONST.url + 'ResetPassword',
 			method: 'POST',
 			data: { id, password, lang }
 		}).then(response => {
@@ -134,7 +138,7 @@ export const resetPassword = (id, password, lang, navigation) => {
 				duration    	: 3000,
 				textStyle   	: {
 					color       	: "white",
-					fontFamily  	: 'sukar',
+					fontFamily  	: 'cairo',
 					textAlign   	: 'center'
 				}
 			});
@@ -162,7 +166,7 @@ const handelLogin = (dispatch, data , navigation) => {
         duration    : 3000,
         textStyle   : {
             color       : "white",
-            fontFamily  : 'sukar',
+            fontFamily  : 'cairo',
             textAlign   : 'center'
         }
     });

@@ -1,10 +1,11 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, ActivityIndicator, KeyboardAvoidingView} from "react-native";
-import {Container, Content, Card, Form, Item, Label, Input, Toast} from 'native-base'
+import {View, Text, Image, TouchableOpacity, Dimensions, KeyboardAvoidingView, ActivityIndicator} from "react-native";
+import {Container, Content, Form, Item, Label, Input, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import RNPickerSelect from 'react-native-picker-select';
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {changePass} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -13,6 +14,8 @@ const isIOS = Platform.OS === 'ios';
 function EditPassword({navigation , route}) {
 
     const authType = route.params.authType ;
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const [newpass, setNewpass] = useState('');
@@ -21,7 +24,7 @@ function EditPassword({navigation , route}) {
     const [newpassStatus, setNewpassStatus] = useState(0);
     const [passwordStatus, setPasswordStatus] = useState(0);
     const [confirmPassStatus, setConfirmPassStatus] = useState(0);
-
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsSubmitted(false)
@@ -42,10 +45,9 @@ function EditPassword({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('save') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -57,6 +59,7 @@ function EditPassword({navigation , route}) {
 
         );
     }
+
     function onConfirm(){
 
         if (confirmPass.length < 6){
@@ -85,8 +88,7 @@ function EditPassword({navigation , route}) {
             return false
         } else {
             setIsSubmitted(true)
-            // dispatch(changePass(lang , password , confirmPass , token , navigation));
-            navigation.navigate('settings',{authType})
+            dispatch(changePass(lang , password , confirmPass , token , navigation , authType));
         }
     }
 

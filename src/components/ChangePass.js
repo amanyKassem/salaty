@@ -1,37 +1,44 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, KeyboardAvoidingView, I18nManager, AsyncStorage, ActivityIndicator } from "react-native";
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {resetPassword} from "../actions";
 
-function ChangePass({navigation}) {
+function ChangePass({navigation , route}) {
 
+    const { activeCode, id } = route.params;
+    const lang      = useSelector(state => state.lang.lang);
+    const dispatch  = useDispatch();
 
+    const [code, setCode] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
+    const [codeStatus, setCodeStatus] = useState(0);
     const [passwordStatus, setPasswordStatus] = useState(0);
     const [confirmPassStatus, setConfirmPassStatus] = useState(0);
-    const [spinner, setSpinner] = useState(false);
 
 
     useEffect(() => {
-        setTimeout(() => setSpinner(false), 500);
-    }, [spinner]);
-
+        alert('activation code : ' + activeCode)
+    }, [])
 
     function activeInput(type) {
+        if (type === 'code' || code !== '') setCodeStatus(1);
         if (type === 'password' || password !== '') setPasswordStatus(1);
         if (type === 'confirmPass' || confirmPass !== '') setConfirmPassStatus(1);
     }
 
     function unActiveInput(type) {
+        if (type === 'code' && code === '') setCodeStatus(0);
         if (type === 'password' && password === '') setPasswordStatus(0);
         if (type === 'confirmPass' && confirmPass === '') setConfirmPassStatus(0);
     }
 
     function renderSubmit() {
-        if (password == '' || confirmPass == '') {
+        if (code == '' || password == '' || confirmPass == '') {
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -52,50 +59,50 @@ function ChangePass({navigation}) {
     }
 
     function onConfirm(){
-
-        if (confirmPass.length < 6){
-            Toast.show({
-                text        : i18n.t('passreq'),
-                type        : "danger",
-                duration    : 3000,
-                textStyle   : {
-                    color       : "white",
-                    fontFamily  : 'cairo',
-                    textAlign   : 'center'
-                }
-            });
-            return false
-        }else if(password !== confirmPass){
-            Toast.show({
-                text        : i18n.t('passError'),
-                type        : "danger",
-                duration    : 3000,
-                textStyle   : {
-                    color       : "white",
-                    fontFamily  : 'cairo',
-                    textAlign   : 'center'
-                }
-            });
-            return false
+        if (code == activeCode) {
+            if (confirmPass.length < 6) {
+                Toast.show({
+                    text: i18n.t('passreq'),
+                    type: "danger",
+                    duration: 3000,
+                    textStyle: {
+                        color: "white",
+                        fontFamily: 'cairo',
+                        textAlign: 'center'
+                    }
+                });
+                return false
+            } else if (password !== confirmPass) {
+                Toast.show({
+                    text: i18n.t('passError'),
+                    type: "danger",
+                    duration: 3000,
+                    textStyle: {
+                        color: "white",
+                        fontFamily: 'cairo',
+                        textAlign: 'center'
+                    }
+                });
+                return false
+            } else {
+                dispatch(resetPassword(id, password, lang, navigation));
+            }
         } else {
-            // setIsSubmitted(true)
-            navigation.navigate('login')
-        }
-    }
-
-    function renderLoader(){
-        if (spinner){
-            return(
-                <View style={[styles.loading, styles.flexCenter, {height:'100%'}]}>
-                    <ActivityIndicator size="large" color={COLORS.blue} style={{ alignSelf: 'center' }} />
-                </View>
-            );
+            Toast.show({
+                text        	: i18n.t('codeNotMatch'),
+                type			: "danger",
+                duration    	: 3000,
+                textStyle   	: {
+                    color       	: "white",
+                    fontFamily  	: 'cairo',
+                    textAlign   	: 'center'
+                }
+            });
         }
     }
 
     return (
         <Container>
-            {renderLoader()}
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 , {marginLeft:15}]}>
@@ -114,6 +121,17 @@ function ChangePass({navigation}) {
 
                     <KeyboardAvoidingView style={[styles.Width_100]}>
                         <Form style={[styles.Width_100 , styles.flexCenter]}>
+                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                                <Item floatingLabel style={[styles.item]}>
+                                    <Label style={[styles.label, styles.textRegular ,{ color:codeStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('code') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (codeStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(code) => setCode(code)}
+                                           onBlur={() => unActiveInput('code')}
+                                           onFocus={() => activeInput('code')}
+                                           keyboardType={'number-pad'}
+                                    />
+                                </Item>
+                            </View>
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7 ]}>
                                 <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:passwordStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('password') }</Label>

@@ -4,31 +4,45 @@ import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
+import { useDispatch, useSelector } from 'react-redux'
+import {activeAccount} from "../actions";
 
-function ActivationCode({navigation}) {
+function ActivationCode({navigation , route}) {
 
+    const { code, userId } = route.params;
+    const lang = useSelector(state => state.lang.lang);
+    const dispatch = useDispatch();
 
-    const [code, setCode] = useState('');
+    const [myCode, setCode] = useState('');
     const [codeStatus, setCodeStatus] = useState(0);
     const [spinner, setSpinner] = useState(false);
 
+    useEffect(() => {
+        alert('activation code : ' + code)
+    }, []);
+
 
     useEffect(() => {
-        setTimeout(() => setSpinner(false), 500);
-    }, [spinner]);
+        const unsubscribe = navigation.addListener('focus', () => {
+            setSpinner(false)
+        });
+        setSpinner(false)
+        return unsubscribe;
+    }, [navigation, spinner]);
+
 
 
     function activeInput(type) {
-        if (type === 'code' || code !== '') setCodeStatus(1);
+        if (type === 'code' || myCode !== '') setCodeStatus(1);
     }
 
     function unActiveInput(type) {
-        if (type === 'code' && code === '') setCodeStatus(0);
+        if (type === 'code' && myCode === '') setCodeStatus(0);
     }
 
 
     function renderSubmit() {
-        if (code == '') {
+        if (myCode == '') {
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , {
@@ -42,21 +56,37 @@ function ActivationCode({navigation}) {
 
         return (
             <TouchableOpacity
-                onPress={() => onLoginPressed()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20]}>
+                onPress={() => onActiveAccount()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20]}>
                 <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('send') }</Text>
             </TouchableOpacity>
         );
     }
 
-    function onLoginPressed() {
-        // navigation.navigate('home')
+    function onActiveAccount() {
+
+        if (myCode == code) {
+            setSpinner(true);
+            dispatch(activeAccount(userId, lang, navigation));
+        }
+        else {
+            Toast.show({
+                text        	: i18n.t('codeNotMatch'),
+                type			: "danger",
+                duration    	: 3000,
+                textStyle   	: {
+                    color       	: "white",
+                    fontFamily  	: 'cairo',
+                    textAlign   	: 'center'
+                }
+            });
+        }
     }
 
     function renderLoader(){
         if (spinner){
             return(
                 <View style={[styles.loading, styles.flexCenter, {height:'100%'}]}>
-                    <ActivityIndicator size="large" color={COLORS.blue} style={{ alignSelf: 'center' }} />
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
                 </View>
             );
         }
@@ -87,7 +117,7 @@ function ActivationCode({navigation}) {
                                 <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:codeStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('activationCode') }</Label>
                                     <Input style={[styles.input, styles.height_50, (codeStatus === 1 ? styles.Active : styles.noActive)]}
-                                           onChangeText={(code) => setCode(code)}
+                                           onChangeText={(myCode) => setCode(myCode)}
                                            onBlur={() => unActiveInput('code')}
                                            onFocus={() => activeInput('code')}
                                            keyboardType={'number-pad'}

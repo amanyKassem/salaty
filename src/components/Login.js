@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, KeyboardAvoidingView, I18nManager, AsyncStorage, ActivityIndicator } from "react-native";
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, AsyncStorage, ActivityIndicator } from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -9,8 +9,13 @@ import {userLogin} from '../actions';
 import * as Permissions from 'expo-permissions';
 import {Notifications} from 'expo'
 
-function Login({navigation}) {
+function Login({navigation , route}) {
 
+    // const userType = route.params.userType;
+    const lang = useSelector(state => state.lang.lang);
+    const auth = useSelector(state => state.auth);
+
+    const dispatch = useDispatch()
 
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
@@ -50,7 +55,7 @@ function Login({navigation}) {
 
     useEffect(() => {
         setTimeout(() => setSpinner(false), 500);
-    }, [spinner]);
+    }, [auth]);
 
 
     function activeInput(type) {
@@ -81,7 +86,7 @@ function Login({navigation}) {
                 duration: 3000,
                 textStyle: {
                     color: "white",
-                    fontFamily: 'sukar',
+                    fontFamily: 'cairo',
                     textAlign: 'center',
                 }
             });
@@ -93,7 +98,7 @@ function Login({navigation}) {
         if (password == '' || phone == '') {
             return (
                 <View
-                    style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , {
+                    style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , styles.marginBottom_60 , {
                         backgroundColor:'#ccc'
                     }]}
                 >
@@ -104,7 +109,7 @@ function Login({navigation}) {
 
         return (
             <TouchableOpacity
-                onPress={() => onLoginPressed()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40]}>
+                onPress={() => onLoginPressed()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , styles.marginBottom_60]}>
                 <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('login') }</Text>
             </TouchableOpacity>
         );
@@ -115,7 +120,7 @@ function Login({navigation}) {
 
         if (!err){
             setSpinner(true);
-            // dispatch(userLogin(phone, password, deviceId , lang , navigation));
+            dispatch(userLogin(phone, password, deviceId , lang , navigation));
         }
     }
 
@@ -123,7 +128,7 @@ function Login({navigation}) {
         if (spinner){
             return(
                 <View style={[styles.loading, styles.flexCenter, {height:'100%'}]}>
-                    <ActivityIndicator size="large" color={COLORS.blue} style={{ alignSelf: 'center' }} />
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
                 </View>
             );
         }
@@ -134,6 +139,9 @@ function Login({navigation}) {
             {renderLoader()}
                 <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 , {marginLeft:15}]}>
+                        <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
+                    </TouchableOpacity>
                     <Image source={require('../../assets/images/login_vector.png')} style={[styles.icon220 , {top:40 , left:30 , zIndex:1}]} resizeMode={'contain'} />
 
                     <View style={[styles.bgFullWidth,styles.paddingHorizontal_20 ,styles.bg_White,
@@ -171,10 +179,21 @@ function Login({navigation}) {
 
                                {renderSubmit()}
 
-                               <TouchableOpacity onPress={() => navigation.push('register')} style={[styles.directionRow , styles.marginTop_60 , styles.marginBottom_15]}>
+                               <TouchableOpacity onPress={() => navigation.push('register')} style={[styles.directionRow , styles.marginBottom_15]}>
                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('haveNoAcc') }</Text>
                                    <Text style={[styles.textRegular , styles.text_green , styles.textSize_14 , {marginLeft:5}]}>{ i18n.t('createAcc') }</Text>
                                </TouchableOpacity>
+
+                               {/*{*/}
+                                   {/*userType === 'user' ?*/}
+                                       {/*<TouchableOpacity onPress={() => navigation.push('register')} style={[styles.directionRow , styles.marginBottom_15]}>*/}
+                                           {/*<Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('haveNoAcc') }</Text>*/}
+                                           {/*<Text style={[styles.textRegular , styles.text_green , styles.textSize_14 , {marginLeft:5}]}>{ i18n.t('createAcc') }</Text>*/}
+                                       {/*</TouchableOpacity>*/}
+                                       {/*:*/}
+                                       {/*null*/}
+                               {/*}*/}
+
 
                            </Form>
                        </KeyboardAvoidingView>

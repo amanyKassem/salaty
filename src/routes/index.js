@@ -22,12 +22,11 @@ function renderScreens() {
 	}, []);
 
 
-	// const auth = useSelector(state => state.auth);
-	const auth = true;
+	const auth = useSelector(state => state.auth);
+	console.log('auth' , auth)
 
 
-	// if (auth.user !== null) {
-	if (auth) {
+	if (auth.user !== null) {
 		return (
 			<RootStack.Screen name={'MainStack'} component={MainStackNavigator} />
 		)

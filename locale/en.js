@@ -244,6 +244,9 @@ const en = {
     'numOrImg'                  : "You can enter the number or photograph the card",
     'withdrawal'                : "The withdrawal was successful",
     'noCredit'                  : "No operation can be applied to this card until it has credit and please inform the customer",
+    'selectUser'                : "Select account type",
+    'client'                    : "Client",
+    'cashier'                   : "Cashier",
 };
 
 export default en;

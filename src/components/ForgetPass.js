@@ -4,31 +4,39 @@ import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
+import { useDispatch, useSelector } from 'react-redux'
+import {checkPhone} from "../actions";
 
 function ForgetPass({navigation}) {
 
+    const lang = useSelector(state => state.lang.lang);
+    const dispatch = useDispatch();
 
-    const [code, setCode] = useState('');
-    const [codeStatus, setCodeStatus] = useState(0);
+    const [phone, setPhone] = useState('');
+    const [phoneStatus, setPhoneStatus] = useState(0);
     const [spinner, setSpinner] = useState(false);
 
 
     useEffect(() => {
-        setTimeout(() => setSpinner(false), 500);
-    }, [spinner]);
+        const unsubscribe = navigation.addListener('focus', () => {
+            setSpinner(false)
+        });
+        setSpinner(false)
+        return unsubscribe;
+    }, [navigation, spinner]);
 
 
     function activeInput(type) {
-        if (type === 'code' || code !== '') setCodeStatus(1);
+        if (type === 'phone' || phone !== '') setPhoneStatus(1);
     }
 
     function unActiveInput(type) {
-        if (type === 'code' && code === '') setCodeStatus(0);
+        if (type === 'phone' && phone === '') setPhoneStatus(0);
     }
 
 
     function renderSubmit() {
-        if (code == '') {
+        if (phone == '') {
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , {
@@ -49,7 +57,8 @@ function ForgetPass({navigation}) {
     }
 
     function onConfirm() {
-        navigation.push('changePass')
+        // setSpinner(true);
+        dispatch(checkPhone(phone, lang, navigation));
     }
 
     function renderLoader(){
@@ -85,11 +94,11 @@ function ForgetPass({navigation}) {
                         <Form style={[styles.Width_100 , styles.flexCenter]}>
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
                                 <Item floatingLabel style={[styles.item]}>
-                                    <Label style={[styles.label, styles.textRegular ,{ color:codeStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('code') }</Label>
-                                    <Input style={[styles.input, styles.height_50, (codeStatus === 1 ? styles.Active : styles.noActive)]}
-                                           onChangeText={(code) => setCode(code)}
-                                           onBlur={() => unActiveInput('code')}
-                                           onFocus={() => activeInput('code')}
+                                    <Label style={[styles.label, styles.textRegular ,{ color:phoneStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('phone') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (phoneStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(phone) => setPhone(phone)}
+                                           onBlur={() => unActiveInput('phone')}
+                                           onFocus={() => activeInput('phone')}
                                            keyboardType={'number-pad'}
                                     />
                                 </Item>

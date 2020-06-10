@@ -3,8 +3,9 @@ import {View, Text, Image, TouchableOpacity, Dimensions , Switch} from "react-na
 import {Container, Content, Card, Form} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import RNPickerSelect from 'react-native-picker-select';
-import COLORS from "../consts/colors";
+import COLORS from "../consts/colors";;
+import {useDispatch, useSelector} from "react-redux";
+import {getNoti} from "../actions";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -13,10 +14,22 @@ const isIOS = Platform.OS === 'ios';
 function Settings({navigation , route}) {
 
     const authType = route.params.authType ;
-    const [switchValue, setSwitchValue] = useState(false);
+
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
+    let isNotify = useSelector(state => state.auth.isNotify);
+
+    const [switchValue, setSwitchValue] = useState(isNotify);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setSwitchValue(isNotify);
+    }, [isNotify]);
 
     function toggleSwitch(value) {
-        setSwitchValue(value);
+        setSwitchValue(value)
+        dispatch(getNoti(lang , value , token))
     }
 
     return (

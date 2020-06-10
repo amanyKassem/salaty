@@ -188,6 +188,9 @@ const styles = ({
     marginBottom_35 : {
         marginBottom      : 35
     },
+    marginBottom_60: {
+        marginBottom      : 60
+    },
     marginTop_5 : {
         marginTop      : 5
     },

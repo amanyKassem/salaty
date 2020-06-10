@@ -5,6 +5,8 @@ import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import RNPickerSelect from 'react-native-picker-select';
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {updateProfile , getCities} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -12,19 +14,31 @@ const isIOS = Platform.OS === 'ios';
 
 function EditData({navigation , route}) {
 
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+    const user = useSelector(state => state.auth.user.data);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const cities = useSelector(state => state.cities.cities);
+    const citiesLoader = useSelector(state => state.cities.loader);
+
     const authType = route.params.authType ;
-    const [fullName, setFullName] = useState('اماني');
-    const [phone, setPhone] = useState('012345678');
-    const [city, setCity] = useState('mansoura');
+    const [fullName, setFullName] = useState(user.name);
+    const [phone, setPhone] = useState(user.phone);
+    const [city, setCity] = useState(user.city_id);
     const [fullNameStatus, setFullNameStatus] = useState(1);
     const [phoneStatus, setPhoneStatus] = useState(1);
-    const [spinner, setSpinner] = useState(false);
+
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setIsSubmitted(false)
+    }, []);
 
 
     useEffect(() => {
-        setTimeout(() => setSpinner(false), 500);
-    }, [spinner]);
-
+        dispatch(getCities(lang))
+    }, [citiesLoader]);
 
     function activeInput(type) {
         if (type === 'fullName' || fullName !== '') setFullNameStatus(1);
@@ -49,6 +63,14 @@ function EditData({navigation , route}) {
             );
         }
 
+        if (isSubmitted){
+            return(
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
+            )
+        }
+
         return (
             <TouchableOpacity
                 onPress={() => onEdit()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_25 , styles.marginBottom_35]}>
@@ -57,24 +79,15 @@ function EditData({navigation , route}) {
         );
     }
 
-    function onEdit() {
-        navigation.navigate('profile')
+    function onEdit(){
+        setIsSubmitted(true)
+        dispatch(updateProfile(lang , fullName , phone , city , token , navigation , authType));
     }
 
-    function renderLoader(){
-        if (spinner){
-            return(
-                <View style={[styles.loading, styles.flexCenter, {height:'100%'}]}>
-                    <ActivityIndicator size="large" color={COLORS.blue} style={{ alignSelf: 'center' }} />
-                </View>
-            );
-        }
-    }
 
 
     return (
         <Container>
-            {renderLoader()}
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
@@ -151,11 +164,14 @@ function EditData({navigation , route}) {
                                         label: i18n.t('city') ,
                                     }}
                                     onValueChange={(city) => setCity(city)}
-                                    items={[
-                                        { label: 'القاهرة', value: 'cairo' },
-                                        { label: 'الاسكندرية', value: 'alex' },
-                                        { label: 'المنصورة', value: 'mansoura' },
-                                    ]}
+                                    items={cities ?
+                                        cities.map((city, i) => {
+                                                return (
+                                                    { label: city.name, value: city.id , key: city.id}
+                                                )
+                                            }
+                                        )
+                                        :  [] }
                                     Icon={() => {
                                         return <Image source={city !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}

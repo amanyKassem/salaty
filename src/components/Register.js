@@ -1,16 +1,21 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, KeyboardAvoidingView, Platform, AsyncStorage, ActivityIndicator } from "react-native";
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, Platform, AsyncStorage, ActivityIndicator } from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import RNPickerSelect from 'react-native-picker-select';
+import {useDispatch, useSelector} from "react-redux";
+import {getCities , register} from "../actions";
 
 
 const isIOS = Platform.OS === 'ios';
 
 function Register({navigation}) {
 
+    const lang = useSelector(state => state.lang.lang);
+    const cities = useSelector(state => state.cities.cities);
+    const citiesLoader = useSelector(state => state.cities.loader);
 
     const [fullName, setFullName] = useState('');
     const [phone, setPhone] = useState('');
@@ -19,21 +24,29 @@ function Register({navigation}) {
     const [confirmPass, setConfirmPass] = useState('');
     const [fullNameStatus, setFullNameStatus] = useState(0);
     const [phoneStatus, setPhoneStatus] = useState(0);
-    const [cityStatus, setCityStatus] = useState(0);
     const [passwordStatus, setPasswordStatus] = useState(0);
     const [confirmPassStatus, setConfirmPassStatus] = useState(0);
     const [spinner, setSpinner] = useState(false);
 
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        setTimeout(() => setSpinner(false), 500);
-    }, [spinner]);
+        dispatch(getCities(lang))
+    }, [citiesLoader]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setSpinner(false)
+        });
+        setSpinner(false)
+        return unsubscribe;
+    }, [navigation, spinner]);
 
 
     function activeInput(type) {
         if (type === 'fullName' || fullName !== '') setFullNameStatus(1);
         if (type === 'phone' || phone !== '') setPhoneStatus(1);
-        if (type === 'city' || city !== '') setCityStatus(1);
         if (type === 'password' || password !== '') setPasswordStatus(1);
         if (type === 'confirmPass' || confirmPass !== '') setConfirmPassStatus(1);
     }
@@ -41,10 +54,45 @@ function Register({navigation}) {
     function unActiveInput(type) {
         if (type === 'fullName' && fullName === '') setFullNameStatus(0);
         if (type === 'phone' && phone === '') setPhoneStatus(0);
-        if (type === 'city' && city === '') setCityStatus(0);
         if (type === 'password' && password === '') setPasswordStatus(0);
         if (type === 'confirmPass' && confirmPass === '') setConfirmPassStatus(0);
     }
+
+
+    const validate = () => {
+        let isError         = false;
+        let msg             = '';
+
+        if (fullName.length <= 0) {
+            isError     = true;
+            msg         = i18n.t('name');
+        } else if (phone.length <= 0) {
+            isError     = true;
+            msg         = i18n.t('namereq');
+        } else if (password.length < 6){
+            isError     = true;
+            msg         = i18n.t('passreq');
+        } else if (password !== confirmPass){
+            isError     = true;
+            msg         = i18n.translate('notmatch');
+        }
+
+        if (msg !== '') {
+            Toast.show({
+                text        : msg,
+                type        : "danger",
+                duration    : 3000,
+                textStyle   	: {
+                    color       	: "white",
+                    fontFamily  	: 'cairo',
+                    textAlign   	: 'center'
+                }
+            });
+        }
+
+        return isError;
+    };
+
 
     function renderSubmit() {
         if (fullName == '' ||password == '' || phone == '' || confirmPass == ''|| city == null) {
@@ -68,14 +116,20 @@ function Register({navigation}) {
     }
 
     function onRegisterPressed() {
-        navigation.push('activationCode')
+        const err = validate();
+
+        if (!err){
+            setSpinner(true);
+            const data = { fullName, phone, city, password, lang };
+            dispatch(register(data, navigation));
+        }
     }
 
     function renderLoader(){
         if (spinner){
             return(
                 <View style={[styles.loading, styles.flexCenter, {height:'100%'}]}>
-                    <ActivityIndicator size="large" color={COLORS.blue} style={{ alignSelf: 'center' }} />
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
                 </View>
             );
         }
@@ -137,11 +191,14 @@ function Register({navigation}) {
                                         label: i18n.t('city') ,
                                     }}
                                     onValueChange={(city) => setCity(city)}
-                                    items={[
-                                        { label: 'القاهرة', value: 'cairo' },
-                                        { label: 'الاسكندرية', value: 'alex' },
-                                        { label: 'المنصورة', value: 'mansoura' },
-                                    ]}
+                                    items={cities ?
+                                            cities.map((city, i) => {
+                                                    return (
+                                                        { label: city.name, value: city.id , key: city.id}
+                                                    )
+                                                }
+                                            )
+                                            :  [] }
                                     Icon={() => {
                                         return <Image source={city !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top: isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}

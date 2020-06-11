@@ -227,6 +227,7 @@ const en = {
     'bankName'                  : 'Transferred bank name',
     'draftImage'                : 'Draft image',
     'cardImage'                 : 'Card image (Optional)',
+    'cardImg'                   : 'Card image',
     'cardInfo'                  : 'The card information to be transferred to',
     'transferData'              : 'Transfer data',
     'newPhone'                  : "New user\'s mobile",
@@ -247,6 +248,7 @@ const en = {
     'selectUser'                : "Select account type",
     'client'                    : "Client",
     'cashier'                   : "Cashier",
+    'cardTrans'                 : "Card number transferred to",
 };
 
 export default en;

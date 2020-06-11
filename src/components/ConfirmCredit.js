@@ -5,20 +5,30 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
-    KeyboardAvoidingView,
+    KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
-import {Container, Content, Form, Item, Label, Input} from 'native-base'
+import {Container, Content, Form, Item, Label, Input, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+import {cridetTransferConfirm} from "../actions";
+import {useDispatch, useSelector} from "react-redux";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function ConfirmCredit({navigation , route}) {
+
+
+    const activeCode = route.params.activeCode;
+    const trans_id = route.params.trans_id;
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+
+    useEffect(() => {
+        alert('activation code : ' + activeCode)
+    }, []);
 
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -33,10 +43,11 @@ function ConfirmCredit({navigation , route}) {
         if (type === 'code' && code === '') setCodeStatus(0);
     }
 
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, [isSubmitted]);
+    }, []);
 
 
 
@@ -54,10 +65,9 @@ function ConfirmCredit({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('send') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -71,8 +81,22 @@ function ConfirmCredit({navigation , route}) {
     }
 
     function onConfirm(){
-        // setIsSubmitted(true)
-        navigation.navigate('home')
+        if (activeCode == code) {
+            setIsSubmitted(true);
+            dispatch(cridetTransferConfirm(lang , trans_id, token , navigation));
+        }
+        else {
+            Toast.show({
+                text        	: i18n.t('codeNotMatch'),
+                type			: "danger",
+                duration    	: 3000,
+                textStyle   	: {
+                    color       	: "white",
+                    fontFamily  	: 'cairo',
+                    textAlign   	: 'center'
+                }
+            });
+        }
     }
 
 

@@ -11,19 +11,19 @@ import {Container, Content, Form, Item, Label, Input, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
-import {confirmTransferCard} from "../actions";
-import {useDispatch, useSelector} from "react-redux";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function ActivateCard({navigation , route}) {
+function ActiveConfirmCard({navigation , route}) {
 
     const activeCode = route.params.activeCode;
-    const trans_id = route.params.trans_id;
-    const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const credit = route.params.credit;
+    const image = route.params.image;
+    const phone = route.params.phone;
+    const card_identity = route.params.card_identity;
+
 
     useEffect(() => {
         alert('activation code : ' + activeCode)
@@ -33,8 +33,6 @@ function ActivateCard({navigation , route}) {
 
     const [code, setCode] = useState('');
     const [codeStatus, setCodeStatus] = useState(0);
-
-    const dispatch = useDispatch();
 
     function activeInput(type) {
         if (type === 'code' || code !== '') setCodeStatus(1);
@@ -59,7 +57,7 @@ function ActivateCard({navigation , route}) {
                         backgroundColor:'#ccc'
                     }]}
                 >
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('confirm') }</Text>
+                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
                 </View>
             );
         }
@@ -74,7 +72,7 @@ function ActivateCard({navigation , route}) {
         return (
             <TouchableOpacity
                 onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('confirm') }</Text>
+                <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
             </TouchableOpacity>
 
         );
@@ -83,7 +81,7 @@ function ActivateCard({navigation , route}) {
     function onConfirm(){
         if (activeCode == code) {
             setIsSubmitted(true);
-            dispatch(confirmTransferCard(lang , trans_id, token , navigation));
+            navigation.push('enterBill' , {card_identity , image , phone , credit})
         }
         else {
             Toast.show({
@@ -123,10 +121,10 @@ function ActivateCard({navigation , route}) {
                     {borderTopRightRadius:50 , borderTopLeftRadius:50}]}>
 
                     <View style={[styles.directionRow,styles.marginBottom_35]}>
-                        <Image source={require('../../assets/images/change_card_small.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
+                        <Image source={require('../../assets/images/confirmat_card.png')} style={[styles.icon35 , styles.marginBottom_7]} resizeMode={'contain'} />
                         <View style={{marginLeft:15}}>
-                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14,styles.alignStart]}>{ i18n.t('transferCard') }</Text>
-                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13,styles.alignStart]}>{ i18n.t('enterCode') }</Text>
+                            <Text style={[styles.textBold , styles.text_black , styles.textSize_14,styles.alignStart]}>{ i18n.t('confirmCard') }</Text>
+                            <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13,styles.alignStart]}>{ i18n.t('numOrImg') }</Text>
                         </View>
                     </View>
 
@@ -158,6 +156,6 @@ function ActivateCard({navigation , route}) {
     );
 }
 
-export default ActivateCard;
+export default ActiveConfirmCard;
 
 

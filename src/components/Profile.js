@@ -1,9 +1,9 @@
-import React, { useEffect} from "react";
+import React from "react";
 import {View, Text, Image, TouchableOpacity, Dimensions , I18nManager} from "react-native";
 import {Container, Content} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import {useDispatch, useSelector} from "react-redux";
+import { useSelector} from "react-redux";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -12,11 +12,8 @@ const isIOS = Platform.OS === 'ios';
 function Profile({navigation , route}) {
 
     const authType = route.params.authType ;
-    const lang  = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
 
     const user      = useSelector(state => state.auth.user ? state.auth.user.data : { avatar: '../../assets/images/user_small_icon.png', name: null, email: null, phone: null });
-    const dispatch  = useDispatch();
 
     return (
         <Container>
@@ -65,11 +62,20 @@ function Profile({navigation , route}) {
                         <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>{user.phone}</Text>
                     </View>
 
-                    <View style={[styles.directionRow , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
-                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{ i18n.t('city') }</Text>
-                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , {marginRight:20}]}> : </Text>
-                        <Text style={[styles.textRegular , styles.text_black , styles.textSize_14]}>{user.city}</Text>
-                    </View>
+                    {
+                        authType === 'user' ?
+                            <View
+                                style={[styles.directionRow, styles.paddingHorizontal_25, styles.marginBottom_15, {paddingBottom: 15}]}>
+                                <Text
+                                    style={[styles.textRegular, styles.text_gray, styles.textSize_14, styles.width_90, {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}]}>{i18n.t('city')}</Text>
+                                <Text
+                                    style={[styles.textRegular, styles.text_gray, styles.textSize_14, {marginRight: 20}]}> : </Text>
+                                <Text
+                                    style={[styles.textRegular, styles.text_black, styles.textSize_14]}>{user.city}</Text>
+                            </View>
+                            :
+                            null
+                    }
 
 
 

@@ -227,6 +227,7 @@ const ar = {
     'bankName'                  : 'اسم البنك المحول منه',
     'draftImage'                : 'صورة الحوالة',
     'cardImage'                 : 'صورة البطاقة (اختياري)',
+    'cardImg'                   : 'صورة البطاقة',
     'cardInfo'                  : 'بيانات البطاقة التي ستحول اليها',
     'transferData'              : 'بيانات النقل',
     'newPhone'                  : "جوال المستخدم الجديد",
@@ -249,6 +250,7 @@ const ar = {
     'selectUser'                : "اختر نوع الحساب",
     'client'                    : "عميل",
     'cashier'                   : "كاشير",
+    'cardTrans'                 : "رقم البطاقة المحول لها",
 };
 
 export default ar;

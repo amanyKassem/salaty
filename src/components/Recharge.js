@@ -15,6 +15,8 @@ import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import {useDispatch, useSelector} from "react-redux";
+import {getBanks , getCardRecharge} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -24,10 +26,15 @@ function Recharge({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const [bankName, setBankName] = useState('cairo');
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+    const banks = useSelector(state => state.banks.banks);
+    const banksLoader = useSelector(state => state.banks.loader);
+
+    const [bankId, setBankId] = useState(null);
 
     const [draftImage, setDraftImage] = useState(i18n.t('draftImage'));
-    const [imgBase64,, setImgBase64] = useState('');
+    const [base64, setBase64] = useState('');
 
     const [username, setUsername] = useState('');
     const [usernameStatus, setUsernameStatus] = useState(0);
@@ -35,31 +42,52 @@ function Recharge({navigation , route}) {
     const [accNameStatus, setAccNameStatus] = useState(0);
     const [bankTransName, setBankTransName] = useState('');
     const [bankTransNameStatus, setBankTransNameStatus] = useState(0);
+    const [cardNumber, setCardNumber] = useState('');
+    const [cardNumberStatus, setCardNumberStatus] = useState(0);
 
     function activeInput(type) {
         if (type === 'accName' || accName !== '') setAccNameStatus(1);
         if (type === 'username' || username !== '') setUsernameStatus(1);
         if (type === 'bankTransName' || bankTransName !== '') setBankTransNameStatus(1);
+        if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
     }
 
     function unActiveInput(type) {
         if (type === 'accName' && accName === '') setAccNameStatus(0);
         if (type === 'username' && username === '') setUsernameStatus(0);
         if (type === 'bankTransName' && bankTransName === '') setBankTransNameStatus(0);
+        if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
     }
+
+
+    const dispatch = useDispatch();
+
+    function fetchData(){
+        dispatch(getBanks(lang, token))
+    }
+
+    useEffect(() => {
+        fetchData();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchData();
+        });
+
+        return unsubscribe;
+    }, [navigation , banksLoader]);
 
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, [isSubmitted]);
+    }, []);
 
 
-    async function askPermissionsAsync (){
+    const askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
     };
 
-    async function _pickImage () {
+    const _pickImage = async () => {
 
         askPermissionsAsync();
 
@@ -67,23 +95,20 @@ function Recharge({navigation , route}) {
             allowsEditing: true,
             aspect: [4, 3],
             base64:true,
-            quality:.1
-
         });
 
-        let localUri = result.uri;
-        let filename = localUri.split('/').pop();
+        console.log('result' , result)
 
-        // check if there is image then set it and make button not disabled
         if (!result.cancelled) {
-            setDraftImage(filename)
-            setImgBase64(result.base64)
+            setDraftImage(result.uri.split('/').pop());
+            setBase64(result.base64);
         }
     };
 
 
+
     function renderConfirm(){
-        if (username == '' || accName == '' || bankTransName == '' || draftImage == i18n.t('draftImage')|| draftImage == ''){
+        if (bankId == null || username == '' || accName == '' || bankTransName == '' ||  cardNumber == '' || draftImage == i18n.t('draftImage')|| draftImage == ''){
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -96,10 +121,9 @@ function Recharge({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('send') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -113,12 +137,12 @@ function Recharge({navigation , route}) {
     }
 
     function onConfirm(){
-        // setIsSubmitted(true)
-        navigation.navigate('home')
+        setIsSubmitted(true);
+        dispatch(getCardRecharge(lang , username , accName , bankTransName , base64 , bankId , cardNumber , token , navigation));
     }
 
-    function selectBank(name){
-        setBankName(name)
+    function selectBank(id){
+        setBankId(id)
     }
 
 
@@ -157,24 +181,24 @@ function Recharge({navigation , route}) {
                     <View style={[styles.marginBottom_10]}>
 
                         <ScrollView style={[styles.scrollView]} horizontal={true} showsHorizontalScrollIndicator={false}>
-
-                            <TouchableOpacity onPress={() => selectBank('cairo')} style={[styles.Radius_7 , styles.icon130 , styles.marginBottom_12 , {marginRight:10}]}>
-                                <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth , { borderWidth:1 , borderColor: bankName === 'cairo' ? COLORS.mstarda : 'transparent'}]}>
-                                    <Image source={require('../../assets/images/bank_alqahra.png')} style={[styles.icon100 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                </Card>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => selectBank('cib')} style={[styles.Radius_7 , styles.icon130 , styles.marginBottom_12 , {marginRight:10}]}>
-                                <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth , { borderWidth:1 , borderColor: bankName === 'cib' ? COLORS.mstarda : 'transparent'}]}>
-                                    <Image source={require('../../assets/images/cib.png')} style={[styles.icon100 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                </Card>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => selectBank('alrajhe')} style={[styles.Radius_7 , styles.icon130 , styles.marginBottom_12 , {marginRight:10}]}>
-                                <Card style={[styles.directionColumnCenter ,styles.Radius_7 , styles.bgFullWidth , { borderWidth:1 , borderColor: bankName === 'alrajhe' ? COLORS.mstarda : 'transparent'}]}>
-                                    <Image source={require('../../assets/images/alrajhe.png')} style={[styles.icon100 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                </Card>
-                            </TouchableOpacity>
+                            {
+                                banks.map((bank, i) => {
+                                    return(
+                                        <TouchableOpacity key={bank.id} onPress={() => selectBank(bank.id)}
+                                                          style={[styles.Radius_7, styles.icon130, styles.marginBottom_12, {marginRight: 10}]}>
+                                            <Card
+                                                style={[styles.directionColumnCenter, styles.Radius_7, styles.bgFullWidth, {
+                                                    borderWidth: 1,
+                                                    borderColor: bankId === bank.id ? COLORS.mstarda : 'transparent'
+                                                }]}>
+                                                <Image source={{uri:bank.image}}
+                                                       style={[styles.icon100, styles.marginBottom_7]}
+                                                       resizeMode={'contain'}/>
+                                            </Card>
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
 
                         </ScrollView>
                     </View>
@@ -214,6 +238,17 @@ function Recharge({navigation , route}) {
                                            onChangeText={(bankTransName) => setBankTransName(bankTransName)}
                                            onBlur={() => unActiveInput('bankTransName')}
                                            onFocus={() => activeInput('bankTransName')}
+                                    />
+                                </Item>
+                            </View>
+
+                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                                <Item floatingLabel style={[styles.item]}>
+                                    <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(cardNumber) => setCardNumber(cardNumber)}
+                                           onBlur={() => unActiveInput('cardNumber')}
+                                           onFocus={() => activeInput('cardNumber')}
                                     />
                                 </Item>
                             </View>

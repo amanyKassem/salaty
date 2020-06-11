@@ -1,10 +1,21 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, Platform, KeyboardAvoidingView} from "react-native";
-import {Container, Content, Card, Form, Item, Label, Input, Toast} from 'native-base'
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    Dimensions,
+    Platform,
+    KeyboardAvoidingView,
+    ActivityIndicator, I18nManager
+} from "react-native";
+import {Container, Content, Card, Form, Item, Label, Input, Toast, Textarea} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import RNPickerSelect from 'react-native-picker-select';
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {getUserCards, giftCard} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -14,23 +25,38 @@ function GiftCard({navigation , route}) {
 
     const authType = route.params.authType ;
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+    const userCards = useSelector(state => state.userCards.userCards);
+    const userCardsLoader = useSelector(state => state.userCards.loader);
 
     const [phone, setPhone] = useState('');
     const [phoneStatus, setPhoneStatus] = useState(0);
     const [card, setCard] = useState('');
+    const [transferNote, setTransferNote] = useState('');
+    const [transferNoteStatus, setTransferNoteStatus] = useState(0);
 
     function activeInput(type) {
         if (type === 'phone' || phone !== '') setPhoneStatus(1);
+        if (type === 'transferNote' || transferNote !== '') setTransferNoteStatus(1);
     }
 
     function unActiveInput(type) {
         if (type === 'phone' && phone === '') setPhoneStatus(0);
+        if (type === 'transferNote' && transferNote === '') setTransferNoteStatus(0);
     }
 
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsSubmitted(false)
     }, [isSubmitted]);
+
+
+    useEffect(() => {
+        dispatch(getUserCards(lang , token))
+    }, [userCardsLoader]);
 
 
     function renderConfirm(){
@@ -47,10 +73,9 @@ function GiftCard({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('send') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -63,9 +88,8 @@ function GiftCard({navigation , route}) {
         );
     }
     function onConfirm(){
-
-        setIsSubmitted(true)
-        navigation.navigate('giftCardSuccessfully',{ authType })
+        setIsSubmitted(true);
+        dispatch(giftCard(lang , phone, card , transferNote , token , navigation , authType));
     }
 
 
@@ -121,12 +145,13 @@ function GiftCard({navigation , route}) {
                             </View>
 
                             <View style={[styles.height_50 ,styles.input ,(card !== ''? styles.Active : styles.noActive), styles.flexCenter,
-                                styles.marginBottom_30 , styles.Width_100]}>
+                                styles.marginBottom_5 , styles.Width_100]}>
                                 <RNPickerSelect
                                     style={{
                                         inputAndroid: {
                                             fontFamily: 'cairo',
-                                            color:COLORS.black
+                                            color:COLORS.black,
+                                            marginRight:20
                                         },
                                         inputIOS: {
                                             fontFamily: 'cairo',
@@ -138,16 +163,27 @@ function GiftCard({navigation , route}) {
                                         label: i18n.t('chooseCard') ,
                                     }}
                                     onValueChange={(card) => setCard(card)}
-                                    items={[
-                                        { label: 'القاهرة', value: 'cairo' },
-                                        { label: 'الاسكندرية', value: 'alex' },
-                                        { label: 'المنصورة', value: 'mansoura' },
-                                    ]}
+                                    items={userCards ?
+                                        userCards.map((userCard, i) => {
+                                                return (
+                                                    { label: userCard.identity, value: userCard.id , key: userCard.id}
+                                                )
+                                            }
+                                        )
+                                        :  [] }
                                     Icon={() => {
                                         return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}
                                 />
                             </View>
+
+                            <Label style={[styles.label, styles.textRegular ,{ color:transferNoteStatus === 1 ?  COLORS.green :  COLORS.gray, top:transferNoteStatus === 1 ? 10 : 40}]}>{ i18n.t('notes') }</Label>
+                            <Textarea style={[styles.input, styles.height_120 , styles.Width_100 , styles.paddingVertical_10,
+                                (transferNoteStatus === 1 ? styles.Active : styles.noActive) , styles.marginBottom_25]}
+                                      onChangeText={(transferNote) => setTransferNote(transferNote)}
+                                      onBlur={() => unActiveInput('transferNote')}
+                                      onFocus={() => activeInput('transferNote')}
+                            />
 
 
                             {renderConfirm()}

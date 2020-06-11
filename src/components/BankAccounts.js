@@ -1,9 +1,11 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView} from "react-native";
 import {Container, Content, Card, Form} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {getBanks} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -11,9 +13,29 @@ const isIOS = Platform.OS === 'ios';
 
 function BankAccounts({navigation , route}) {
 
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+    const banks = useSelector(state => state.banks.banks);
+    const banksLoader = useSelector(state => state.banks.loader);
+
+    const dispatch = useDispatch();
+
+    function fetchData(){
+        dispatch(getBanks(lang, token))
+    }
+
+    useEffect(() => {
+        fetchData();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchData();
+        });
+
+        return unsubscribe;
+    }, [navigation , banksLoader]);
+
     return (
         <Container>
-            <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
+            <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -41,60 +63,45 @@ function BankAccounts({navigation , route}) {
                         </View>
                     </View>
 
-                    <View style={[styles.Radius_7 , styles.Width_100, styles.marginBottom_12]}>
-                        <Card style={[styles.directionRow ,styles.Radius_7 , styles.bgFullWidth , {overflow:'hidden'}]}>
-                            <View style={[styles.paddingHorizontal_10 ,{ borderBottomWidth:1 , borderColor: COLORS.mstarda }]}>
-                                <Image source={require('../../assets/images/bank_alqahra.png')} style={[styles.icon100 , styles.marginBottom_7]} resizeMode={'contain'} />
-                            </View>
-                            <View style={{flex:1 , marginLeft:7 , paddingRight:7}}>
-                                <View style={[styles.directionRow]}>
-                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('bank') } :</Text>
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12, {marginLeft:5}]}>بنك القاهرة</Text>
-                                </View>
-                                <View style={[styles.directionRow , {flexWrap:'wrap'}]}>
-                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('accName') } :</Text>
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12, {marginLeft:5}]}>12345678911</Text>
-                                </View>
-                            </View>
-                        </Card>
-                    </View>
+                    <View style={[{height:height - 250}]}>
+                        <ScrollView contentContainerStyle={[styles.Width_100]} showsVerticalScrollIndicator={false}>
 
-                    <View style={[styles.Radius_7 , styles.Width_100, styles.marginBottom_12]}>
-                        <Card style={[styles.directionRow ,styles.Radius_7 , styles.bgFullWidth , {overflow:'hidden'}]}>
-                            <View style={[styles.paddingHorizontal_10 ,{ borderBottomWidth:1 , borderColor: COLORS.mstarda }]}>
-                                <Image source={require('../../assets/images/cib.png')} style={[styles.icon100 , styles.marginBottom_7]} resizeMode={'contain'} />
-                            </View>
-                            <View style={{flex:1 , marginLeft:7 , paddingRight:7}}>
-                                <View style={[styles.directionRow]}>
-                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('bank') } :</Text>
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12, {marginLeft:5}]}>بنك CIB</Text>
-                                </View>
-                                <View style={[styles.directionRow , {flexWrap:'wrap'}]}>
-                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('accName') } :</Text>
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12, {marginLeft:5 }]}>123456789119999</Text>
-                                </View>
-                            </View>
-                        </Card>
-                    </View>
+                            {
+                                banks.map((bank, i) => {
+                                    return (
+                                        <View key={bank.id} style={[styles.Radius_7, styles.Width_100, styles.marginBottom_12]}>
+                                            <Card
+                                                style={[styles.directionRow, styles.Radius_7, styles.bgFullWidth, {overflow: 'hidden'}]}>
+                                                <View style={[styles.paddingHorizontal_10, {
+                                                    borderBottomWidth: 1,
+                                                    borderColor: COLORS.mstarda
+                                                }]}>
+                                                    <Image source={{uri:bank.image}}
+                                                           style={[styles.icon100, styles.marginBottom_7]}
+                                                           resizeMode={'contain'}/>
+                                                </View>
+                                                <View style={{flex: 1, marginLeft: 7, paddingRight: 7}}>
+                                                    <View style={[styles.directionRow, {flexWrap: 'wrap'}]}>
+                                                        <Text
+                                                            style={[styles.textRegular, styles.text_gray, styles.textSize_14]}>{i18n.t('bank')} :</Text>
+                                                        <Text
+                                                            style={[styles.textBold, styles.text_black, styles.textSize_12, {marginLeft: 5}]}>{bank.name}</Text>
+                                                    </View>
+                                                    <View style={[styles.directionRow, {flexWrap: 'wrap'}]}>
+                                                        <Text
+                                                            style={[styles.textRegular, styles.text_gray, styles.textSize_14]}>{i18n.t('accName')} :</Text>
+                                                        <Text
+                                                            style={[styles.textBold, styles.text_black, styles.textSize_12, {marginLeft: 5}]}>{bank.account_number}</Text>
+                                                    </View>
+                                                </View>
+                                            </Card>
+                                        </View>
+                                    )
+                                })
+                            }
 
-                    <View style={[styles.Radius_7 , styles.Width_100, styles.marginBottom_12]}>
-                        <Card style={[styles.directionRow ,styles.Radius_7 , styles.bgFullWidth , {overflow:'hidden'}]}>
-                            <View style={[styles.paddingHorizontal_10 ,{ borderBottomWidth:1 , borderColor: COLORS.mstarda }]}>
-                                <Image source={require('../../assets/images/alrajhe.png')} style={[styles.icon100 , styles.marginBottom_7]} resizeMode={'contain'} />
-                            </View>
-                            <View style={{flex:1 , marginLeft:7 , paddingRight:7}}>
-                                <View style={[styles.directionRow]}>
-                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('bank') } :</Text>
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12, {marginLeft:5}]}>بنك الراجحي</Text>
-                                </View>
-                                <View style={[styles.directionRow , {flexWrap:'wrap'}]}>
-                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('accName') } :</Text>
-                                    <Text style={[styles.textBold , styles.text_black , styles.textSize_12, {marginLeft:5}]}>12345678911</Text>
-                                </View>
-                            </View>
-                        </Card>
+                        </ScrollView>
                     </View>
-
 
                 </View>
 

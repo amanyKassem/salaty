@@ -1,10 +1,12 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions , Platform } from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions, Platform, ActivityIndicator} from "react-native";
 import {Container, Content, Card, Form} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import RNPickerSelect from 'react-native-picker-select';
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {getUserCards} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -12,7 +14,23 @@ const isIOS = Platform.OS === 'ios';
 
 function InquiryCard({navigation , route}) {
 
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+    const userCards = useSelector(state => state.userCards.userCards);
+    const userCardsLoader = useSelector(state => state.userCards.loader);
     const [card, setCard] = useState('');
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setIsSubmitted(false)
+    }, [isSubmitted]);
+
+
+    useEffect(() => {
+        dispatch(getUserCards(lang , token))
+    }, [userCardsLoader]);
 
     function renderSubmit() {
         if (card == null || card == '') {
@@ -27,6 +45,14 @@ function InquiryCard({navigation , route}) {
             );
         }
 
+        if (isSubmitted){
+            return(
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
+            )
+        }
+
         return (
             <TouchableOpacity
                 onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20]}>
@@ -36,7 +62,7 @@ function InquiryCard({navigation , route}) {
     }
 
     function onConfirm() {
-        navigation.push('accStatement')
+        navigation.push('accStatement', {card})
     }
 
     return (
@@ -75,7 +101,8 @@ function InquiryCard({navigation , route}) {
                             style={{
                                 inputAndroid: {
                                     fontFamily: 'cairo',
-                                    color:COLORS.black
+                                    color:COLORS.black,
+                                    marginRight:20
                                 },
                                 inputIOS: {
                                     fontFamily: 'cairo',
@@ -87,11 +114,14 @@ function InquiryCard({navigation , route}) {
                                 label: i18n.t('chooseCard') ,
                             }}
                             onValueChange={(card) => setCard(card)}
-                            items={[
-                                { label: 'القاهرة', value: 'cairo' },
-                                { label: 'الاسكندرية', value: 'alex' },
-                                { label: 'المنصورة', value: 'mansoura' },
-                            ]}
+                            items={userCards ?
+                                userCards.map((userCard, i) => {
+                                        return (
+                                            { label: userCard.identity, value: userCard.id , key: userCard.id}
+                                        )
+                                    }
+                                )
+                                :  [] }
                             Icon={() => {
                                 return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                             }}

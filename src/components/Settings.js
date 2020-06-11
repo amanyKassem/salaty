@@ -76,18 +76,24 @@ function Settings({navigation , route}) {
                         <Text style={[styles.textRegular , styles.text_gray , styles.textSize_15]}>{ i18n.t('language') }</Text>
                         <Image source={require('../../assets/images/arrow_gray_side.png')} style={[styles.icon20, styles.transform, {left:10}]} resizeMode={'contain'} />
                     </TouchableOpacity>
+                    {
+                        authType === 'user' ?
 
-
-                    <View style={[styles.directionRowSpace , styles.borderBottomGray , styles.paddingHorizontal_25, styles.marginBottom_15,{paddingBottom:15}]}>
-                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_15]}>{ i18n.t('notifications') }</Text>
-                        <Switch
-                            style={{left:10}}
-                            onValueChange={() => toggleSwitch(!switchValue)}
-                            value={switchValue}
-                            trackColor={COLORS.mstarda}
-                            thumbColor={COLORS.mstarda}
-                        />
-                    </View>
+                            <View
+                                style={[styles.directionRowSpace, styles.borderBottomGray, styles.paddingHorizontal_25, styles.marginBottom_15, {paddingBottom: 15}]}>
+                                <Text
+                                    style={[styles.textRegular, styles.text_gray, styles.textSize_15]}>{i18n.t('notifications')}</Text>
+                                <Switch
+                                    style={{left: 10}}
+                                    onValueChange={() => toggleSwitch(!switchValue)}
+                                    value={switchValue}
+                                    trackColor={COLORS.mstarda}
+                                    thumbColor={COLORS.mstarda}
+                                />
+                            </View>
+                            :
+                            null
+                    }
 
                 </View>
 

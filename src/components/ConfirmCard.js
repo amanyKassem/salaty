@@ -5,7 +5,7 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
-    KeyboardAvoidingView,
+    KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
 import {Container, Content, Form, Item, Label, Input} from 'native-base'
 import styles from '../../assets/styles'
@@ -13,41 +13,52 @@ import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import {useDispatch, useSelector} from "react-redux";
+import {confirmCard} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function ConfirmCard({navigation , route}) {
-
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const [cardImage, setCardImage] = useState(i18n.t('cardImage'));
-    const [imgBase64,, setImgBase64] = useState('');
+    const [cardImage, setCardImage] = useState(i18n.t('cardImg'));
+    const [base64, setBase64] = useState('');
 
     const [cardNumber, setCardNumber] = useState('');
     const [cardNumberStatus, setCardNumberStatus] = useState(0);
 
+    const [phone, setPhone] = useState('');
+    const [phoneStatus, setPhoneStatus] = useState(0);
+
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
+        if (type === 'phone' || phone !== '') setPhoneStatus(1);
     }
 
     function unActiveInput(type) {
+        if (type === 'phone' && phone === '') setPhoneStatus(0);
         if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
     }
 
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
         setIsSubmitted(false)
-    }, [isSubmitted]);
+    }, []);
 
 
-    async function askPermissionsAsync (){
+    const askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
     };
 
-    async function _pickImage () {
+    const _pickImage = async () => {
 
         askPermissionsAsync();
 
@@ -55,23 +66,18 @@ function ConfirmCard({navigation , route}) {
             allowsEditing: true,
             aspect: [4, 3],
             base64:true,
-            quality:.1
-
         });
 
-        let localUri = result.uri;
-        let filename = localUri.split('/').pop();
+        console.log('result' , result)
 
-        // check if there is image then set it and make button not disabled
         if (!result.cancelled) {
-            setCardImage(filename)
-            setImgBase64(result.base64)
+            setCardImage(result.uri.split('/').pop());
+            setBase64(result.base64);
         }
     };
 
-
     function renderConfirm(){
-        if ( cardNumber == '' && (cardImage == i18n.t('cardImage')|| cardImage == '')){
+        if (phone == '' ||  cardNumber == '' || (cardImage == i18n.t('cardImg')|| cardImage == '')){
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -84,10 +90,9 @@ function ConfirmCard({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -101,8 +106,8 @@ function ConfirmCard({navigation , route}) {
     }
 
     function onConfirm(){
-        // setIsSubmitted(true)
-        navigation.push('checkCredit' , {hasCredit:false})
+        setIsSubmitted(true);
+        dispatch(confirmCard(lang , cardNumber , phone , base64  , token , navigation));
     }
 
 
@@ -143,12 +148,23 @@ function ConfirmCard({navigation , route}) {
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
+                                    />
+                                </Item>
+                            </View>
+
+                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                                <Item floatingLabel style={[styles.item]}>
+                                    <Label style={[styles.label, styles.textRegular ,{ color:phoneStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('phone') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (phoneStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(phone) => setPhone(phone)}
+                                           onBlur={() => unActiveInput('phone')}
+                                           onFocus={() => activeInput('phone')}
                                            keyboardType={'number-pad'}
                                     />
                                 </Item>
                             </View>
 
-                            <TouchableOpacity onPress={_pickImage} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImage') ? styles.Active : styles.noActive), styles.directionRowSpace,
+                            <TouchableOpacity onPress={_pickImage} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImg') ? styles.Active : styles.noActive), styles.directionRowSpace,
                                 styles.marginBottom_25 , styles.Width_100]}>
                                 <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{cardImage.substr(0,38)}</Text>
                                 <Image source={require('../../assets/images/camera_green.png')} style={[styles.icon20]} resizeMode={'contain'} />

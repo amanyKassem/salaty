@@ -10,6 +10,7 @@ const isIOS = Platform.OS === 'ios';
 
 function AccStatement({navigation , route}) {
 
+    const card = route.params.card;
     const [type, setType] = useState(0);
 
     const allData = [

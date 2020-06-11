@@ -5,7 +5,7 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
-    KeyboardAvoidingView,
+    KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
 import {Container, Content, Form, Item, Label, Input} from 'native-base'
 import styles from '../../assets/styles'
@@ -13,6 +13,8 @@ import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import {useDispatch, useSelector} from "react-redux";
+import {storeBill} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -20,10 +22,17 @@ const isIOS = Platform.OS === 'ios';
 
 function EnterBill({navigation , route}) {
 
+    const credit = route.params.credit;
+    const image = route.params.image;
+    const phone = route.params.phone;
+    const card_identity = route.params.card_identity;
+
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const [billImage, setBillImage] = useState(i18n.t('billImage'));
-    const [imgBase64,, setImgBase64] = useState('');
+    const [base64, setBase64] = useState('');
 
     const [totalBillAmount, setTotalBillAmount] = useState('');
     const [totalBillAmountStatus, setTotalBillAmountStatus] = useState(0);
@@ -37,17 +46,20 @@ function EnterBill({navigation , route}) {
     }
 
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
         setIsSubmitted(false)
-    }, [isSubmitted]);
+    }, []);
 
 
-    async function askPermissionsAsync (){
+    const askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
     };
 
-    async function _pickImage () {
+    const _pickImage = async () => {
 
         askPermissionsAsync();
 
@@ -55,17 +67,13 @@ function EnterBill({navigation , route}) {
             allowsEditing: true,
             aspect: [4, 3],
             base64:true,
-            quality:.1
-
         });
 
-        let localUri = result.uri;
-        let filename = localUri.split('/').pop();
+        console.log('result' , result)
 
-        // check if there is image then set it and make button not disabled
         if (!result.cancelled) {
-            setBillImage(filename)
-            setImgBase64(result.base64)
+            setBillImage(result.uri.split('/').pop());
+            setBase64(result.base64);
         }
     };
 
@@ -84,10 +92,9 @@ function EnterBill({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -101,8 +108,8 @@ function EnterBill({navigation , route}) {
     }
 
     function onConfirm(){
-        // setIsSubmitted(true)
-        navigation.navigate('confirmCard')
+        setIsSubmitted(true);
+        dispatch(storeBill(lang , card_identity , phone , totalBillAmount , base64 , image  , token , navigation ));
     }
 
 

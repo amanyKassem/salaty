@@ -5,12 +5,14 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
-    KeyboardAvoidingView,
+    KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
-import {Container, Content, Accordion, Item, Label, Input, Card} from 'native-base'
+import {Container, Content, Accordion, Item, Label, Input, Card, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {getMyCards, cardOrder} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -18,11 +20,32 @@ const isIOS = Platform.OS === 'ios';
 
 function MyCards({navigation , route}) {
 
-    const allData = [
-        { cardNumber: "123456789-20", credit:'20 ريال' , phone:'0102345678' , status:'تم اهداء البطاقة الي (200211515-66)' },
-        { cardNumber: "123456789-20", credit:'20 ريال' , phone:'0102345678' , status:'تم اهداء البطاقة الي (200211515-66)' },
-        { cardNumber: "123456789-20", credit:'20 ريال' , phone:'0102345678' , status:'تم اهداء البطاقة الي (200211515-66)' },
-    ];
+
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+    const myCards = useSelector(state => state.myCards.myCards);
+    const myCardsLoader = useSelector(state => state.myCards.loader);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const dispatch = useDispatch();
+
+    function fetchData(){
+        dispatch(getMyCards(lang, token))
+    }
+
+    useEffect(() => {
+        setIsSubmitted(false)
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchData();
+        });
+
+        return unsubscribe;
+    }, [navigation , myCardsLoader]);
+
 
 
     function _allHeader(item, expanded) {
@@ -30,7 +53,7 @@ function MyCards({navigation , route}) {
             <Card style={[styles.directionRowSpace , styles.marginBottom_10, {padding:10}]}>
                 <View style={[styles.directionRow]}>
                     <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('cardNumber') } :</Text>
-                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.cardNumber }</Text>
+                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.identity }</Text>
                 </View>
                 {expanded
                     ? <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon15 , styles.transform]} resizeMode={'contain'} />
@@ -55,11 +78,34 @@ function MyCards({navigation , route}) {
 
                 <View style={[styles.directionRow]}>
                     <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('status') } :</Text>
-                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.status }</Text>
+                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.statue }</Text>
                 </View>
 
             </View>
         );
+    }
+
+    function renderConfirm(){
+
+        if (isSubmitted){
+            return(
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_40 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
+            )
+        }
+
+        return (
+            <TouchableOpacity onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , styles.marginBottom_25]}>
+                <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('requestCard') }</Text>
+            </TouchableOpacity>
+
+        );
+    }
+
+    function onConfirm(){
+        setIsSubmitted(true);
+        dispatch(cardOrder(lang , token , navigation));
     }
 
 
@@ -95,7 +141,7 @@ function MyCards({navigation , route}) {
 
                     <View>
                         <Accordion
-                            dataArray={allData}
+                            dataArray={myCards}
                             animation={true}
                             expanded={true}
                             renderHeader={_allHeader}
@@ -104,9 +150,7 @@ function MyCards({navigation , route}) {
                         />
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('addCardSuccessfully')} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , styles.marginBottom_25]}>
-                        <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('requestCard') }</Text>
-                    </TouchableOpacity>
+                    {renderConfirm()}
 
                 </View>
 

@@ -5,12 +5,14 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
-    KeyboardAvoidingView,
+    KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
 import {Container, Content, Form, Item, Label, Input , Textarea} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
+import {useDispatch, useSelector} from "react-redux";
+import {transferCard} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -19,6 +21,8 @@ const isIOS = Platform.OS === 'ios';
 function TransferCard({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
 
     const [cardNumber, setCardNumber] = useState('');
     const [cardNumberStatus, setCardNumberStatus] = useState(0);
@@ -26,6 +30,8 @@ function TransferCard({navigation , route}) {
     const [newPhoneStatus, setNewPhoneStatus] = useState(0);
     const [transferNote, setTransferNote] = useState('');
     const [transferNoteStatus, setTransferNoteStatus] = useState(0);
+
+    const dispatch = useDispatch();
 
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
@@ -42,7 +48,7 @@ function TransferCard({navigation , route}) {
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, [isSubmitted]);
+    }, []);
 
 
     function renderConfirm(){
@@ -59,10 +65,9 @@ function TransferCard({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('confirm') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -76,8 +81,8 @@ function TransferCard({navigation , route}) {
     }
 
     function onConfirm(){
-        // setIsSubmitted(true)
-        navigation.navigate('activateCard')
+        setIsSubmitted(true);
+        dispatch(transferCard(lang , cardNumber , newPhone , transferNote , token , navigation));
     }
 
 
@@ -121,7 +126,6 @@ function TransferCard({navigation , route}) {
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
-                                           keyboardType={'number-pad'}
                                     />
                                 </Item>
                             </View>

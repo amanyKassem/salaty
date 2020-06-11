@@ -5,7 +5,7 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
-    KeyboardAvoidingView,
+    KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
 import {Container, Content, Form, Item, Label, Input} from 'native-base'
 import styles from '../../assets/styles'
@@ -13,6 +13,8 @@ import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import {useDispatch, useSelector} from "react-redux";
+import {cridetTransfer} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -21,38 +23,47 @@ const isIOS = Platform.OS === 'ios';
 function TransferCredit({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
 
     const [cardImage, setCardImage] = useState(i18n.t('cardImage'));
-    const [imgBase64,, setImgBase64] = useState('');
+    const [base64, setBase64] = useState('');
 
     const [cardNumber, setCardNumber] = useState('');
     const [cardNumberStatus, setCardNumberStatus] = useState(0);
+
+    const [cardTrans, setCardTrans] = useState('');
+    const [cardTransrStatus, setCardTransStatus] = useState(0);
 
     const [amountTransfer, setAmountTransfer] = useState('');
     const [amountTransferStatus, setAmountTransferStatus] = useState(0);
 
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
+        if (type === 'cardTrans' || cardTrans !== '') setCardTransStatus(1);
         if (type === 'amountTransfer' || amountTransfer !== '') setAmountTransferStatus(1);
     }
 
     function unActiveInput(type) {
         if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
+        if (type === 'cardTrans' && cardTrans === '') setCardTransStatus(0);
         if (type === 'amountTransfer' && amountTransfer === '') setAmountTransferStatus(0);
     }
 
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, [isSubmitted]);
+    }, []);
 
 
-    async function askPermissionsAsync (){
+    const askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
     };
 
-    async function _pickImage () {
+    const _pickImage = async () => {
 
         askPermissionsAsync();
 
@@ -60,23 +71,17 @@ function TransferCredit({navigation , route}) {
             allowsEditing: true,
             aspect: [4, 3],
             base64:true,
-            quality:.1
-
         });
 
-        let localUri = result.uri;
-        let filename = localUri.split('/').pop();
 
-        // check if there is image then set it and make button not disabled
         if (!result.cancelled) {
-            setCardImage(filename)
-            setImgBase64(result.base64)
+            setCardImage(result.uri.split('/').pop());
+            setBase64(result.base64);
         }
     };
 
-
     function renderConfirm(){
-        if ( cardNumber == '' || amountTransfer == ''){
+        if ( cardNumber == '' ||cardTrans == '' || amountTransfer == ''){
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -89,10 +94,9 @@ function TransferCredit({navigation , route}) {
         }
         if (isSubmitted){
             return(
-                <TouchableOpacity
-                    onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('confirm') }</Text>
-                </TouchableOpacity>
+                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
             )
         }
 
@@ -106,8 +110,8 @@ function TransferCredit({navigation , route}) {
     }
 
     function onConfirm(){
-        // setIsSubmitted(true)
-        navigation.navigate('confirmCredit')
+        setIsSubmitted(true);
+        dispatch(cridetTransfer(lang , cardNumber , cardTrans , base64 , amountTransfer , token , navigation));
     }
 
 
@@ -151,7 +155,17 @@ function TransferCredit({navigation , route}) {
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
-                                           keyboardType={'number-pad'}
+                                    />
+                                </Item>
+                            </View>
+
+                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                                <Item floatingLabel style={[styles.item]}>
+                                    <Label style={[styles.label, styles.textRegular ,{ color:cardTransrStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardTrans') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (cardTransrStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(cardTrans) => setCardTrans(cardTrans)}
+                                           onBlur={() => unActiveInput('cardTrans')}
+                                           onFocus={() => activeInput('cardTrans')}
                                     />
                                 </Item>
                             </View>

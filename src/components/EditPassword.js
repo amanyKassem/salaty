@@ -28,7 +28,7 @@ function EditPassword({navigation , route}) {
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, [isSubmitted]);
+    }, []);
 
 
     function renderConfirm(){

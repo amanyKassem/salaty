@@ -3,13 +3,38 @@ import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView} from "react
 import {Container, Content, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import  Modal  from "react-native-modal";
+import {useDispatch, useSelector} from "react-redux";
+import {getNotifications , deleteNoti} from '../actions';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function Notification({navigation , route}) {
+
+    const lang = useSelector(state => state.lang.lang);
+    const token = useSelector(state => state.auth.user.data.token);
+    const notifications = useSelector(state => state.notifications.notifications);
+    const notificationsLoader = useSelector(state => state.notifications.loader);
+
+    const dispatch = useDispatch();
+
+    function fetchData(){
+        dispatch(getNotifications(lang, token))
+    }
+    function deleteNotify(id){
+        dispatch(deleteNoti(lang , id, token))
+    }
+
+    useEffect(() => {
+        fetchData();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchData();
+        });
+
+        return unsubscribe;
+    }, [navigation , notificationsLoader]);
+
 
     return (
         <Container>
@@ -44,47 +69,34 @@ function Notification({navigation , route}) {
 
                         <ScrollView contentContainerStyle={[styles.Width_100]} showsVerticalScrollIndicator={false}>
 
-                            <View style={[styles.Radius_7 , styles.marginBottom_12]}>
-                                <Card style={[styles.directionBasicRow ,styles.Radius_7 , styles.bgFullWidth , {padding:17}]}>
-                                    <Image source={require('../../assets/images/ring_small.png')} style={[styles.icon33 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <View style={[styles.marginHorizontal_10 ,{flex:1}]}>
-                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14, styles.alignStart]}>رسالة من الاداره</Text>
-                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13, styles.alignStart]}>تم تحويل المبلغ الي بطاقة Amany</Text>
-                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5, styles.alignStart]}>منذ يومين</Text>
-                                    </View>
-                                    <TouchableOpacity style={[styles.icon23 , {right:-5 , top:-5}]}>
-                                        <Image source={require('../../assets/images/rubbish_can_gray.png')} style={[styles.Width_100 , styles.heightFull , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    </TouchableOpacity>
-                                </Card>
-                            </View>
+                            {
+                                notifications.map((notification, i) => {
+                                    return (
 
-                            <View style={[styles.Radius_7 , styles.marginBottom_12]}>
-                                <Card style={[styles.directionBasicRow ,styles.Radius_7 , styles.bgFullWidth , {padding:17}]}>
-                                    <Image source={require('../../assets/images/ring_small.png')} style={[styles.icon33 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <View style={[styles.marginHorizontal_10 ,{flex:1}]}>
-                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14, styles.alignStart]}>رسالة من الاداره</Text>
-                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13, styles.alignStart]}>تم تحويل المبلغ الي بطاقة Amany</Text>
-                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5, styles.alignStart]}>منذ يومين</Text>
-                                    </View>
-                                    <TouchableOpacity style={[styles.icon23 , {right:-5 , top:-5}]}>
-                                        <Image source={require('../../assets/images/rubbish_can_gray.png')} style={[styles.Width_100 , styles.heightFull , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    </TouchableOpacity>
-                                </Card>
-                            </View>
-
-                            <View style={[styles.Radius_7 , styles.marginBottom_12]}>
-                                <Card style={[styles.directionBasicRow ,styles.Radius_7 , styles.bgFullWidth , {padding:17}]}>
-                                    <Image source={require('../../assets/images/ring_small.png')} style={[styles.icon33 , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    <View style={[styles.marginHorizontal_10 ,{flex:1}]}>
-                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14, styles.alignStart]}>رسالة من الاداره</Text>
-                                        <Text style={[styles.textBold , styles.text_black , styles.textSize_13, styles.alignStart]}>تم تحويل المبلغ الي بطاقة Amany</Text>
-                                        <Text style={[styles.textRegular , styles.text_light_gray , styles.textSize_13, styles.marginTop_5, styles.alignStart]}>منذ يومين</Text>
-                                    </View>
-                                    <TouchableOpacity style={[styles.icon23 , {right:-5 , top:-5}]}>
-                                        <Image source={require('../../assets/images/rubbish_can_gray.png')} style={[styles.Width_100 , styles.heightFull , styles.marginBottom_7]} resizeMode={'contain'} />
-                                    </TouchableOpacity>
-                                </Card>
-                            </View>
+                                        <View key={notification.id} style={[styles.Radius_7, styles.marginBottom_12]}>
+                                            <Card
+                                                style={[styles.directionBasicRow, styles.Radius_7, styles.bgFullWidth, {padding: 17}]}>
+                                                <Image source={require('../../assets/images/ring_small.png')}
+                                                       style={[styles.icon33, styles.marginBottom_7]}
+                                                       resizeMode={'contain'}/>
+                                                <View style={[styles.marginHorizontal_10, {flex: 1}]}>
+                                                    <Text
+                                                        style={[styles.textRegular, styles.text_gray, styles.textSize_14, styles.alignStart]}>{notification.title}</Text>
+                                                    <Text
+                                                        style={[styles.textBold, styles.text_black, styles.textSize_13, styles.alignStart]}>{notification.body}</Text>
+                                                    <Text
+                                                        style={[styles.textRegular, styles.text_light_gray, styles.textSize_13, styles.marginTop_5, styles.alignStart]}>{notification.date}</Text>
+                                                </View>
+                                                <TouchableOpacity onPress = {() => deleteNotify(notification.id)} style={[styles.icon23, {right: -5, top: -5}]}>
+                                                    <Image source={require('../../assets/images/rubbish_can_gray.png')}
+                                                           style={[styles.Width_100, styles.heightFull, styles.marginBottom_7]}
+                                                           resizeMode={'contain'}/>
+                                                </TouchableOpacity>
+                                            </Card>
+                                        </View>
+                                    )
+                                })
+                            }
 
                         </ScrollView>
 

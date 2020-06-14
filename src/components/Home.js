@@ -1,14 +1,37 @@
-import React from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView} from "react-native";
+import React , {useEffect} from "react";
+import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView, Vibration} from "react-native";
 import {Container, Content, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
+import { Notifications } from 'expo'
+import {useSelector} from "react-redux";
 
 const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function Home({navigation , route}) {
+function Home({navigation}) {
+
+    const notifications = useSelector(state => state.notifications.notifications);
+
+    useEffect(() => {
+        Notifications.addListener(handleNotification);
+    }, []);
+
+    function handleNotification(notification) {
+        if (notification && notification.origin !== 'received') {
+            navigation.navigate('notification');
+        }
+
+        if (notification.remote) {
+            Vibration.vibrate();
+            const notificationId = Notifications.presentLocalNotificationAsync({
+                title: notification.data.title  ? notification.data.title : i18n.t('newNotification'),
+                body: notification.data.body ? notification.data.body : i18n.t('_newNotification'),
+                ios: { _displayInForeground: true }
+            });
+        }
+    }
+
 
     return (
         <Container>
@@ -22,7 +45,12 @@ function Home({navigation , route}) {
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
 
                     <TouchableOpacity onPress={() => navigation.push('notification')}>
-                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        {
+                            notifications && (notifications).length > 0 ?
+                                <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                    :
+                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        }
                     </TouchableOpacity>
 
                 </View>

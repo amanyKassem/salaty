@@ -4,7 +4,6 @@ import {
     Text,
     Image,
     TouchableOpacity,
-    Dimensions,
     KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
 import {Container, Content, Form, Item, Label, Input , Textarea} from 'native-base'
@@ -14,15 +13,13 @@ import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
 import {transferCard} from '../actions';
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function TransferCard({navigation , route}) {
+function TransferCard({navigation}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
 
     const [cardNumber, setCardNumber] = useState('');
     const [cardNumberStatus, setCardNumberStatus] = useState(0);
@@ -30,6 +27,7 @@ function TransferCard({navigation , route}) {
     const [newPhoneStatus, setNewPhoneStatus] = useState(0);
     const [transferNote, setTransferNote] = useState('');
     const [transferNoteStatus, setTransferNoteStatus] = useState(0);
+    const notifications = useSelector(state => state.notifications.notifications);
 
     const dispatch = useDispatch();
 
@@ -48,7 +46,7 @@ function TransferCard({navigation , route}) {
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, []);
+    }, [isSubmitted]);
 
 
     function renderConfirm(){
@@ -98,7 +96,12 @@ function TransferCard({navigation , route}) {
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
 
                     <TouchableOpacity onPress={() => navigation.push('notification')}>
-                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        {
+                            notifications && (notifications).length > 0 ?
+                                <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                :
+                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        }
                     </TouchableOpacity>
 
                 </View>

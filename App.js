@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistedStore } from './src/store';
 import './ReactotronConfig';
+import { Notifications } from 'expo'
 
 function App({navigation}) {
 
@@ -18,6 +19,13 @@ function App({navigation}) {
 
 		// I18nManager.forceRTL(true);
 		// AsyncStorage.clear()
+
+		if (Platform.OS === 'android') {
+			Notifications.createChannelAndroidAsync('orders', {
+				name: 'Chat messages',
+				sound: true,
+			});
+		}
 
 		async function loadFont(){
 			await Font.loadAsync({

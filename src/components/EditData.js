@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity , Platform, Dimensions, ActivityIndicator, KeyboardAvoidingView} from "react-native";
+import {View, Text, Image, TouchableOpacity , Platform, ActivityIndicator, KeyboardAvoidingView} from "react-native";
 import {Container, Content, Card, Form, Item, Label, Input} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -8,18 +8,17 @@ import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
 import {updateProfile , getCities} from '../actions';
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function EditData({navigation , route}) {
 
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const user = useSelector(state => state.auth.user.data);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const cities = useSelector(state => state.cities.cities);
     const citiesLoader = useSelector(state => state.cities.loader);
+    const notifications = useSelector(state => state.notifications.notifications);
 
     const authType = route.params.authType ;
     const [fullName, setFullName] = useState(user.name);
@@ -33,7 +32,7 @@ function EditData({navigation , route}) {
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, []);
+    }, [isSubmitted]);
 
 
     useEffect(() => {
@@ -100,7 +99,12 @@ function EditData({navigation , route}) {
                     {
                         authType === 'user' ?
                             <TouchableOpacity onPress={() => navigation.push('notification')}>
-                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                {
+                                    notifications && (notifications).length > 0 ?
+                                        <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                        :
+                                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                }
                             </TouchableOpacity>
                             :
                             <View/>

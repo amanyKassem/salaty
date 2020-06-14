@@ -1,25 +1,26 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView} from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView, ActivityIndicator} from "react-native";
 import {Container, Content, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import {useDispatch, useSelector} from "react-redux";
 import {getNotifications , deleteNoti} from '../actions';
+import COLORS from "../consts/colors";
 
 const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
-const isIOS = Platform.OS === 'ios';
 
-function Notification({navigation , route}) {
+function Notification({navigation}) {
 
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const notifications = useSelector(state => state.notifications.notifications);
     const notificationsLoader = useSelector(state => state.notifications.loader);
+    const [screenLoader , setScreenLoader ] = useState(true);
 
     const dispatch = useDispatch();
 
     function fetchData(){
+        setScreenLoader(true)
         dispatch(getNotifications(lang, token))
     }
     function deleteNotify(id){
@@ -35,9 +36,37 @@ function Notification({navigation , route}) {
         return unsubscribe;
     }, [navigation , notificationsLoader]);
 
+    useEffect(() => {
+        setScreenLoader(false)
+    }, [notifications]);
+
+    function renderLoader(){
+        if (screenLoader){
+            return(
+                <View style={[styles.loading, styles.flexCenter, {backgroundColor:'#fff'}]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
+            );
+        }
+    }
+
+    function renderNoData() {
+        if (notifications && (notifications).length <= 0) {
+            return (
+                <View style={[styles.directionColumnCenter , styles.Width_100, styles.marginTop_25]}>
+                    <Image source={require('../../assets/images/note.png')} resizeMode={'contain'}
+                           style={{alignSelf: 'center', width: 200, height: 200}}/>
+                </View>
+            );
+        }
+
+        return null
+    }
+
 
     return (
         <Container>
+            {renderLoader()}
             <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
@@ -47,9 +76,14 @@ function Notification({navigation , route}) {
 
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
 
-                    <TouchableOpacity onPress={() => navigation.navigate('notification')}>
-                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
-                    </TouchableOpacity>
+                    <View>
+                        {
+                            notifications && (notifications).length > 0 ?
+                                <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                :
+                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        }
+                    </View>
 
                 </View>
 
@@ -67,6 +101,7 @@ function Notification({navigation , route}) {
 
                     <View style={[styles.marginTop_15 , styles.marginBottom_20 , {height:height - 370}]}>
 
+                        {renderNoData()}
                         <ScrollView contentContainerStyle={[styles.Width_100]} showsVerticalScrollIndicator={false}>
 
                             {

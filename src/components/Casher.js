@@ -1,16 +1,13 @@
 import React from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions} from "react-native";
+import {View, Text, Image, TouchableOpacity} from "react-native";
 import {Container, Content,} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import COLORS from "../consts/colors";
 import { useSelector} from "react-redux";
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function Casher({navigation , route}) {
+function Casher({navigation}) {
     const user      = useSelector(state => state.auth.user ? state.auth.user.data : { avatar: '../../assets/images/user_small_icon.png', name: null, email: null, phone: null });
     return (
         <Container>

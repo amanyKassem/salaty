@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from "react-native";
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -23,7 +23,7 @@ function ChangePass({navigation , route}) {
 
     useEffect(() => {
         alert('activation code : ' + activeCode)
-    }, [])
+    }, []);
 
     function activeInput(type) {
         if (type === 'code' || code !== '') setCodeStatus(1);

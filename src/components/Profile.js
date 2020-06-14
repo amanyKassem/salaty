@@ -1,17 +1,16 @@
 import React from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions , I18nManager} from "react-native";
+import {View, Text, Image, TouchableOpacity , I18nManager} from "react-native";
 import {Container, Content} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import { useSelector} from "react-redux";
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function Profile({navigation , route}) {
 
     const authType = route.params.authType ;
+    const notifications = useSelector(state => state.notifications.notifications);
 
     const user      = useSelector(state => state.auth.user ? state.auth.user.data : { avatar: '../../assets/images/user_small_icon.png', name: null, email: null, phone: null });
 
@@ -29,7 +28,12 @@ function Profile({navigation , route}) {
                     {
                         authType === 'user' ?
                             <TouchableOpacity onPress={() => navigation.push('notification')}>
-                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                {
+                                    notifications && (notifications).length > 0 ?
+                                        <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                        :
+                                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                }
                             </TouchableOpacity>
                             :
                             <View/>

@@ -1,6 +1,6 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, Platform, ActivityIndicator} from "react-native";
-import {Container, Content, Card, Form} from 'native-base'
+import {View, Text, Image, TouchableOpacity, Platform, ActivityIndicator} from "react-native";
+import {Container, Content} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import RNPickerSelect from 'react-native-picker-select';
@@ -8,16 +8,15 @@ import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
 import {getUserCards} from '../actions';
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function InquiryCard({navigation , route}) {
+function InquiryCard({navigation}) {
 
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const userCards = useSelector(state => state.userCards.userCards);
     const userCardsLoader = useSelector(state => state.userCards.loader);
+    const notifications = useSelector(state => state.notifications.notifications);
     const [card, setCard] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -77,7 +76,12 @@ function InquiryCard({navigation , route}) {
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
 
                     <TouchableOpacity onPress={() => navigation.push('notification')}>
-                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        {
+                            notifications && (notifications).length > 0 ?
+                                <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                :
+                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        }
                     </TouchableOpacity>
 
                 </View>

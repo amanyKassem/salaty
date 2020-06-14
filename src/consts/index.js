@@ -1,3 +1,3 @@
 export default {
-    url: 'http://saltii.aait-sa.com/api/',
+    url: 'http://sltii.aait-sa.com/api/',
 };

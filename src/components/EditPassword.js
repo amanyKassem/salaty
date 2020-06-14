@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, KeyboardAvoidingView, ActivityIndicator} from "react-native";
+import {View, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator} from "react-native";
 import {Container, Content, Form, Item, Label, Input, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -7,16 +7,15 @@ import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
 import {changePass} from '../actions';
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function EditPassword({navigation , route}) {
 
     const authType = route.params.authType ;
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const notifications = useSelector(state => state.notifications.notifications);
 
     const [newpass, setNewpass] = useState('');
     const [password, setPassword] = useState('');
@@ -28,7 +27,7 @@ function EditPassword({navigation , route}) {
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, []);
+    }, [isSubmitted]);
 
 
     function renderConfirm(){
@@ -138,7 +137,12 @@ function EditPassword({navigation , route}) {
                     {
                         authType === 'user' ?
                             <TouchableOpacity onPress={() => navigation.push('notification')}>
-                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                {
+                                    notifications && (notifications).length > 0 ?
+                                        <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                        :
+                                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                }
                             </TouchableOpacity>
                             :
                             <View/>

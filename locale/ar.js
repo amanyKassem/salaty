@@ -251,6 +251,9 @@ const ar = {
     'client'                    : "عميل",
     'cashier'                   : "كاشير",
     'cardTrans'                 : "رقم البطاقة المحول لها",
+    'type'                      : "النوع",
+    '_newNotification'          : 'يوجد اشعار جديد',
+    'newNotification'           : 'اشعار جديد',
 };
 
 export default ar;

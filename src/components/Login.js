@@ -9,7 +9,7 @@ import {userLogin} from '../actions';
 import * as Permissions from 'expo-permissions';
 import {Notifications} from 'expo'
 
-function Login({navigation , route}) {
+function Login({navigation}) {
 
     // const userType = route.params.userType;
     const lang = useSelector(state => state.lang.lang);

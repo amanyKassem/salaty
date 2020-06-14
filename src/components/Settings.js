@@ -1,14 +1,12 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions , Switch} from "react-native";
-import {Container, Content, Card, Form} from 'native-base'
+import {View, Text, Image, TouchableOpacity , Switch} from "react-native";
+import {Container, Content} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";;
 import {useDispatch, useSelector} from "react-redux";
 import {getNoti} from "../actions";
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function Settings({navigation , route}) {
@@ -18,6 +16,7 @@ function Settings({navigation , route}) {
     const lang = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     let isNotify = useSelector(state => state.auth.isNotify);
+    const notifications = useSelector(state => state.notifications.notifications);
 
     const [switchValue, setSwitchValue] = useState(isNotify);
 
@@ -46,7 +45,12 @@ function Settings({navigation , route}) {
                     {
                         authType === 'user' ?
                             <TouchableOpacity onPress={() => navigation.push('notification')}>
-                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                {
+                                    notifications && (notifications).length > 0 ?
+                                        <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                        :
+                                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                }
                             </TouchableOpacity>
                             :
                             <View/>

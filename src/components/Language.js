@@ -1,14 +1,11 @@
-import React, { useState , useEffect} from "react";
+import React, { useState } from "react";
 import {View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
-import {Container, Content, Card, Form} from 'native-base'
+import {Container, Content} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import COLORS from "../consts/colors";
 import {useSelector, useDispatch} from 'react-redux';
 import { chooseLang } from '../actions';
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function Language({navigation , route}) {
@@ -16,6 +13,7 @@ function Language({navigation , route}) {
     const authType = route.params.authType ;
     const language = useSelector(state => state.lang);
     const [lang, setLang] = useState(language.lang);
+    const notifications = useSelector(state => state.notifications.notifications);
     console.log("language" , language.lang)
 
 
@@ -43,7 +41,12 @@ function Language({navigation , route}) {
                     {
                         authType === 'user' ?
                             <TouchableOpacity onPress={() => navigation.push('notification')}>
-                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                {
+                                    notifications && (notifications).length > 0 ?
+                                        <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                        :
+                                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                }
                             </TouchableOpacity>
                             :
                             <View/>

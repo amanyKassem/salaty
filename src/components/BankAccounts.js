@@ -1,6 +1,6 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView} from "react-native";
-import {Container, Content, Card, Form} from 'native-base'
+import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView, ActivityIndicator} from "react-native";
+import {Container, Content, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
@@ -8,19 +8,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {getBanks} from '../actions';
 
 const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function BankAccounts({navigation , route}) {
+function BankAccounts({navigation}) {
 
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const banks = useSelector(state => state.banks.banks);
     const banksLoader = useSelector(state => state.banks.loader);
+    const notifications = useSelector(state => state.notifications.notifications);
+    const [screenLoader , setScreenLoader ] = useState(true);
 
     const dispatch = useDispatch();
 
     function fetchData(){
+        setScreenLoader(true)
         dispatch(getBanks(lang, token))
     }
 
@@ -33,8 +35,38 @@ function BankAccounts({navigation , route}) {
         return unsubscribe;
     }, [navigation , banksLoader]);
 
+
+    useEffect(() => {
+        setScreenLoader(false)
+    }, [banks]);
+
+    function renderLoader(){
+        if (screenLoader){
+            return(
+                <View style={[styles.loading, styles.flexCenter, {backgroundColor:'#fff'}]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
+            );
+        }
+    }
+
+    function renderNoData() {
+        if (banks && (banks).length <= 0) {
+            return (
+                <View style={[styles.directionColumnCenter , styles.Width_100, styles.marginTop_25]}>
+                    <Image source={require('../../assets/images/note.png')} resizeMode={'contain'}
+                           style={{alignSelf: 'center', width: 200, height: 200}}/>
+                </View>
+            );
+        }
+
+        return null
+    }
+
+
     return (
         <Container>
+            {renderLoader()}
             <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
@@ -45,7 +77,12 @@ function BankAccounts({navigation , route}) {
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
 
                     <TouchableOpacity onPress={() => navigation.push('notification')}>
-                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        {
+                            notifications && (notifications).length > 0 ?
+                                <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                :
+                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        }
                     </TouchableOpacity>
 
                 </View>
@@ -64,6 +101,7 @@ function BankAccounts({navigation , route}) {
                     </View>
 
                     <View style={[{height:height - 250}]}>
+                        {renderNoData()}
                         <ScrollView contentContainerStyle={[styles.Width_100]} showsVerticalScrollIndicator={false}>
 
                             {

@@ -4,7 +4,6 @@ import {
     Text,
     Image,
     TouchableOpacity,
-    Dimensions,
     KeyboardAvoidingView, ActivityIndicator,
 } from "react-native";
 import {Container, Content, Form, Item, Label, Input} from 'native-base'
@@ -16,8 +15,6 @@ import * as Permissions from 'expo-permissions';
 import {useDispatch, useSelector} from "react-redux";
 import {storeBill} from '../actions';
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function EnterBill({navigation , route}) {
@@ -28,7 +25,7 @@ function EnterBill({navigation , route}) {
     const card_identity = route.params.card_identity;
 
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const [billImage, setBillImage] = useState(i18n.t('billImage'));

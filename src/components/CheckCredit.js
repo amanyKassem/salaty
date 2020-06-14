@@ -1,12 +1,9 @@
 import React from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions} from "react-native";
+import {View, Text, Image, TouchableOpacity} from "react-native";
 import {Container, Content,} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import COLORS from "../consts/colors";
 
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
 function CheckCredit({navigation , route}) {

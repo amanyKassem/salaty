@@ -249,6 +249,9 @@ const en = {
     'client'                    : "Client",
     'cashier'                   : "Cashier",
     'cardTrans'                 : "Card number transferred to",
+    'type'                      : "Type",
+    '_newNotification'          : 'there is a new notification',
+    'newNotification'           : 'new notification',
 };
 
 export default en;

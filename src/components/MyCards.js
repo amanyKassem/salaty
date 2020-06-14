@@ -3,11 +3,9 @@ import {
     View,
     Text,
     Image,
-    TouchableOpacity,
-    Dimensions,
-    KeyboardAvoidingView, ActivityIndicator,
+    TouchableOpacity, ActivityIndicator, ScrollView, Dimensions,
 } from "react-native";
-import {Container, Content, Accordion, Item, Label, Input, Card, Toast} from 'native-base'
+import {Container, Content, Accordion, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
@@ -15,27 +13,29 @@ import {useDispatch, useSelector} from "react-redux";
 import {getMyCards, cardOrder} from '../actions';
 
 const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
 const isIOS = Platform.OS === 'ios';
 
-function MyCards({navigation , route}) {
+function MyCards({navigation}) {
 
 
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const myCards = useSelector(state => state.myCards.myCards);
     const myCardsLoader = useSelector(state => state.myCards.loader);
+    const notifications = useSelector(state => state.notifications.notifications);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [screenLoader , setScreenLoader ] = useState(true);
 
     const dispatch = useDispatch();
 
     function fetchData(){
+        setScreenLoader(true)
         dispatch(getMyCards(lang, token))
     }
 
     useEffect(() => {
         setIsSubmitted(false)
-    }, []);
+    }, [isSubmitted]);
 
     useEffect(() => {
         fetchData();
@@ -46,6 +46,32 @@ function MyCards({navigation , route}) {
         return unsubscribe;
     }, [navigation , myCardsLoader]);
 
+    useEffect(() => {
+        setScreenLoader(false)
+    }, [myCards]);
+
+    function renderLoader(){
+        if (screenLoader){
+            return(
+                <View style={[styles.loading, styles.flexCenter, {backgroundColor:'#fff'}]}>
+                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
+                </View>
+            );
+        }
+    }
+
+    function renderNoData() {
+        if (myCards && (myCards).length <= 0) {
+            return (
+                <View style={[styles.directionColumnCenter , styles.Width_100, styles.marginTop_25]}>
+                    <Image source={require('../../assets/images/note.png')} resizeMode={'contain'}
+                           style={{alignSelf: 'center', width: 200, height: 200}}/>
+                </View>
+            );
+        }
+
+        return null
+    }
 
 
     function _allHeader(item, expanded) {
@@ -111,7 +137,8 @@ function MyCards({navigation , route}) {
 
     return (
         <Container>
-            <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
+            {renderLoader()}
+            <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -121,7 +148,12 @@ function MyCards({navigation , route}) {
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100]} resizeMode={'contain'} />
 
                     <TouchableOpacity onPress={() => navigation.push('notification')}>
-                        <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        {
+                            notifications && (notifications).length > 0 ?
+                                <Image source={require('../../assets/images/notifcation_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                                :
+                                <Image source={require('../../assets/images/notifcation_non_active.png')} style={[styles.icon25]} resizeMode={'contain'} />
+                        }
                     </TouchableOpacity>
 
                 </View>
@@ -138,16 +170,18 @@ function MyCards({navigation , route}) {
                             <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13,styles.alignStart]}>{ i18n.t('registeredCards') }</Text>
                         </View>
                     </View>
-
-                    <View>
-                        <Accordion
-                            dataArray={myCards}
-                            animation={true}
-                            expanded={true}
-                            renderHeader={_allHeader}
-                            renderContent={_allContent}
-                            style={[{borderWidth:0}]}
-                        />
+                    <View style={[styles.marginTop_15 , styles.marginBottom_20 , {height:height - 410}]}>
+                    {renderNoData()}
+                        <ScrollView contentContainerStyle={[styles.Width_100]} showsVerticalScrollIndicator={false}>
+                            <Accordion
+                                dataArray={myCards}
+                                animation={true}
+                                expanded={true}
+                                renderHeader={_allHeader}
+                                renderContent={_allContent}
+                                style={[{borderWidth:0}]}
+                            />
+                        </ScrollView>
                     </View>
 
                     {renderConfirm()}

@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, Platform, AsyncStorage, ActivityIndicator } from "react-native";
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";

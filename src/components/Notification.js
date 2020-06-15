@@ -1,5 +1,14 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView, ActivityIndicator} from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    Dimensions,
+    ScrollView,
+    ActivityIndicator,
+    I18nManager
+} from "react-native";
 import {Container, Content, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -118,7 +127,7 @@ function Notification({navigation}) {
                                                     <Text
                                                         style={[styles.textRegular, styles.text_gray, styles.textSize_14, styles.alignStart]}>{notification.title}</Text>
                                                     <Text
-                                                        style={[styles.textBold, styles.text_black, styles.textSize_13, styles.alignStart]}>{notification.body}</Text>
+                                                        style={[styles.textBold, styles.text_black, styles.textSize_13, styles.alignStart,{writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }]}>{notification.body}</Text>
                                                     <Text
                                                         style={[styles.textRegular, styles.text_light_gray, styles.textSize_13, styles.marginTop_5, styles.alignStart]}>{notification.date}</Text>
                                                 </View>

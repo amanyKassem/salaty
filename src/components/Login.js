@@ -98,7 +98,7 @@ function Login({navigation}) {
         if (password == '' || phone == '') {
             return (
                 <View
-                    style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , styles.marginBottom_60 , {
+                    style={[styles.greenBtn , styles.Width_100 , styles.marginTop_25 , styles.marginBottom_10 , {
                         backgroundColor:'#ccc'
                     }]}
                 >
@@ -109,7 +109,7 @@ function Login({navigation}) {
 
         return (
             <TouchableOpacity
-                onPress={() => onLoginPressed()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_40 , styles.marginBottom_60]}>
+                onPress={() => onLoginPressed()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_25 , styles.marginBottom_10]}>
                 <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('login') }</Text>
             </TouchableOpacity>
         );
@@ -139,9 +139,9 @@ function Login({navigation}) {
             {renderLoader()}
                 <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 , {marginLeft:15}]}>
-                        <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 , {marginLeft:15}]}>*/}
+                        {/*<Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />*/}
+                    {/*</TouchableOpacity>*/}
                     <Image source={require('../../assets/images/login_vector.png')} style={[styles.icon220 , {top:40 , left:30 , zIndex:1}]} resizeMode={'contain'} />
 
                     <View style={[styles.bgFullWidth,styles.paddingHorizontal_20 ,styles.bg_White,

@@ -15,7 +15,7 @@ function AccStatement({navigation , route}) {
     const card = route.params.card;
     const [type, setType] = useState('all');
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
+    const token = useSelector(state => state.auth.user.data.token);
     const notifications = useSelector(state => state.notifications.notifications);
     const cardEnquiry = useSelector(state => state.cardEnquiry.cardEnquiry);
     const cardEnquiryLoader = useSelector(state => state.cardEnquiry.loader);

@@ -232,6 +232,7 @@ const en = {
     'transferData'              : 'Transfer data',
     'newPhone'                  : "New user\'s mobile",
     'transferNote'              : "Transfer notes",
+    'registeredCards'           : "These are your registered cards",
     'requestCard'               : "Request a card",
     'cardRequested'             : "A card has been successfully requested, and the department will be contacted",
     'registeredBank'            : "Registered bank accounts",

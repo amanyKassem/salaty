@@ -1,11 +1,21 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image , Linking, TouchableOpacity , Platform, ActivityIndicator, KeyboardAvoidingView} from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    Linking,
+    TouchableOpacity,
+    Platform,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    ScrollView
+} from "react-native";
 import {Container, Content, Card, Form, Item, Label, Input, Textarea} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
-import {updateProfile , getCities} from '../actions';
+import {addConatct, getSocial} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -24,8 +34,25 @@ function ContactUs({navigation , route}) {
     const [writeUrMsg, setWriteUrMsg] = useState('');
     const [writeUrMsgStatus, setWriteUrMsgStatus] = useState(0);
 
+    const contactSocial = useSelector(state => state.contactSocial.contactSocial);
+    const contactSocialLoader = useSelector(state => state.contactSocial.loader);
+
 
     const dispatch = useDispatch();
+
+    function fetchData(){
+        dispatch(getSocial(lang, token))
+    }
+
+    useEffect(() => {
+        fetchData();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchData();
+        });
+
+        return unsubscribe;
+    }, [navigation , contactSocialLoader]);
+
 
     useEffect(() => {
         setIsSubmitted(false)
@@ -75,7 +102,7 @@ function ContactUs({navigation , route}) {
 
     function onEdit(){
         setIsSubmitted(true)
-        // dispatch(updateProfile(lang , fullName , phone , city , token , navigation));
+        dispatch(addConatct(lang , fullName , email , writeUrMsg , token , navigation));
     }
 
 
@@ -157,19 +184,23 @@ function ContactUs({navigation , route}) {
 
                     </KeyboardAvoidingView>
 
-
                     <View style={[styles.flexCenter , styles.marginBottom_25]}>
                         <Text style={[styles.textRegular , styles.text_green , styles.textSize_15, styles.marginBottom_10]}>{ i18n.t('socialMedia') }</Text>
                         <View style={[styles.directionRow]}>
-                            <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com')}>
-                                <Image source={require('../../assets/images/instagram.png')} style={[styles.icon30]} resizeMode={'contain'} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => Linking.openURL('https://www.twitter.com')} style={[styles.marginHorizontal_20]}>
-                                <Image source={require('../../assets/images/twitter.png')} style={[styles.icon30 ]} resizeMode={'contain'} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => Linking.openURL('https://www.facebook.com')}>
-                                <Image source={require('../../assets/images/facebook.png')} style={[styles.icon30]} resizeMode={'contain'} />
-                            </TouchableOpacity>
+
+                            { contactSocial ?
+                                contactSocial.map((contact, i) => {
+                                        return (
+                                            <TouchableOpacity style={{marginLeft:15}} key={i} onPress={() => Linking.openURL(contact.url)}>
+                                                <Image source={{uri:contact.icon}}
+                                                       style={[styles.icon30]} resizeMode={'contain'}/>
+                                            </TouchableOpacity>
+                                        )
+                                    }
+                                )
+                                :
+                                null
+                            }
                         </View>
                     </View>
 

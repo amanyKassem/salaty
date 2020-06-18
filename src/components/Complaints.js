@@ -6,7 +6,7 @@ import i18n from "../../locale/i18n";
 import RNPickerSelect from 'react-native-picker-select';
 import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
-import {updateProfile , getCities} from '../actions';
+import {addComplaint} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -80,7 +80,7 @@ function Complaints({navigation , route}) {
 
     function onEdit(){
         setIsSubmitted(true)
-        // dispatch(updateProfile(lang , fullName , phone , city , token , navigation));
+        dispatch(addComplaint(lang , fullName , email , msgSubject , writeUrMsg , token , navigation));
     }
 
 

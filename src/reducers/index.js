@@ -8,6 +8,7 @@ import myCards from './MyCardsReducer';
 import userCards from './UserCardsReducer';
 import notifications from './NotificationsReducer';
 import cardEnquiry from './CardEnquiryReducer';
+import contactSocial from './ContactSocialReducer';
 
 export default combineReducers({
     lang,
@@ -19,4 +20,5 @@ export default combineReducers({
     userCards,
     notifications,
     cardEnquiry,
+    contactSocial,
 });

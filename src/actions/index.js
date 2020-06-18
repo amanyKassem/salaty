@@ -18,3 +18,6 @@ export * from './ConfirmCardAction';
 export * from './StoreBillAction';
 export * from './NotificationsAction';
 export * from './CardEnquiryAction';
+export * from './AddComplaintAction';
+export * from './AddConatctAction';
+export * from './ContactSocialAction';

@@ -20,6 +20,7 @@ const ar = {
     'haveAcc'                   : 'لديك حساب ؟',
     'loginNow'                  : 'دخول الآن',
     'username'                  : 'اسم المستخدم بالكامل',
+    'userName'                  : 'اسم المستخدم',
     'email'                     : 'البريد الالكتروني',
     'activationCode'            : 'كود التفعيل',
     'language'                  : 'اللغة',
@@ -47,7 +48,7 @@ const ar = {
     'more'                      : 'المزيد',
     'space'                     : 'المساحة',
     'person'                    : 'فرد',
-    'socialMedia'               : 'وسائل التواصل',
+    'socialMedia'               : 'أو عير التواصل الاجتماعي',
     'socialMedia2'              : 'وسائل التواصل الاجتماعي',
     'hallLocation'              : 'موقع القاعة',
     'reservation'               : 'حجز',
@@ -81,7 +82,7 @@ const ar = {
     'editPersonalData'          : 'تعديل المعلومات الشخصية',
     'changePass'                : 'تغيير كلمة المرور',
     'appNoti'                   : 'اشعارات التطبيق',
-    'contactUs'                 : 'تواصل معنا',
+    'contactUs'                 : 'اتصل بنا',
     'share'                     : 'مشاركة',
     'repeatPass'                : 'اعد كلمة السر',
     'changeLang'                : 'تغيير اللغة',
@@ -254,6 +255,11 @@ const ar = {
     'type'                      : "النوع",
     '_newNotification'          : 'يوجد اشعار جديد',
     'newNotification'           : 'اشعار جديد',
+    'complaints'                : 'الشكاوي والمقترحات',
+    'msgSubject'                : 'موضوع الرساله',
+    'fillComplaint'             : 'يمكنك تقديم الشكوي التي لديك',
+    'writeUrMsg'                : 'اكتب رسالتك',
+    'msgContact'                : 'يمكنك التواصل معنا عبر ارسال رسالة',
 };
 
 export default ar;

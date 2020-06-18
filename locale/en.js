@@ -20,6 +20,7 @@ const en = {
     'haveAcc'                   : 'Have an account?',
     'loginNow'                  : 'Login now',
     'username'                  : 'Full username',
+    'userName'                  : 'Username',
     'email'                     : 'Email',
     'activationCode'            : 'Activation code',
     'language'                  : 'Language',
@@ -47,7 +48,7 @@ const en = {
     'more'                      : 'More',
     'space'                     : 'Space',
     'person'                    : 'Person',
-    'socialMedia'               : 'Social media',
+    'socialMedia'               : 'Or through social media',
     'socialMedia2'              : 'Social media',
     'hallLocation'              : 'Hall location',
     'reservation'               : 'Reservation',
@@ -253,6 +254,11 @@ const en = {
     'type'                      : "Type",
     '_newNotification'          : 'there is a new notification',
     'newNotification'           : 'new notification',
+    'complaints'                : 'Complaints and suggestions',
+    'msgSubject'                : 'Message Subject',
+    'fillComplaint'             : 'You can file your complaint',
+    'writeUrMsg'                : 'Write your message',
+    'msgContact'                : 'You can contact us by sending a message',
 };
 
 export default en;

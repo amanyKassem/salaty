@@ -716,6 +716,10 @@ const styles = ({
         width               : 25,
         height              : 25,
     },
+    icon30 : {
+        width               : 30,
+        height              : 30,
+    },
     icon35 : {
         width               : 35,
         height              : 35,
@@ -1036,9 +1040,8 @@ const styles = ({
         alignSelf: 'flex-start',
         fontFamily: 'cairo',
         fontSize: 14,
-        borderBottomWidth: 2,
-        borderBottomColor: '#fff',
-        zIndex:10
+        zIndex:10,
+        paddingHorizontal:5
     },
     labelText : {
         left: 15,

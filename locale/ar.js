@@ -196,7 +196,7 @@ const ar = {
     'enterPass'                 : 'ادخل كلمة المرور الجديدة',
     'recharge'                  : 'شحن الرصيد',
     'inquiry'                   : 'استعلام عن البطاقة',
-    'transferCard'              : 'نقل كارت',
+    'transferCard'              : 'نقل بطاقة',
     'transferCredit'            : 'تحويل رصيد',
     'bankAccounts'              : 'الحسابات البنكية',
     'myCards'                   : 'بطاقاتي',
@@ -260,6 +260,8 @@ const ar = {
     'fillComplaint'             : 'يمكنك تقديم الشكوي التي لديك',
     'writeUrMsg'                : 'اكتب رسالتك',
     'msgContact'                : 'يمكنك التواصل معنا عبر ارسال رسالة',
+    'balanceInquiry'            : 'استعلام عن الرصيد',
+    'noOp'                      : 'لا يوجد عمليات',
 };
 
 export default ar;

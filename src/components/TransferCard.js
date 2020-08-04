@@ -15,7 +15,7 @@ import {transferCard} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
-function TransferCard({navigation}) {
+function TransferCard({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const lang = useSelector(state => state.lang.lang);
@@ -47,6 +47,17 @@ function TransferCard({navigation}) {
     useEffect(() => {
         setIsSubmitted(false)
     }, [isSubmitted]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.cardNumber) {
+                setCardNumber(route.params.cardNumber);
+                setCardNumberStatus(1)
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation , route.params?.cardNumber]);
 
 
     function renderConfirm(){
@@ -129,8 +140,12 @@ function TransferCard({navigation}) {
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
+                                           value={cardNumber}
                                     />
                                 </Item>
+                                <TouchableOpacity onPress={() => navigation.navigate('barCodeScan' , {pathName:'transferCard'})} style={{position:'absolute' , right:15 , top:15}}>
+                                    <Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                                </TouchableOpacity>
                             </View>
 
                             <View style={[styles.height_40, styles.flexCenter]}>

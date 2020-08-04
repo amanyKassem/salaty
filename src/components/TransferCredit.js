@@ -17,7 +17,7 @@ import {cridetTransfer} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
-function TransferCredit({navigation}) {
+function TransferCredit({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const lang = useSelector(state => state.lang.lang);
@@ -54,6 +54,17 @@ function TransferCredit({navigation}) {
         setIsSubmitted(false)
     }, [isSubmitted]);
 
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.cardNumber) {
+                setCardNumber(route.params.cardNumber);
+                setCardNumberStatus(1)
+            }
+        });
+
+        return unsubscribe;
+    }, [navigation , route.params?.cardNumber]);
 
     const askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA);
@@ -158,8 +169,12 @@ function TransferCredit({navigation}) {
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
+                                           value={cardNumber}
                                     />
                                 </Item>
+                                <TouchableOpacity onPress={() => navigation.navigate('barCodeScan' , {pathName:'transferCredit'})} style={{position:'absolute' , right:15 , top:15}}>
+                                    <Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                                </TouchableOpacity>
                             </View>
 
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>

@@ -20,7 +20,7 @@ import {getBanks , getCardRecharge} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
-function Recharge({navigation}) {
+function Recharge({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const notifications = useSelector(state => state.notifications.notifications);
@@ -39,6 +39,8 @@ function Recharge({navigation}) {
     const [usernameStatus, setUsernameStatus] = useState(0);
     const [accName, setAccName] = useState('');
     const [accNameStatus, setAccNameStatus] = useState(0);
+    const [amount, setAmount] = useState('');
+    const [amountStatus, setAmountStatus] = useState(0);
     const [bankTransName, setBankTransName] = useState('');
     const [bankTransNameStatus, setBankTransNameStatus] = useState(0);
     const [cardNumber, setCardNumber] = useState('');
@@ -46,6 +48,7 @@ function Recharge({navigation}) {
 
     function activeInput(type) {
         if (type === 'accName' || accName !== '') setAccNameStatus(1);
+        if (type === 'amount' || amount !== '') setAmountStatus(1);
         if (type === 'username' || username !== '') setUsernameStatus(1);
         if (type === 'bankTransName' || bankTransName !== '') setBankTransNameStatus(1);
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
@@ -53,6 +56,7 @@ function Recharge({navigation}) {
 
     function unActiveInput(type) {
         if (type === 'accName' && accName === '') setAccNameStatus(0);
+        if (type === 'amount' && amount === '') setAmountStatus(0);
         if (type === 'username' && username === '') setUsernameStatus(0);
         if (type === 'bankTransName' && bankTransName === '') setBankTransNameStatus(0);
         if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
@@ -73,6 +77,17 @@ function Recharge({navigation}) {
 
         return unsubscribe;
     }, [navigation , banksLoader]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.cardNumber) {
+                setCardNumber(route.params.cardNumber);
+                setCardNumberStatus(1)
+            }
+        });
+
+        return unsubscribe;
+    }, [route.params?.cardNumber]);
 
 
     useEffect(() => {
@@ -107,7 +122,7 @@ function Recharge({navigation}) {
 
 
     function renderConfirm(){
-        if (bankId == null || username == '' || accName == '' || bankTransName == '' ||  cardNumber == '' || draftImage == i18n.t('draftImage')|| draftImage == ''){
+        if (bankId == null || username == '' ||amount == '' || accName == '' || bankTransName == '' ||  cardNumber == '' || draftImage == i18n.t('draftImage')|| draftImage == ''){
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -137,7 +152,7 @@ function Recharge({navigation}) {
 
     function onConfirm(){
         setIsSubmitted(true);
-        dispatch(getCardRecharge(lang , username , accName , bankTransName , base64 , bankId , cardNumber , token , navigation));
+        dispatch(getCardRecharge(lang , username , accName , amount , bankTransName , base64 , bankId , cardNumber , token , navigation));
     }
 
     function selectBank(id){
@@ -237,6 +252,18 @@ function Recharge({navigation}) {
 
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
                                 <Item floatingLabel style={[styles.item]}>
+                                    <Label style={[styles.label, styles.textRegular ,{ color:amountStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('amount') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (amountStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(amount) => setAmount(amount)}
+                                           onBlur={() => unActiveInput('amount')}
+                                           onFocus={() => activeInput('amount')}
+                                           keyboardType={'number-pad'}
+                                    />
+                                </Item>
+                            </View>
+
+                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                                <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:bankTransNameStatus === 1 ?  COLORS.green :  COLORS.gray , top:1}]}>{ i18n.t('bankName') }</Label>
                                     <Input style={[styles.input, styles.height_50, (bankTransNameStatus === 1 ? styles.Active : styles.noActive)]}
                                            onChangeText={(bankTransName) => setBankTransName(bankTransName)}
@@ -249,12 +276,16 @@ function Recharge({navigation}) {
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
                                 <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>
-                                    <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive)]}
+                                    <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive) , {paddingRight:45}]}
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
+                                           value={cardNumber}
                                     />
                                 </Item>
+                                <TouchableOpacity onPress={() => navigation.navigate('barCodeScan' , {pathName:'recharge'})} style={{position:'absolute' , right:15 , top:15}}>
+                                    <Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                                </TouchableOpacity>
                             </View>
 
                             <TouchableOpacity onPress={_pickImage} style={[styles.height_50 ,styles.input ,(draftImage !== '' && draftImage !== i18n.t('draftImage') ? styles.Active : styles.noActive), styles.directionRowSpace,

@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, AsyncStorage, ActivityIndicator } from "react-native";
-import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
+import {Card, Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
@@ -142,6 +142,15 @@ function Login({navigation}) {
                     {/*<TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 , {marginLeft:15}]}>*/}
                         {/*<Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />*/}
                     {/*</TouchableOpacity>*/}
+
+                    <TouchableOpacity onPress={() => navigation.navigate('balanceInquiry')} style={[styles.bg_White , styles.marginTop_40 , styles.directionRowCenter , styles.Radius_5 , styles.paddingHorizontal_5 , styles.paddingVertical_5 , {
+                        alignSelf:'flex-end',
+                        marginRight:15
+                    }]}>
+                        <Image source={require('../../assets/images/transform_money_small.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                        <Text style={[styles.textRegular , styles.text_green , styles.textSize_13]}>{ i18n.t('balanceInquiry') }</Text>
+                    </TouchableOpacity>
+
                     <Image source={require('../../assets/images/login_vector.png')} style={[styles.icon220 , {top:40 , left:30 , zIndex:1}]} resizeMode={'contain'} />
 
                     <View style={[styles.bgFullWidth,styles.paddingHorizontal_20 ,styles.bg_White,

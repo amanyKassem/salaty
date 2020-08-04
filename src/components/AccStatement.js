@@ -66,6 +66,7 @@ function AccStatement({navigation , route}) {
                 <View style={[styles.directionColumnCenter , styles.Width_100, styles.marginTop_25]}>
                     <Image source={require('../../assets/images/note.png')} resizeMode={'contain'}
                            style={{alignSelf: 'center', width: 200, height: 200}}/>
+                    <Text style={[styles.textBold , styles.text_black , styles.textSize_14]}>{ i18n.t('noOp') }</Text>
                 </View>
             );
         }

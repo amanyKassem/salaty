@@ -224,6 +224,9 @@ const styles = ({
     marginTop_125 : {
         marginTop      : 125
     },
+    marginTop_135 : {
+        marginTop      : 135
+    },
     marginTop_150 : {
         marginTop      : 150
     },
@@ -595,6 +598,9 @@ const styles = ({
     },
     width_150 : {
         width               : 150
+    },
+    width_155 : {
+        width               : 155
     },
     height_10 : {
         height               : 10

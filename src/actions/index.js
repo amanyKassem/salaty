@@ -21,3 +21,4 @@ export * from './CardEnquiryAction';
 export * from './AddComplaintAction';
 export * from './AddConatctAction';
 export * from './ContactSocialAction';
+export * from './InquiryAction';

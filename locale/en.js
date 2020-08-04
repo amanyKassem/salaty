@@ -259,6 +259,8 @@ const en = {
     'fillComplaint'             : 'You can file your complaint',
     'writeUrMsg'                : 'Write your message',
     'msgContact'                : 'You can contact us by sending a message',
+    'balanceInquiry'            : 'Balance inquiry',
+    'noOp'                      : 'No operations',
 };
 
 export default en;

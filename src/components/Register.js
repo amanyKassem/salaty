@@ -63,7 +63,7 @@ function Register({navigation}) {
         let isError         = false;
         let msg             = '';
 
-        if (username.length <= 0) {
+        if (fullName.length <= 0) {
             isError     = true;
             msg         = i18n.t('name');
         } else if (phone.length <= 0 || phone.length !== 10) {

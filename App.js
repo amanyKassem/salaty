@@ -57,3 +57,8 @@ function App({navigation}) {
 }
 
 export default App;
+
+
+// Keystore password: 0bc851c9d65745588171921599773229
+// Key alias:         QG1fc2hhbXMvU2FsYXR5
+// Key password:      2feaf955721042b7929e661d70ef7ffb

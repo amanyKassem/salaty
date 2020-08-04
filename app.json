@@ -23,7 +23,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.salaty",
+      "bundleIdentifier": "aait.salaty",
       "infoPlist": {
         "NSCameraUsageDescription": "App need this permission to update profile photo.",
         "NSPhotoLibraryAddUsageDescription": "App need this permission to update profile photo.",
@@ -32,7 +32,7 @@
       }
     },
     "android": {
-      "package": "com.salaty",
+      "package": "aait.salaty",
       "versionCode": 1,
       "config": {
         "googleMaps": {

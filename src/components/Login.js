@@ -136,6 +136,7 @@ function Login({navigation}) {
 
     return (
         <Container>
+
             {renderLoader()}
                 <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
@@ -192,7 +193,7 @@ function Login({navigation}) {
                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('haveNoAcc') }</Text>
                                    <Text style={[styles.textRegular , styles.text_green , styles.textSize_14 , {marginLeft:5}]}>{ i18n.t('createAcc') }</Text>
                                </TouchableOpacity>
-
+                               
                                {/*{*/}
                                    {/*userType === 'user' ?*/}
                                        {/*<TouchableOpacity onPress={() => navigation.push('register')} style={[styles.directionRow , styles.marginBottom_15]}>*/}

@@ -1,5 +1,5 @@
 import React , {useState , useEffect} from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage , Text } from 'react-native';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,6 +26,9 @@ function App({navigation}) {
 				sound: true,
 			});
 		}
+
+		if (Text.defaultProps == null) Text.defaultProps = {};
+		Text.defaultProps.allowFontScaling = false;
 
 		async function loadFont(){
 			await Font.loadAsync({

@@ -144,13 +144,6 @@ function Login({navigation}) {
                         {/*<Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />*/}
                     {/*</TouchableOpacity>*/}
 
-                    <TouchableOpacity onPress={() => navigation.navigate('balanceInquiry')} style={[styles.bg_White , styles.marginTop_40 , styles.directionRowCenter , styles.Radius_5 , styles.paddingHorizontal_5 , styles.paddingVertical_5 , {
-                        alignSelf:'flex-end',
-                        marginRight:15
-                    }]}>
-                        <Image source={require('../../assets/images/transform_money_small.png')} style={[styles.icon20]} resizeMode={'contain'} />
-                        <Text style={[styles.textRegular , styles.text_green , styles.textSize_13]}>{ i18n.t('balanceInquiry') }</Text>
-                    </TouchableOpacity>
 
                     <Image source={require('../../assets/images/login_vector.png')} style={[styles.icon220 , {top:40 , left:30 , zIndex:1}]} resizeMode={'contain'} />
 
@@ -193,7 +186,12 @@ function Login({navigation}) {
                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('haveNoAcc') }</Text>
                                    <Text style={[styles.textRegular , styles.text_green , styles.textSize_14 , {marginLeft:5}]}>{ i18n.t('createAcc') }</Text>
                                </TouchableOpacity>
-                               
+
+                               <TouchableOpacity onPress={() => navigation.navigate('balanceInquiry')} style={[styles.bg_White , styles.marginBottom_15 , styles.directionRowCenter ]}>
+                                   <Image source={require('../../assets/images/transform_money_small.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                                   <Text style={[styles.textRegular , styles.text_green , styles.textSize_13]}>{ i18n.t('balanceInquiry') }</Text>
+                               </TouchableOpacity>
+
                                {/*{*/}
                                    {/*userType === 'user' ?*/}
                                        {/*<TouchableOpacity onPress={() => navigation.push('register')} style={[styles.directionRow , styles.marginBottom_15]}>*/}

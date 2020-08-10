@@ -64,12 +64,13 @@ function GiftCard({navigation , route}) {
         const unsubscribe = navigation.addListener('focus', () => {
             if (route.params?.cardNumber) {
                 setCardNumber(route.params.cardNumber);
-                setCardNumberStatus(1)
+                setCardNumberStatus(1);
+                setCard(null)
             }
         });
 
         return unsubscribe;
-    }, [route.params?.cardNumber , card ,navigation]);
+    }, [route.params?.cardNumber ,navigation]);
 
 
     function renderConfirm(){
@@ -180,7 +181,7 @@ function GiftCard({navigation , route}) {
                                     placeholder={{
                                         label: i18n.t('chooseCard') ,
                                     }}
-                                    onValueChange={(card) => setCard(card)}
+                                    onValueChange={(card) => {setCard(card) ; setCardNumber('')}}
                                     items={userCards ?
                                         userCards.map((userCard, i) => {
                                                 return (
@@ -192,7 +193,7 @@ function GiftCard({navigation , route}) {
                                     Icon={() => {
                                         return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}
-                                    disabled={!!cardNumber}
+                                    value={card}
                                 />
                             </View>
 
@@ -200,14 +201,13 @@ function GiftCard({navigation , route}) {
                                 <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>
                                     <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive) , {paddingRight:45}]}
-                                           onChangeText={(cardNumber) => setCardNumber(cardNumber)}
+                                           onChangeText={(cardNumber) => {setCardNumber(cardNumber) ; setCard(null)}}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
                                            value={cardNumber}
-                                           disabled={!!card}
                                     />
                                 </Item>
-                                <TouchableOpacity onPress={!!card ? null : () => navigation.navigate('barCodeScan' , {pathName:'giftCard' , authType})} style={{position:'absolute' , right:15 , top:5}}>
+                                <TouchableOpacity onPress={() => navigation.navigate('barCodeScan' , {pathName:'giftCard' , authType})} style={{position:'absolute' , right:15 , top:5}}>
                                     <Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
                                 </TouchableOpacity>
                             </View>

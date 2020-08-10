@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 export default function BarCodeScan({navigation , route}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const pathName = route.params.pathName;
+    const authType = route.params.authType;
 
     useEffect(() => {
         (async () => {
@@ -16,10 +17,19 @@ export default function BarCodeScan({navigation , route}) {
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        navigation.navigate('homeStack', {
-            screen: pathName,
-            params: { cardNumber:data },
-        })
+
+        if(pathName === 'giftCard'){
+            navigation.navigate('commonStack', {
+                screen: 'giftCard',
+                params: { authType , cardNumber:data  }
+            })
+        }else{
+            navigation.navigate('homeStack', {
+                screen: pathName,
+                params: { cardNumber:data },
+            })
+        }
+
     };
 
     if (hasPermission === null) {

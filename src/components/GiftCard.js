@@ -31,17 +31,21 @@ function GiftCard({navigation , route}) {
     const [phone, setPhone] = useState('');
     const [phoneStatus, setPhoneStatus] = useState(0);
     const [card, setCard] = useState('');
+    const [cardNumber, setCardNumber] = useState('');
+    const [cardNumberStatus, setCardNumberStatus] = useState(0);
     const [transferNote, setTransferNote] = useState('');
     const [transferNoteStatus, setTransferNoteStatus] = useState(0);
 
     function activeInput(type) {
         if (type === 'phone' || phone !== '') setPhoneStatus(1);
         if (type === 'transferNote' || transferNote !== '') setTransferNoteStatus(1);
+        if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
     }
 
     function unActiveInput(type) {
         if (type === 'phone' && phone === '') setPhoneStatus(0);
         if (type === 'transferNote' && transferNote === '') setTransferNoteStatus(0);
+        if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
     }
 
 
@@ -56,9 +60,20 @@ function GiftCard({navigation , route}) {
         dispatch(getUserCards(lang , token))
     }, [userCardsLoader]);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.cardNumber) {
+                setCardNumber(route.params.cardNumber);
+                setCardNumberStatus(1)
+            }
+        });
+
+        return unsubscribe;
+    }, [route.params?.cardNumber , card ,navigation]);
+
 
     function renderConfirm(){
-        if (phone == '' || card == null || card == ''){
+        if (phone == '' || (card == null || card == '' )&& cardNumber == ''){
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -148,7 +163,7 @@ function GiftCard({navigation , route}) {
                             </View>
 
                             <View style={[styles.height_50 ,styles.input ,(card !== ''? styles.Active : styles.noActive), styles.flexCenter,
-                                styles.marginBottom_5 , styles.Width_100]}>
+                                styles.marginBottom_40 , styles.Width_100]}>
                                 <RNPickerSelect
                                     style={{
                                         inputAndroid: {
@@ -177,7 +192,24 @@ function GiftCard({navigation , route}) {
                                     Icon={() => {
                                         return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                                     }}
+                                    disabled={!!cardNumber}
                                 />
+                            </View>
+
+                            <View style={[styles.height_50, styles.flexCenter]}>
+                                <Item floatingLabel style={[styles.item]}>
+                                    <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive) , {paddingRight:45}]}
+                                           onChangeText={(cardNumber) => setCardNumber(cardNumber)}
+                                           onBlur={() => unActiveInput('cardNumber')}
+                                           onFocus={() => activeInput('cardNumber')}
+                                           value={cardNumber}
+                                           disabled={!!card}
+                                    />
+                                </Item>
+                                <TouchableOpacity onPress={!!card ? null : () => navigation.navigate('barCodeScan' , {pathName:'giftCard' , authType})} style={{position:'absolute' , right:15 , top:5}}>
+                                    <Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                                </TouchableOpacity>
                             </View>
 
                             <Label style={[styles.label, styles.textRegular ,{ color:transferNoteStatus === 1 ?  COLORS.green :  COLORS.gray, top:transferNoteStatus === 1 ? 10 : 40}]}>{ i18n.t('notes') }</Label>

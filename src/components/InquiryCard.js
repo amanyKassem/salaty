@@ -1,6 +1,6 @@
 import React, { useState , useEffect} from "react";
 import {View, Text, Image, TouchableOpacity, Platform, ActivityIndicator} from "react-native";
-import {Container, Content} from 'native-base'
+import {Container, Content, Form, Input, Item, Label} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import RNPickerSelect from 'react-native-picker-select';
@@ -10,7 +10,7 @@ import {getUserCards} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
-function InquiryCard({navigation}) {
+function InquiryCard({navigation , route}) {
 
     const lang = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
@@ -18,7 +18,18 @@ function InquiryCard({navigation}) {
     const userCardsLoader = useSelector(state => state.userCards.loader);
     const notifications = useSelector(state => state.notifications.notifications);
     const [card, setCard] = useState('');
+    const [cardNumber, setCardNumber] = useState('');
+    const [cardNumberStatus, setCardNumberStatus] = useState(0);
     const [isSubmitted, setIsSubmitted] = useState(false);
+
+    function activeInput(type) {
+        if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
+    }
+
+    function unActiveInput(type) {
+        if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
+    }
+
 
     const dispatch = useDispatch();
 
@@ -31,8 +42,20 @@ function InquiryCard({navigation}) {
         dispatch(getUserCards(lang , token))
     }, [userCardsLoader]);
 
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.cardNumber) {
+                setCardNumber(route.params.cardNumber);
+                setCardNumberStatus(1)
+            }
+        });
+
+        return unsubscribe;
+    }, [route.params?.cardNumber , card ,navigation]);
+
     function renderSubmit() {
-        if (card == null || card == '') {
+        if ((card == null || card == '' )&& cardNumber == '') {
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , {
@@ -100,7 +123,7 @@ function InquiryCard({navigation}) {
                     </View>
 
                     <View style={[styles.height_50 ,styles.input ,(card !== ''? styles.Active : styles.noActive), styles.flexCenter,
-                        styles.marginBottom_30 , styles.Width_100]}>
+                        styles.marginBottom_25 , styles.Width_100]}>
                         <RNPickerSelect
                             style={{
                                 inputAndroid: {
@@ -129,7 +152,23 @@ function InquiryCard({navigation}) {
                             Icon={() => {
                                 return <Image source={card !== ''? require('../../assets/images/drop_green_arrow.png') : require('../../assets/images/gray_arrow.png')} style={[styles.icon15 , {top:isIOS ? 7 : 18}]} resizeMode={'contain'} />
                             }}
+                            disabled={!!cardNumber}
                         />
+                    </View>
+                    <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                        <Item floatingLabel style={[styles.item]}>
+                            <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>
+                            <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive) , {paddingRight:45}]}
+                                   onChangeText={(cardNumber) => setCardNumber(cardNumber)}
+                                   onBlur={() => unActiveInput('cardNumber')}
+                                   onFocus={() => activeInput('cardNumber')}
+                                   value={cardNumber}
+                                   disabled={!!card}
+                            />
+                        </Item>
+                        <TouchableOpacity onPress={!!card ? null : () => navigation.navigate('barCodeScan' , {pathName:'inquiryCard'})} style={{position:'absolute' , right:15 , top:15}}>
+                            <Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                        </TouchableOpacity>
                     </View>
 
                     {renderSubmit()}

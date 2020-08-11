@@ -170,7 +170,7 @@ function InquiryCard({navigation , route}) {
                                    onChangeText={(cardNumber) => {setCardNumber(cardNumber) ; setCard(null)}}
                                    onBlur={() => unActiveInput('cardNumber')}
                                    onFocus={() => activeInput('cardNumber')}
-                                   value={cardNumber.toString()}
+                                   value={cardNumber}
                             />
                         </Item>
 

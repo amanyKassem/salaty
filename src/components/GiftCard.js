@@ -63,9 +63,9 @@ function GiftCard({navigation , route}) {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             if (route.params?.cardNumber) {
+                setCard('');
                 setCardNumber(route.params.cardNumber);
                 setCardNumberStatus(1);
-                setCard(null)
             }
         });
 
@@ -106,7 +106,12 @@ function GiftCard({navigation , route}) {
         dispatch(giftCard(lang , phone, card , transferNote , token , navigation , authType));
     }
 
+    function setCardVal(card){
+        setCard(card);
 
+        if (card)
+            setCardNumber('')
+    }
 
     return (
         <Container>
@@ -181,7 +186,7 @@ function GiftCard({navigation , route}) {
                                     placeholder={{
                                         label: i18n.t('chooseCard') ,
                                     }}
-                                    onValueChange={(card) => {setCard(card) ; setCardNumber('')}}
+                                    onValueChange={(card) => { setCardVal(card) }}
                                     items={userCards ?
                                         userCards.map((userCard, i) => {
                                                 return (

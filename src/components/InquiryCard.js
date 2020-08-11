@@ -50,7 +50,6 @@ function InquiryCard({navigation , route}) {
                 setCardNumber(route.params.cardNumber);
                 setCardNumberStatus(1);
             }
-
         });
 
         return unsubscribe;

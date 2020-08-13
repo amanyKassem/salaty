@@ -7,7 +7,7 @@ import COLORS from "../consts/colors";
 import { useDispatch, useSelector } from 'react-redux'
 import {checkInquery} from "../actions";
 
-function BalanceInquiry({navigation}) {
+function BalanceInquiry({navigation, route}) {
 
     const lang = useSelector(state => state.lang.lang);
     const dispatch = useDispatch();
@@ -24,6 +24,17 @@ function BalanceInquiry({navigation}) {
         setSpinner(false)
         return unsubscribe;
     }, [navigation, spinner]);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', () => {
+			if (route.params?.cardNumber) {
+				setCardNumber(route.params.cardNumber);
+				setCardNumberStatus(1);
+			}
+		});
+
+		return unsubscribe;
+	}, [route.params?.cardNumber ,navigation]);
 
 
     function activeInput(type) {
@@ -96,8 +107,13 @@ function BalanceInquiry({navigation}) {
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
+										   value={cardNumber}
                                     />
                                 </Item>
+
+								<TouchableOpacity onPress={() => navigation.navigate('barCodeScan' , {pathName:'balanceInquiry'})} style={{position:'absolute' , right:15 , top:15}}>
+									<Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
+								</TouchableOpacity>
                             </View>
 
                             {renderSubmit()}

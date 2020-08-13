@@ -18,18 +18,7 @@ export default function BarCodeScan({navigation , route}) {
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
 
-        if(pathName === 'giftCard'){
-            navigation.navigate('commonStack', {
-                screen: 'giftCard',
-                params: { authType , cardNumber:data  }
-            })
-        }else{
-            navigation.navigate('homeStack', {
-                screen: pathName,
-                params: { cardNumber:data },
-            })
-        }
-
+		navigation.navigate(pathName, { authType , cardNumber:data } );
     };
 
     if (hasPermission === null) {

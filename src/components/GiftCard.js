@@ -202,6 +202,8 @@ function GiftCard({navigation , route}) {
                                 />
                             </View>
 
+							<Text style={[styles.textRegular , styles.text_gray , styles.textSize_16,styles.textCenter, { marginBottom: 20 }]}>-- { i18n.t('or') } --</Text>
+
                             <View style={[styles.height_50, styles.flexCenter]}>
                                 <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>

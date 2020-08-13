@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Image, TouchableOpacity, Dimensions} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import styles from "../../assets/styles";
+import {Container, Content} from "native-base";
+
+const height    = Dimensions.get('window').height;
 
 export default function BarCodeScan({navigation , route}) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -29,16 +33,18 @@ export default function BarCodeScan({navigation , route}) {
     }
 
     return (
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-            }}>
-            <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                style={StyleSheet.absoluteFillObject}
-            />
-        </View>
+        <Content contentContainerStyle={[styles.bgFullWidth]}>
+
+            <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 ,styles.bg_White , styles.icon35 , styles.centerContext
+                , styles.Radius_50, {marginLeft:15,position:'absolute' , zIndex:1, top:20}]}>
+                <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon20, styles.transformReverse]} resizeMode={'contain'} />
+            </TouchableOpacity>
+            <View style={{flex:1}}>
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={StyleSheet.absoluteFillObject}
+                />
+            </View>
+        </Content>
     );
 }

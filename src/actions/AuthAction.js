@@ -29,7 +29,7 @@ export const register = (data, navigation) => {
 				data: {
 					name			    : data.fullName,
 					phone			    : data.phone,
-					// email			    : data.email,
+					// email			: data.email,
 					city_id			    : data.city,
 					password		    : data.password,
 					lang 			    : data.lang,

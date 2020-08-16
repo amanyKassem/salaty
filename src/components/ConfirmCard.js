@@ -17,7 +17,7 @@ import {confirmCard} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
-function ConfirmCard({navigation}) {
+function ConfirmCard({navigation,route}) {
     const lang = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -43,6 +43,17 @@ function ConfirmCard({navigation}) {
 
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.photo) {
+                setCardImage(route.params.photo.uri);
+                setBase64(route.params.photo.base64);
+            }
+        });
+
+        return unsubscribe;
+    }, [route.params?.photo ,navigation]);
 
     useEffect(() => {
         setIsSubmitted(false)
@@ -161,7 +172,7 @@ function ConfirmCard({navigation}) {
                                 </Item>
                             </View>
 
-                            <TouchableOpacity onPress={_pickImage} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImg') ? styles.Active : styles.noActive), styles.directionRowSpace,
+                            <TouchableOpacity onPress={() => navigation.navigate('cameraCapture')} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImg') ? styles.Active : styles.noActive), styles.directionRowSpace,
                                 styles.marginBottom_25 , styles.Width_100]}>
                                 <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{cardImage.substr(0,38)}</Text>
                                 <Image source={require('../../assets/images/camera_green.png')} style={[styles.icon20]} resizeMode={'contain'} />

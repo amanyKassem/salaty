@@ -13,6 +13,7 @@ const isIOS = Platform.OS === 'ios';
 function AccStatement({navigation , route}) {
 
     const card = route.params.card;
+    const cardNumber = route.params.cardNumber;
     const [type, setType] = useState('all');
     const lang = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user.data.token);
@@ -25,7 +26,13 @@ function AccStatement({navigation , route}) {
 
     function fetchData(){
         setScreenLoader(true)
-        dispatch(getCardEnquiry(lang , card , type, token))
+        if(card) {
+            dispatch(getCardEnquiry(lang , card , type, token))
+        }
+        else{
+            dispatch(getCardEnquiry(lang , cardNumber , type, token))
+        }
+
     }
 
     useEffect(() => {
@@ -46,7 +53,13 @@ function AccStatement({navigation , route}) {
     function changeType(newType) {
         setScreenLoader(true)
         setType(newType);
-        dispatch(getCardEnquiry(lang , card , newType, token))
+
+        if(card) {
+            dispatch(getCardEnquiry(lang , card , newType, token))
+        }
+        else{
+            dispatch(getCardEnquiry(lang , cardNumber , newType, token))
+        }
     }
 
 

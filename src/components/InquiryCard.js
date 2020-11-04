@@ -85,7 +85,10 @@ function InquiryCard({navigation , route}) {
     }
 
     function onConfirm() {
-        navigation.push('accStatement', {card})
+        if(card)
+            navigation.push('accStatement', {card})
+        else
+            navigation.push('accStatement', {cardNumber})
     }
 
     function setCardVal(card){

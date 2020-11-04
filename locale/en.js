@@ -261,6 +261,7 @@ const en = {
     'msgContact'                : 'You can contact us by sending a message',
     'balanceInquiry'            : 'Balance inquiry',
     'noOp'                      : 'No operations',
+    'verifyCard'                : 'Check card',
 };
 
 export default en;

@@ -3,7 +3,7 @@ import {
     View,
     Text,
     Image,
-    TouchableOpacity, ActivityIndicator, ScrollView, Dimensions,
+    TouchableOpacity, ActivityIndicator, ScrollView, Dimensions, Switch,
 } from "react-native";
 import {Container, Content, Accordion, Card} from 'native-base'
 import styles from '../../assets/styles'
@@ -11,6 +11,7 @@ import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
 import {getMyCards, cardOrder} from '../actions';
+import MyCard from "./Card";
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
@@ -25,6 +26,7 @@ function MyCards({navigation}) {
     const notifications = useSelector(state => state.notifications.notifications);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [screenLoader , setScreenLoader ] = useState(true);
+    const [isExpanded , setIsExpanded ] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -37,6 +39,8 @@ function MyCards({navigation}) {
         setIsSubmitted(false)
     }, [isSubmitted]);
 
+
+
     useEffect(() => {
         fetchData();
         const unsubscribe = navigation.addListener('focus', () => {
@@ -44,7 +48,7 @@ function MyCards({navigation}) {
         });
 
         return unsubscribe;
-    }, [navigation , myCardsLoader]);
+    }, [navigation , myCardsLoader , isExpanded]);
 
     useEffect(() => {
         setScreenLoader(false)
@@ -75,39 +79,25 @@ function MyCards({navigation}) {
 
 
     function _allHeader(item, expanded) {
+        setIsExpanded(expanded);
         return (
             <Card style={[styles.directionRowSpace , styles.marginBottom_10, {padding:10}]}>
                 <View style={[styles.directionRow]}>
                     <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('cardNumber') } :</Text>
                     <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.identity }</Text>
                 </View>
-                {expanded
-                    ? <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon15 , styles.transform]} resizeMode={'contain'} />
-                    : <Image source={require('../../assets/images/drop_green_arrow.png')} style={[styles.icon15]} resizeMode={'contain'} />}
+                {
+                    expanded ?
+                        <Image source={require('../../assets/images/arrow_yellow_open.png')} style={[styles.icon15 , styles.transform]} resizeMode={'contain'} />
+                    : <Image source={require('../../assets/images/drop_green_arrow.png')} style={[styles.icon15]} resizeMode={'contain'} />
+                }
             </Card>
         );
     }
 
     function _allContent(item) {
         return (
-            <View style={{padding:10 , paddingTop:5}}>
-
-                <View style={[styles.directionRow]}>
-                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('credit') } :</Text>
-                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.credit }</Text>
-                </View>
-
-                <View style={[styles.directionRow]}>
-                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('phone') } :</Text>
-                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.phone }</Text>
-                </View>
-
-                <View style={[styles.directionRow]}>
-                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14]}>{ i18n.t('status') } :</Text>
-                    <Text style={[styles.textBold , styles.text_black , styles.textSize_13, {marginLeft:5}]}>{ item.statue }</Text>
-                </View>
-
-            </View>
+            <MyCard key={item.identity} item={item} navigation={navigation}/>
         );
     }
 
@@ -176,7 +166,9 @@ function MyCards({navigation}) {
                             <Accordion
                                 dataArray={myCards}
                                 animation={true}
-                                expanded={true}
+                                onAccordionOpen={() => {
+                                    dispatch(getMyCards(lang, token))
+                                }}
                                 renderHeader={_allHeader}
                                 renderContent={_allContent}
                                 style={[{borderWidth:0}]}

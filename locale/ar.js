@@ -262,6 +262,7 @@ const ar = {
     'msgContact'                : 'يمكنك التواصل معنا عبر ارسال رسالة',
     'balanceInquiry'            : 'استعلام عن الرصيد',
     'noOp'                      : 'لا يوجد عمليات',
+    'verifyCard'                : 'تحقق البطاقه',
 };
 
 export default ar;

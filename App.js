@@ -13,6 +13,7 @@ import { Notifications } from 'expo'
 
 function App({navigation}) {
 
+
 	const [isReady, setIsReady] = useState(false);
 
 	useEffect( () => {

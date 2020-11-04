@@ -12,6 +12,7 @@ export const userLogin = (phone, password, deviceId, lang, navigation) => {
             CONST.url + 'login',
             {phone, password, lang, device_id: deviceId})
             .then(
+
                 response => handelLogin(dispatch, response.data , navigation)
             )
             .catch(
@@ -171,7 +172,6 @@ const handelLogin = (dispatch, data , navigation) => {
         }
     });
 };
-
 
 const loginSuccess = (dispatch, data , navigation) => {
     AsyncStorage.setItem('token', JSON.stringify(data.data.token))

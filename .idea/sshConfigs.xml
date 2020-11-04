@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="host.aait-sa.com" id="deae9ad4-10e6-4db4-ae30-0d299bd7bbf4" port="1289" customName="salaty" nameFormat="CUSTOM">
+        <option name="customName" value="salaty" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

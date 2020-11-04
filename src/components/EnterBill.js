@@ -1,11 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    KeyboardAvoidingView, ActivityIndicator,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, } from "react-native";
 import {Container, Content, Form, Item, Label, Input} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -19,12 +13,12 @@ const isIOS = Platform.OS === 'ios';
 
 function EnterBill({navigation , route}) {
 
-    const credit = route.params.credit;
-    const image = route.params.image;
-    const phone = route.params.phone;
+    const credit        = route.params.credit;
+    const image         = route.params.image;
+    const phone         = route.params.phone;
     const card_identity = route.params.card_identity;
 
-    const lang = useSelector(state => state.lang.lang);
+    const lang  = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -108,7 +102,6 @@ function EnterBill({navigation , route}) {
         setIsSubmitted(true);
         dispatch(storeBill(lang , card_identity , phone , totalBillAmount , base64 , image  , token , navigation ));
     }
-
 
     return (
         <Container>

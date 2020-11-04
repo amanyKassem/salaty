@@ -18,7 +18,7 @@ function ActivationCode({navigation , route}) {
     const [spinner, setSpinner] = useState(false);
 
     useEffect(() => {
-        alert('activation code : ' + code)
+        // alert('activation code : ' + code)
     }, []);
 
 

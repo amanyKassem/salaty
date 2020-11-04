@@ -1,11 +1,5 @@
 import React, { useState , useEffect} from "react";
-import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    KeyboardAvoidingView, ActivityIndicator,
-} from "react-native";
+import {View, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, } from "react-native";
 import {Container, Content, Form, Item, Label, Input , Textarea} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -18,7 +12,7 @@ const isIOS = Platform.OS === 'ios';
 function TransferCard({navigation , route}) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const lang = useSelector(state => state.lang.lang);
+    const lang  = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
 
     const [cardNumber, setCardNumber] = useState('');
@@ -42,7 +36,6 @@ function TransferCard({navigation , route}) {
         if (type === 'newPhone' && newPhone === '') setNewPhoneStatus(0);
         if (type === 'transferNote' && transferNote === '') setTransferNoteStatus(0);
     }
-
 
     useEffect(() => {
         setIsSubmitted(false)
@@ -72,6 +65,7 @@ function TransferCard({navigation , route}) {
                 </View>
             );
         }
+
         if (isSubmitted){
             return(
                 <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>

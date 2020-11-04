@@ -18,7 +18,7 @@ import {confirmCard} from '../actions';
 const isIOS = Platform.OS === 'ios';
 
 function ConfirmCard({navigation,route}) {
-    const lang = useSelector(state => state.lang.lang);
+    const lang  = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -28,19 +28,18 @@ function ConfirmCard({navigation,route}) {
     const [cardNumber, setCardNumber] = useState('');
     const [cardNumberStatus, setCardNumberStatus] = useState(0);
 
-    const [phone, setPhone] = useState('');
-    const [phoneStatus, setPhoneStatus] = useState(0);
+    const [amount, setAmount] = useState('');
+    const [amountStatus, setAmountStatus] = useState(0);
 
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
-        if (type === 'phone' || phone !== '') setPhoneStatus(1);
+        if (type === 'amount' || amount !== '') setAmountStatus(1);
     }
 
     function unActiveInput(type) {
-        if (type === 'phone' && phone === '') setPhoneStatus(0);
+        if (type === 'amount' && amount === '') setAmountStatus(0);
         if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
     }
-
 
     const dispatch = useDispatch();
 
@@ -56,9 +55,15 @@ function ConfirmCard({navigation,route}) {
     }, [route.params?.photo ,navigation]);
 
     useEffect(() => {
-        setIsSubmitted(false)
-    }, [isSubmitted]);
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.cardNumber) {
+                setCardNumber(route.params.cardNumber);
+                setCardNumberStatus(1)
+            }
+        });
 
+        return unsubscribe;
+    }, [navigation , route.params?.cardNumber]);
 
     const askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA);
@@ -85,7 +90,7 @@ function ConfirmCard({navigation,route}) {
     };
 
     function renderConfirm(){
-        if (phone == '' ||  cardNumber == '' || (cardImage == i18n.t('cardImg')|| cardImage == '')){
+        if (amount === '' ||  cardNumber === '' || (cardImage == i18n.t('cardImg')|| cardImage == '')){
             return (
                 <View
                     style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
@@ -109,15 +114,13 @@ function ConfirmCard({navigation,route}) {
                 onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
                 <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
             </TouchableOpacity>
-
         );
     }
 
     function onConfirm(){
-        setIsSubmitted(true);
-        dispatch(confirmCard(lang , cardNumber , phone , base64  , token , navigation));
+       setIsSubmitted(true);
+        dispatch(confirmCard(lang , cardNumber , amount , base64  , token , navigation)).then(()=> setIsSubmitted(false));
     }
-
 
     return (
         <Container>
@@ -127,11 +130,8 @@ function ConfirmCard({navigation,route}) {
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
-
                     <Image source={require('../../assets/images/logo_in_app.png')} style={[styles.icon100, {right:12}]} resizeMode={'contain'} />
-
                     <View/>
-
                 </View>
 
                 <View style={[styles.bgFullWidth,styles.bg_White,styles.paddingHorizontal_20,
@@ -148,25 +148,28 @@ function ConfirmCard({navigation,route}) {
 
                     <KeyboardAvoidingView style={[styles.Width_100]}>
                         <Form style={[styles.Width_100 , styles.flexCenter]}>
-
-                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
+                            <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_10]}>
                                 <Item floatingLabel style={[styles.item]}>
                                     <Label style={[styles.label, styles.textRegular ,{ color:cardNumberStatus === 1 ?  COLORS.green :  COLORS.gray, top:1}]}>{ i18n.t('cardNumber') }</Label>
                                     <Input style={[styles.input, styles.height_50, (cardNumberStatus === 1 ? styles.Active : styles.noActive)]}
                                            onChangeText={(cardNumber) => setCardNumber(cardNumber)}
                                            onBlur={() => unActiveInput('cardNumber')}
                                            onFocus={() => activeInput('cardNumber')}
+                                           value={cardNumber}
                                     />
                                 </Item>
+                                <TouchableOpacity onPress={() => navigation.navigate('barCodeScan' , {pathName:'confirmCard'})} style={{position:'absolute' , right:15 , top:15}}>
+                                    <Image source={require('../../assets/images/qr.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                                </TouchableOpacity>
                             </View>
 
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
                                 <Item floatingLabel style={[styles.item]}>
-                                    <Label style={[styles.label, styles.textRegular ,{ color:phoneStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('phone') }</Label>
-                                    <Input style={[styles.input, styles.height_50, (phoneStatus === 1 ? styles.Active : styles.noActive)]}
-                                           onChangeText={(phone) => setPhone(phone)}
-                                           onBlur={() => unActiveInput('phone')}
-                                           onFocus={() => activeInput('phone')}
+                                    <Label style={[styles.label, styles.textRegular ,{ color:amountStatus === 1 ?  COLORS.green :  COLORS.gray}]}>{ i18n.t('amount') }</Label>
+                                    <Input style={[styles.input, styles.height_50, (amountStatus === 1 ? styles.Active : styles.noActive)]}
+                                           onChangeText={(amount) => setAmount(amount)}
+                                           onBlur={() => unActiveInput('amount')}
+                                           onFocus={() => activeInput('amount')}
                                            keyboardType={'number-pad'}
                                     />
                                 </Item>

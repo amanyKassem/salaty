@@ -3,21 +3,19 @@ import CONST from "../consts";
 import {Toast} from "native-base";
 
 
-export const confirmCard = (lang , card_identity , phone , image  , token , navigation) => {
-    return (dispatch) => {
-        axios({
-            url         : CONST.url + 'confirmCard',
+export const confirmCard = (lang , card_identity , amount , bill_image  , token , navigation) => {
+    return async (dispatch) => {
+        await axios({
+            url         : CONST.url + 'storeBill',
             method      : 'POST',
-            data        : {lang , card_identity , phone },
+            data        : {lang , card_identity , amount , bill_image},
             headers     : {Authorization: token}
         }).then(response => {
             if (response.data.success){
                 navigation.navigate('activeConfirmCard', {
                     activeCode			: response.data.data.code,
                     credit			    : response.data.data.credit,
-                    image,
-                    phone,
-                    card_identity,
+                    bill_id			    : response.data.data.bill_id,
                 });
             }
 

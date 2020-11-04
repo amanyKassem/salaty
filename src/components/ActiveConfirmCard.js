@@ -10,22 +10,22 @@ import {Container, Content, Form, Item, Label, Input, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {activeBill, confirmCard} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
 
 function ActiveConfirmCard({navigation , route}) {
 
-    const activeCode = route.params.activeCode;
-    const credit = route.params.credit;
-    const image = route.params.image;
-    const phone = route.params.phone;
-    const card_identity = route.params.card_identity;
+    const { activeCode, bill_id, }    = route.params;
     const notifications = useSelector(state => state.notifications.notifications);
+    const lang          = useSelector(state => state.lang.lang);
+    const token         = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
+    const dispatch      = useDispatch();
 
 
     useEffect(() => {
-        alert('activation code : ' + activeCode)
+        // alert('activation code : ' + activeCode)
     }, []);
 
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -41,48 +41,21 @@ function ActiveConfirmCard({navigation , route}) {
         if (type === 'code' && code === '') setCodeStatus(0);
     }
 
-
     useEffect(() => {
         setIsSubmitted(false)
     }, [isSubmitted]);
 
-
-
     function renderConfirm(){
-        if ( code == ''){
-            return (
-                <View
-                    style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
-                        backgroundColor:'#ccc'
-                    }]}
-                >
-                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
-                </View>
-            );
-        }
-        if (isSubmitted){
-            return(
-                <View style={[{ justifyContent: 'center', alignItems: 'center' } , styles.marginTop_20 , styles.marginBottom_25]}>
-                    <ActivityIndicator size="large" color={COLORS.mstarda} style={{ alignSelf: 'center' }} />
-                </View>
-            )
-        }
-
         return (
             <TouchableOpacity
                 onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>
                 <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
             </TouchableOpacity>
-
         );
     }
 
     function onConfirm(){
-        if (activeCode == code) {
-            setIsSubmitted(true);
-            navigation.push('enterBill' , {card_identity , image , phone , credit})
-        }
-        else {
+        if (code != '' && code != activeCode) {
             Toast.show({
                 text        	: i18n.t('codeNotMatch'),
                 type			: "danger",
@@ -94,13 +67,13 @@ function ActiveConfirmCard({navigation , route}) {
                 }
             });
         }
-    }
 
+        dispatch(activeBill(lang, bill_id, token, navigation))
+    }
 
     return (
         <Container>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
-
                 <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
@@ -132,7 +105,7 @@ function ActiveConfirmCard({navigation , route}) {
                         </View>
                     </View>
 
-                    <KeyboardAvoidingView style={[styles.Width_100]}>
+                    <KeyboardAvoidingView style={styles.Width_100}>
                         <Form style={[styles.Width_100 , styles.flexCenter]}>
 
                             <View style={[styles.height_70, styles.flexCenter, styles.marginBottom_7]}>
@@ -146,7 +119,6 @@ function ActiveConfirmCard({navigation , route}) {
                                     />
                                 </Item>
                             </View>
-
 
                             {renderConfirm()}
 

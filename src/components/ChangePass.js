@@ -22,7 +22,7 @@ function ChangePass({navigation , route}) {
 
 
     useEffect(() => {
-        alert('activation code : ' + activeCode)
+        // alert('activation code : ' + activeCode)
     }, []);
 
     function activeInput(type) {

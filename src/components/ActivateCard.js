@@ -24,7 +24,7 @@ function ActivateCard({navigation , route}) {
     const notifications = useSelector(state => state.notifications.notifications);
 
     useEffect(() => {
-        alert('activation code : ' + activeCode)
+        // alert('activation code : ' + activeCode)
     }, []);
 
     const [isSubmitted, setIsSubmitted] = useState(false);

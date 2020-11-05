@@ -1,19 +1,21 @@
 import React from "react";
-import {View, Text, Image, TouchableOpacity} from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions} from "react-native";
 import {Container, Content,} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import { useSelector} from "react-redux";
 
 const isIOS = Platform.OS === 'ios';
+const height    = Dimensions.get('window').height;
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function Casher({navigation}) {
     const user      = useSelector(state => state.auth.user ? state.auth.user.data : { avatar: '../../assets/images/user_small_icon.png', name: null, email: null, phone: null });
     return (
-        <Container>
+        <Container style={[styles.bg_green]}>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Image source={require('../../assets/images/menu.png')} style={[styles.icon25 , styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
@@ -42,6 +44,12 @@ function Casher({navigation}) {
                 </View>
 
             </Content>
+            {
+                IS_IPHONE_X ?
+                    <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                    :
+                    null
+            }
         </Container>
     );
 }

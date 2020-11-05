@@ -1,5 +1,14 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, AsyncStorage, ActivityIndicator } from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    AsyncStorage,
+    ActivityIndicator,
+    Dimensions
+} from "react-native";
 import {Card, Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -8,6 +17,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import {userLogin} from '../actions';
 import * as Permissions from 'expo-permissions';
 import {Notifications} from 'expo'
+
+
+const height    = Dimensions.get('window').height;
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function Login({navigation}) {
 
@@ -136,10 +149,11 @@ function Login({navigation}) {
     }
 
     return (
-        <Container>
+        <Container style={[styles.bg_green]}>
 
             {renderLoader()}
-                <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
+
+            <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                     {/*<TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 , {marginLeft:15}]}>*/}
                         {/*<Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />*/}
@@ -208,6 +222,14 @@ function Login({navigation}) {
                        </KeyboardAvoidingView>
                    </View>
                 </Content>
+
+            {
+                IS_IPHONE_X ?
+                    <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                    :
+                    null
+            }
+
         </Container>
     );
 }

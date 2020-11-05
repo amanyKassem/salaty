@@ -9,6 +9,7 @@ import {getBanks} from '../actions';
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function BankAccounts({navigation}) {
 
@@ -65,11 +66,11 @@ function BankAccounts({navigation}) {
 
 
     return (
-        <Container>
+       <Container style={[styles.bg_green]}>
             {renderLoader()}
             <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
@@ -144,6 +145,12 @@ function BankAccounts({navigation}) {
                 </View>
 
             </Content>
+           {
+               IS_IPHONE_X ?
+                   <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                   :
+                   null
+           }
         </Container>
     );
 }

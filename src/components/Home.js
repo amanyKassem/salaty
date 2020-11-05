@@ -8,6 +8,7 @@ import {useSelector} from "react-redux";
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function Home({navigation}) {
 
@@ -34,10 +35,10 @@ function Home({navigation}) {
 
 
     return (
-        <Container>
+       <Container style={[styles.bg_green]}>
             <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Image source={require('../../assets/images/menu.png')} style={[styles.icon25 , styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
@@ -118,6 +119,12 @@ function Home({navigation}) {
                 </View>
 
             </Content>
+           {
+               IS_IPHONE_X ?
+                   <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                   :
+                   null
+           }
         </Container>
     );
 }

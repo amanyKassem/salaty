@@ -1,5 +1,14 @@
 import React, { useState , useEffect} from "react";
-import {View, Text, Image, TouchableOpacity , Platform, ActivityIndicator, KeyboardAvoidingView} from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    Platform,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Dimensions
+} from "react-native";
 import {Container, Content, Card, Form, Item, Label, Input} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -9,6 +18,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateProfile , getCities} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
+const height    = Dimensions.get('window').height;
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function EditData({navigation , route}) {
 
@@ -86,10 +97,10 @@ function EditData({navigation , route}) {
 
 
     return (
-        <Container>
+       <Container style={[styles.bg_green]}>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
@@ -192,6 +203,12 @@ function EditData({navigation , route}) {
                 </View>
 
             </Content>
+           {
+               IS_IPHONE_X ?
+                   <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                   :
+                   null
+           }
         </Container>
     );
 }

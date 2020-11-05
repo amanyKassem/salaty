@@ -1,6 +1,7 @@
 import axios from "axios";
 import CONST from "../consts";
 import {Toast} from "native-base";
+import Casher from "../components/Casher";
 
 
 export const confirmCard = (lang , card_identity , amount , bill_image  , token , navigation) => {
@@ -11,12 +12,16 @@ export const confirmCard = (lang , card_identity , amount , bill_image  , token 
             data        : {lang , card_identity , amount , bill_image},
             headers     : {Authorization: token}
         }).then(response => {
-            if (response.data.success){
+
+
+            if (response.data.success && response.data.data.is_checked){
                 navigation.navigate('activeConfirmCard', {
                     activeCode			: response.data.data.code,
                     credit			    : response.data.data.credit,
                     bill_id			    : response.data.data.bill_id,
                 });
+            } else if(response.data.success){
+                navigation.navigate('casher');
             }
 
             Toast.show({

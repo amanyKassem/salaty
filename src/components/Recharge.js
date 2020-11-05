@@ -19,6 +19,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {getBanks , getCardRecharge} from '../actions';
 
 const isIOS = Platform.OS === 'ios';
+const height    = Dimensions.get('window').height;
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function Recharge({navigation , route}) {
 
@@ -162,10 +164,10 @@ function Recharge({navigation , route}) {
 
 
     return (
-        <Container>
+       <Container style={[styles.bg_green]}>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
@@ -303,6 +305,12 @@ function Recharge({navigation , route}) {
                 </View>
 
             </Content>
+           {
+               IS_IPHONE_X ?
+                   <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                   :
+                   null
+           }
         </Container>
     );
 }

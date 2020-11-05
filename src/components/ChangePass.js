@@ -1,11 +1,14 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import {View, Text, Image, TouchableOpacity, KeyboardAvoidingView, Dimensions} from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import {useDispatch, useSelector} from "react-redux";
 import {resetPassword} from "../actions";
+
+const height    = Dimensions.get('window').height;
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function ChangePass({navigation , route}) {
 
@@ -102,7 +105,7 @@ function ChangePass({navigation , route}) {
     }
 
     return (
-        <Container>
+        <Container style={[styles.bg_green]}>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
                 <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.marginTop_35 , {marginLeft:15}]}>
@@ -161,6 +164,12 @@ function ChangePass({navigation , route}) {
                     </KeyboardAvoidingView>
                 </View>
             </Content>
+            {
+                IS_IPHONE_X ?
+                    <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                    :
+                    null
+            }
         </Container>
     );
 }

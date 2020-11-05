@@ -1,11 +1,14 @@
 import React, { useState , useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from "react-native";
+import {View, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, Dimensions} from "react-native";
 import {Container, Content, Form, Input, Item, Label, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
 import COLORS from "../consts/colors";
 import { useDispatch, useSelector } from 'react-redux'
 import {checkInquery} from "../actions";
+
+const height    = Dimensions.get('window').height;
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function BalanceInquiry({navigation, route}) {
 
@@ -83,7 +86,7 @@ function BalanceInquiry({navigation, route}) {
     }
 
     return (
-        <Container>
+       <Container style={[styles.bg_green]}>
             {renderLoader()}
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
@@ -122,6 +125,12 @@ function BalanceInquiry({navigation, route}) {
                     </KeyboardAvoidingView>
                 </View>
             </Content>
+           {
+               IS_IPHONE_X ?
+                   <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                   :
+                   null
+           }
         </Container>
     );
 }

@@ -13,8 +13,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {getMyCards, cardOrder} from '../actions';
 import MyCard from "./Card";
 
-const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
+const height    = Dimensions.get('window').height;
+const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
 function MyCards({navigation}) {
 
@@ -126,11 +127,11 @@ function MyCards({navigation}) {
 
 
     return (
-        <Container>
+       <Container style={[styles.bg_green]}>
             {renderLoader()}
             <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>
@@ -160,7 +161,7 @@ function MyCards({navigation}) {
                             <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13,styles.alignStart]}>{ i18n.t('registeredCards') }</Text>
                         </View>
                     </View>
-                    <View style={[styles.marginTop_15 , styles.marginBottom_20 , {height:height - 410}]}>
+                    <View style={[styles.marginTop_15 , styles.marginBottom_20 , {height:height - 460}]}>
                     {renderNoData()}
                         <ScrollView contentContainerStyle={[styles.Width_100]} showsVerticalScrollIndicator={false}>
                             <Accordion
@@ -181,6 +182,12 @@ function MyCards({navigation}) {
                 </View>
 
             </Content>
+           {
+               IS_IPHONE_X ?
+                   <View style={[styles.bg_White , {height:40 , zIndex:1}]}/>
+                   :
+                   null
+           }
         </Container>
     );
 }

@@ -48,6 +48,17 @@ function ActiveConfirmCard({navigation , route}) {
     }, [isSubmitted]);
 
     function renderConfirm(){
+        if ( code == ''){
+            return (
+                <View
+                    style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25 , {
+                        backgroundColor:'#ccc'
+                    }]}
+                >
+                    <Text style={[styles.textRegular , styles.text_White , styles.textSize_16]}>{ i18n.t('next') }</Text>
+                </View>
+            );
+        }
         return (
             <TouchableOpacity
                 onPress={() => onConfirm()} style={[styles.greenBtn , styles.Width_100 , styles.marginTop_20 , styles.marginBottom_25]}>

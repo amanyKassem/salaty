@@ -5,6 +5,7 @@ import styles from "../../assets/styles";
 import {Container, Content} from "native-base";
 
 const height    = Dimensions.get('window').height;
+const width    = Dimensions.get('window').width;
 
 export default function BarCodeScan({navigation , route}) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -44,6 +45,7 @@ export default function BarCodeScan({navigation , route}) {
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                     style={StyleSheet.absoluteFillObject}
                 />
+                <Image source={require('../../assets/images/barcode_yellow.png')} style={[styles.icon250, styles.transformReverse , {position:'absolute' , zIndex:1, top:height/3 ,left:'15%' }]} resizeMode={'contain'} />
             </View>
         </Content>
     );

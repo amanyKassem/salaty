@@ -25,7 +25,7 @@ export default function CameraCapture({navigation}) {
     }
 
     async function takePicture() {
-        await camRef.current.takePictureAsync({ onPictureSaved , base64 :true })
+        await camRef.current.takePictureAsync({ onPictureSaved , base64 :true , quality : 0})
     };
 
     function onPictureSaved(photo){

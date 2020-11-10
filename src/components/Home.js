@@ -3,19 +3,29 @@ import {View, Text, Image, TouchableOpacity, Dimensions, ScrollView, Vibration} 
 import {Container, Content, Card} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
-import { Notifications } from 'expo'
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 import {useSelector} from "react-redux";
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
 const IS_IPHONE_X 	= (height === 812 || height === 896) && Platform.OS === 'ios';
 
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+});
+
+
 function Home({navigation}) {
 
     const notifications = useSelector(state => state.notifications.notifications);
 
     useEffect(() => {
-        Notifications.addListener(handleNotification);
+        Notifications.addNotificationReceivedListener(handleNotification);
     }, []);
 
     function handleNotification(notification) {
@@ -38,7 +48,7 @@ function Home({navigation}) {
        <Container style={[styles.bg_green]}>
             <Content scrollEnabled={false} contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : 0 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Image source={require('../../assets/images/menu.png')} style={[styles.icon25 , styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>

@@ -14,7 +14,7 @@ function AddCardSuccessfully({navigation}) {
        <Container style={[styles.bg_green]}>
             <Content contentContainerStyle={[styles.bgFullWidth , styles.bg_green]}>
 
-                <View style={[IS_IPHONE_X ? styles.marginTop_5 : styles.marginTop_25 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
+                <View style={[IS_IPHONE_X ? styles.marginTop_5 : 0 , styles.marginHorizontal_15 , styles.directionRowSpace]}>
                     <TouchableOpacity onPress={() => navigation.navigate('home')}>
                         <Image source={require('../../assets/images/back_arrow.png')} style={[styles.icon25, styles.transform]} resizeMode={'contain'} />
                     </TouchableOpacity>

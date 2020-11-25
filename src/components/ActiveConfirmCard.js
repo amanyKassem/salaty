@@ -79,9 +79,9 @@ function ActiveConfirmCard({navigation , route}) {
                     textAlign   	: 'center'
                 }
             });
+        } else{
+            dispatch(activeBill(lang, bill_id, token, navigation))
         }
-
-        dispatch(activeBill(lang, bill_id, token, navigation))
     }
 
     return (

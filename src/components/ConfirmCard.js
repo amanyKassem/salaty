@@ -68,13 +68,13 @@ function ConfirmCard({ navigation, route }) {
         setShowModal(!showModal)
     }
 
-
     const dispatch = useDispatch();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             if (route.params?.photo) {
                 setCardImage(route.params.photo.uri);
+                setImgURI(route.params.photo.uri);
                 setBase64(route.params.photo.base64);
             }
         });

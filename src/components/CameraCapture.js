@@ -5,10 +5,11 @@ import styles from '../../assets/styles'
 import {Icon} from 'native-base'
 import COLORS from "../consts/colors";
 
-export default function CameraCapture({navigation}) {
+export default function CameraCapture({navigation , route}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     let camRef = useRef(null);
+    const pathName = route.params.pathName
 
     useEffect(() => {
         (async () => {
@@ -30,7 +31,7 @@ export default function CameraCapture({navigation}) {
 
     function onPictureSaved(photo){
         // console.log(photo);
-        navigation.navigate('confirmCard', {photo});
+        navigation.navigate(pathName, {photo});
     }
 
     return (

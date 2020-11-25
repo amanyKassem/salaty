@@ -14,6 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import {useDispatch, useSelector} from "react-redux";
 import {confirmCard} from '../actions';
+import Modal from "react-native-modal";
 
 const isIOS = Platform.OS === 'ios';
 const height    = Dimensions.get('window').height;
@@ -33,6 +34,8 @@ function ConfirmCard({navigation,route}) {
     const [amount, setAmount] = useState('');
     const [amountStatus, setAmountStatus] = useState(0);
 
+    const [showModal, setShowModal] 		= useState(false);
+
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
         if (type === 'amount' || amount !== '') setAmountStatus(1);
@@ -42,6 +45,11 @@ function ConfirmCard({navigation,route}) {
         if (type === 'amount' && amount === '') setAmountStatus(0);
         if (type === 'cardNumber' && cardNumber === '') setCardNumberStatus(0);
     }
+
+    function toggleModal() {
+        setShowModal(!showModal)
+    }
+
 
     const dispatch = useDispatch();
 
@@ -177,7 +185,7 @@ function ConfirmCard({navigation,route}) {
                                 </Item>
                             </View>
 
-                            <TouchableOpacity onPress={() => navigation.navigate('cameraCapture')} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImg') ? styles.Active : styles.noActive), styles.directionRowSpace,
+                            <TouchableOpacity onPress={toggleModal} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImg') ? styles.Active : styles.noActive), styles.directionRowSpace,
                                 styles.marginBottom_25 , styles.Width_100]}>
                                 <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{cardImage.substr(0,38)}</Text>
                                 <Image source={require('../../assets/images/camera_green.png')} style={[styles.icon20]} resizeMode={'contain'} />
@@ -190,7 +198,33 @@ function ConfirmCard({navigation,route}) {
                     </KeyboardAvoidingView>
 
                 </View>
+                <Modal
+                    onBackdropPress     = {toggleModal}
+                    onBackButtonPress   = {toggleModal}
+                    isVisible           = {showModal}
+                    style               = {styles.bgModel}
+                    avoidKeyboard  		= {true}
+                >
+                    <View style={[{borderTopLeftRadius:30,
+                        borderTopRightRadius:30},styles.bg_White, styles.overHidden, styles.Width_100, styles.paddingVertical_10 , styles.paddingHorizontal_10]}>
+                        <View style={[styles.overHidden, styles.Width_100 , styles.paddingHorizontal_25]}>
 
+                            <TouchableOpacity onPress={() => {_pickImage() ; setShowModal(false)}} style={[styles.marginBottom_10]}>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('photos') }</Text>
+                            </TouchableOpacity>
+
+                            <View style={[styles.borderGray , styles.marginBottom_5]}/>
+
+                            <TouchableOpacity onPress={() => {navigation.navigate('commonStack', {screen: 'cameraCapture', params: { pathName:'confirmCard' }}) ; setShowModal(false)}} style={[styles.marginBottom_15]}>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('camera') }</Text>
+                            </TouchableOpacity>
+
+
+
+                        </View>
+                    </View>
+
+                </Modal>
             </Content>
            {
                IS_IPHONE_X ?

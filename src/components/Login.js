@@ -84,7 +84,8 @@ function Login({navigation}) {
     const responseListener = useRef();
 
     useEffect(() => {
-        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+        setTimeout(() => registerForPushNotificationsAsync().then(token => setExpoPushToken(token)) , 3000)
+
 
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);

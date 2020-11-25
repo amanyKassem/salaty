@@ -263,6 +263,8 @@ const ar = {
     'balanceInquiry'            : 'استعلام عن الرصيد',
     'noOp'                      : 'لا يوجد عمليات',
     'verifyCard'                : 'تحقق البطاقه',
+    'photos'                    : 'الصور',
+    'camera'                    : 'الكاميرا',
 };
 
 export default ar;

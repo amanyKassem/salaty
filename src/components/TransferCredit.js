@@ -14,6 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import {useDispatch, useSelector} from "react-redux";
 import {cridetTransfer} from '../actions';
+import Modal from "react-native-modal";
 
 const isIOS = Platform.OS === 'ios';
 const height    = Dimensions.get('window').height;
@@ -37,6 +38,7 @@ function TransferCredit({navigation , route}) {
 
     const [amountTransfer, setAmountTransfer] = useState('');
     const [amountTransferStatus, setAmountTransferStatus] = useState(0);
+    const [showModal, setShowModal] 		= useState(false);
 
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
@@ -50,12 +52,26 @@ function TransferCredit({navigation , route}) {
         if (type === 'amountTransfer' && amountTransfer === '') setAmountTransferStatus(0);
     }
 
+    function toggleModal() {
+        setShowModal(!showModal)
+    }
+
     const dispatch = useDispatch();
 
     useEffect(() => {
         setIsSubmitted(false)
     }, [isSubmitted]);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.photo) {
+                setCardImage(route.params.photo.uri);
+                setBase64(route.params.photo.base64);
+            }
+        });
+
+        return unsubscribe;
+    }, [route.params?.photo ,navigation]);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -190,7 +206,7 @@ function TransferCredit({navigation , route}) {
                                 </Item>
                             </View>
 
-                            <TouchableOpacity onPress={_pickImage} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImage') ? styles.Active : styles.noActive), styles.directionRowSpace,
+                            <TouchableOpacity onPress={toggleModal} style={[styles.height_50 ,styles.input ,(cardImage !== '' && cardImage !== i18n.t('cardImage') ? styles.Active : styles.noActive), styles.directionRowSpace,
                                 styles.marginBottom_25 , styles.Width_100]}>
                                 <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{cardImage.substr(0,38)}</Text>
                                 <Image source={require('../../assets/images/camera_green.png')} style={[styles.icon20]} resizeMode={'contain'} />
@@ -214,7 +230,32 @@ function TransferCredit({navigation , route}) {
                     </KeyboardAvoidingView>
 
                 </View>
+                <Modal
+                    onBackdropPress     = {toggleModal}
+                    onBackButtonPress   = {toggleModal}
+                    isVisible           = {showModal}
+                    style               = {styles.bgModel}
+                    avoidKeyboard  		= {true}
+                >
+                    <View style={[{borderTopLeftRadius:30,
+                        borderTopRightRadius:30},styles.bg_White, styles.overHidden, styles.Width_100, styles.paddingVertical_10 , styles.paddingHorizontal_10]}>
+                        <View style={[styles.overHidden, styles.Width_100 , styles.paddingHorizontal_25]}>
 
+                            <TouchableOpacity onPress={() => {_pickImage() ; setShowModal(false)}} style={[styles.marginBottom_10]}>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('photos') }</Text>
+                            </TouchableOpacity>
+
+                            <View style={[styles.borderGray , styles.marginBottom_5]}/>
+
+                            <TouchableOpacity onPress={() => {navigation.navigate('commonStack', {screen: 'cameraCapture', params: { pathName:'transferCredit' }}) ; setShowModal(false)}} style={[styles.marginBottom_15]}>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('camera') }</Text>
+                            </TouchableOpacity>
+
+
+                        </View>
+                    </View>
+
+                </Modal>
             </Content>
            {
                IS_IPHONE_X ?

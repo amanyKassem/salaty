@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import {useDispatch, useSelector} from "react-redux";
 import {storeBill} from '../actions';
+import Modal from "react-native-modal";
 
 const isIOS = Platform.OS === 'ios';
 const height    = Dimensions.get('window').height;
@@ -29,6 +30,7 @@ function EnterBill({navigation , route}) {
 
     const [totalBillAmount, setTotalBillAmount] = useState('');
     const [totalBillAmountStatus, setTotalBillAmountStatus] = useState(0);
+    const [showModal, setShowModal] 		= useState(false);
 
     function activeInput(type) {
         if (type === 'totalBillAmount' || totalBillAmount !== '') setTotalBillAmountStatus(1);
@@ -45,6 +47,21 @@ function EnterBill({navigation , route}) {
         setIsSubmitted(false)
     }, []);
 
+    function toggleModal() {
+        setShowModal(!showModal)
+    }
+
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.photo) {
+                setBillImage(route.params.photo.uri);
+                setBase64(route.params.photo.base64);
+            }
+        });
+
+        return unsubscribe;
+    }, [route.params?.photo ,navigation]);
 
     const askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA);
@@ -147,7 +164,7 @@ function EnterBill({navigation , route}) {
                                 </Item>
                             </View>
 
-                            <TouchableOpacity onPress={_pickImage} style={[styles.height_50 ,styles.input ,(billImage !== '' && billImage !== i18n.t('billImage') ? styles.Active : styles.noActive), styles.directionRowSpace,
+                            <TouchableOpacity onPress={toggleModal} style={[styles.height_50 ,styles.input ,(billImage !== '' && billImage !== i18n.t('billImage') ? styles.Active : styles.noActive), styles.directionRowSpace,
                                 styles.marginBottom_25 , styles.Width_100]}>
                                 <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13]}>{billImage.substr(0,38)}</Text>
                                 <Image source={require('../../assets/images/camera_green.png')} style={[styles.icon20]} resizeMode={'contain'} />
@@ -160,7 +177,32 @@ function EnterBill({navigation , route}) {
                     </KeyboardAvoidingView>
 
                 </View>
+                <Modal
+                    onBackdropPress     = {toggleModal}
+                    onBackButtonPress   = {toggleModal}
+                    isVisible           = {showModal}
+                    style               = {styles.bgModel}
+                    avoidKeyboard  		= {true}
+                >
+                    <View style={[{borderTopLeftRadius:30,
+                        borderTopRightRadius:30},styles.bg_White, styles.overHidden, styles.Width_100, styles.paddingVertical_10 , styles.paddingHorizontal_10]}>
+                        <View style={[styles.overHidden, styles.Width_100 , styles.paddingHorizontal_25]}>
 
+                            <TouchableOpacity onPress={() => {_pickImage() ; setShowModal(false)}} style={[styles.marginBottom_10]}>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('photos') }</Text>
+                            </TouchableOpacity>
+
+                            <View style={[styles.borderGray , styles.marginBottom_5]}/>
+
+                            <TouchableOpacity onPress={() => {navigation.navigate('commonStack', {screen: 'cameraCapture', params: { pathName:'enterBill' }}) ; setShowModal(false)}} style={[styles.marginBottom_15]}>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('camera') }</Text>
+                            </TouchableOpacity>
+
+
+                        </View>
+                    </View>
+
+                </Modal>
             </Content>
            {
                IS_IPHONE_X ?

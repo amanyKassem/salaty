@@ -262,6 +262,8 @@ const en = {
     'balanceInquiry'            : 'Balance inquiry',
     'noOp'                      : 'No operations',
     'verifyCard'                : 'Check card',
+    'photos'                    : 'Photos',
+    'camera'                    : 'Camera',
 };
 
 export default en;

@@ -1,5 +1,5 @@
-import React , {useState , useEffect} from 'react';
-import { AsyncStorage , Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { AsyncStorage, Text } from 'react-native';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,16 +11,16 @@ import { store, persistedStore } from './src/store';
 import './ReactotronConfig';
 import * as Notifications from 'expo-notifications';
 
-function App({navigation}) {
+function App({ navigation }) {
 
 
 	const [isReady, setIsReady] = useState(false);
 
-	useEffect( () => {
+	useEffect(() => {
 
 		// I18nManager.forceRTL(true);
 		// AsyncStorage.clear()
-
+		console.disableYellowBox = true;
 		if (Platform.OS === 'android') {
 			Notifications.setNotificationChannelAsync('orders', {
 				name: 'E-mail notifications',
@@ -32,12 +32,12 @@ function App({navigation}) {
 		if (Text.defaultProps == null) Text.defaultProps = {};
 		Text.defaultProps.allowFontScaling = false;
 
-		async function loadFont(){
+		async function loadFont() {
 			await Font.loadAsync({
-				cairo             : require('./assets/fonts/Cairo-Regular.ttf'),
-				cairoBold         : require('./assets/fonts/Cairo-Bold.ttf'),
-				Roboto            : require('native-base/Fonts/Roboto.ttf'),
-				Roboto_medium     : require('native-base/Fonts/Roboto_medium.ttf'),
+				cairo: require('./assets/fonts/Cairo-Regular.ttf'),
+				cairoBold: require('./assets/fonts/Cairo-Bold.ttf'),
+				Roboto: require('native-base/Fonts/Roboto.ttf'),
+				Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
 				...Ionicons.font,
 			});
 			setIsReady(true)

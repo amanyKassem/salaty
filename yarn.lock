@@ -5204,6 +5204,11 @@ react-native-communications@^2.2.1:
   resolved "https://registry.yarnpkg.com/react-native-communications/-/react-native-communications-2.2.1.tgz#7883b56b20a002eeb790c113f8616ea8692ca795"
   integrity sha1-eIO1ayCgAu63kMET+GFuqGksp5U=
 
+react-native-document-picker@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-4.1.0.tgz#8092c09727018587da34358bf731fe948d4171a5"
+  integrity sha512-tHYNng9GrnVrOoLk9K2j+T1xa8gAfC2Mk2dbJq32QBYD3zkHGMkFYGd2FZt0nuYxCBnd768tOQWuEZXwXM1tsg==
+
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"

@@ -27,7 +27,33 @@ export const confirmCard = (lang, card_identity, amount, bill_image, token, navi
                         bill_id: response.data.data.bill_id,
                     });
                 } else if (response.data.success) {
-                    navigation.navigate('casher');
+
+                    axios({
+                        url         : CONST.url + 'confirmCard',
+                        method      : 'POST',
+                        data        : {lang , bill_id:response.data.data.bill_id },
+                        headers     : {Authorization: token}
+                    }).then(response => {
+                        if (response.data.success){
+                            navigation.navigate('checkCredit' , {hasCredit : true});
+                        }
+                        if (!response.data.success){
+                            navigation.navigate('checkCredit' , {hasCredit : false});
+                        }
+
+                        Toast.show({
+                            text        : response.data.message,
+                            type        : response.data.success ? "success" : "danger",
+                            duration    : 3000,
+                            textStyle   : {
+                                color       : "white",
+                                fontFamily  : 'cairo',
+                                textAlign   : 'center'
+                            }
+                        });
+                    });
+
+                    // navigation.navigate('casher');
                 }
 
                 Toast.show({

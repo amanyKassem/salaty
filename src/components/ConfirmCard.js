@@ -38,21 +38,6 @@ function ConfirmCard({ navigation, route }) {
 
     const [imgURI, setImgURI] = useState(i18n.t('cardImg'));
 
-    const ImagePickerMultiPart = async () => {
-        await askPermissionsAsync();
-        let response = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        });
-
-        console.log(response);
-
-        if (!response.cancelled)
-            setImgURI(response.uri)
-
-
-
-    }
-
 
     function activeInput(type) {
         if (type === 'cardNumber' || cardNumber !== '') setCardNumberStatus(1);
@@ -71,7 +56,9 @@ function ConfirmCard({ navigation, route }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        setIsSubmitted(false);
         const unsubscribe = navigation.addListener('focus', () => {
+            setIsSubmitted(false);
             if (route.params?.photo) {
                 setCardImage(route.params.photo.uri);
                 setImgURI(route.params.photo.uri);
@@ -94,10 +81,30 @@ function ConfirmCard({ navigation, route }) {
     }, [navigation, route.params?.cardNumber]);
 
     const askPermissionsAsync = async () => {
-        await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        await Permissions.askAsync(Permissions.CAMERA);
 
     };
+
+    const ImagePickerMultiPart = async () => {
+        askPermissionsAsync()
+
+        let response = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            base64: true,
+        });
+
+        console.log(response);
+
+        if (!response.cancelled){
+            setImgURI(response.uri)
+            setShowModal(false);
+        }
+
+
+    }
 
     // const _pickImage = async () => {
 
@@ -161,7 +168,7 @@ function ConfirmCard({ navigation, route }) {
         }
 
 
-        dispatch(confirmCard(lang, cardNumber, amount, image, token, navigation)).then(() => setIsSubmitted(false));
+        dispatch(confirmCard(lang, cardNumber, amount, image, token, navigation));
     }
 
     return (
@@ -243,14 +250,14 @@ function ConfirmCard({ navigation, route }) {
                     }, styles.bg_White, styles.overHidden, styles.Width_100, styles.paddingVertical_10, styles.paddingHorizontal_10]}>
                         <View style={[styles.overHidden, styles.Width_100, styles.paddingHorizontal_25]}>
 
-                            <TouchableOpacity onPress={() => { ImagePickerMultiPart(); setShowModal(false) }} style={[styles.marginBottom_10]}>
-                                <Text style={[styles.text_black, styles.textBold, styles.textSize_16]}>{i18n.t('photos')}</Text>
+                            <TouchableOpacity onPress={ImagePickerMultiPart} style={[styles.marginBottom_10]}>
+                                <Text style={[styles.text_black, styles.textBold, styles.textSize_16, styles.alignStart]}>{i18n.t('photos')}</Text>
                             </TouchableOpacity>
 
                             <View style={[styles.borderGray, styles.marginBottom_5]} />
 
                             <TouchableOpacity onPress={() => { navigation.navigate('commonStack', { screen: 'cameraCapture', params: { pathName: 'confirmCard' } }); setShowModal(false) }} style={[styles.marginBottom_15]}>
-                                <Text style={[styles.text_black, styles.textBold, styles.textSize_16]}>{i18n.t('camera')}</Text>
+                                <Text style={[styles.text_black, styles.textBold, styles.textSize_16, styles.alignStart]}>{i18n.t('camera')}</Text>
                             </TouchableOpacity>
 
 

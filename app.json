@@ -7,7 +7,7 @@
       "android",
       "web"
     ],
-    "version": "2.0.2",
+    "version": "2.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -33,7 +33,7 @@
     },
     "android": {
       "package": "aait.salaty",
-      "versionCode": 8,
+      "versionCode": 11,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json",
       "config": {

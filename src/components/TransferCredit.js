@@ -104,6 +104,7 @@ function TransferCredit({navigation , route}) {
         if (!result.cancelled) {
             setCardImage(result.uri.split('/').pop());
             setBase64(result.base64);
+            setShowModal(false)
         }
     };
 
@@ -241,14 +242,14 @@ function TransferCredit({navigation , route}) {
                         borderTopRightRadius:30},styles.bg_White, styles.overHidden, styles.Width_100, styles.paddingVertical_10 , styles.paddingHorizontal_10]}>
                         <View style={[styles.overHidden, styles.Width_100 , styles.paddingHorizontal_25]}>
 
-                            <TouchableOpacity onPress={() => {_pickImage() ; setShowModal(false)}} style={[styles.marginBottom_10]}>
-                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('photos') }</Text>
+                            <TouchableOpacity onPress={_pickImage} style={[styles.marginBottom_10]}>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16, styles.alignStart]}>{ i18n.t('photos') }</Text>
                             </TouchableOpacity>
 
                             <View style={[styles.borderGray , styles.marginBottom_5]}/>
 
                             <TouchableOpacity onPress={() => {navigation.navigate('commonStack', {screen: 'cameraCapture', params: { pathName:'transferCredit' }}) ; setShowModal(false)}} style={[styles.marginBottom_15]}>
-                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16]}>{ i18n.t('camera') }</Text>
+                                <Text style={[styles.text_black , styles.textBold , styles.textSize_16, styles.alignStart]}>{ i18n.t('camera') }</Text>
                             </TouchableOpacity>
 
 

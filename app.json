@@ -33,7 +33,7 @@
     },
     "android": {
       "package": "aait.salaty",
-      "versionCode": 11,
+      "versionCode": 12,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json",
       "config": {
